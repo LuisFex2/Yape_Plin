@@ -84,6 +84,17 @@
   </div>
 
   <script>
+    // --- Función para escapar caracteres especiales ---
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    // --- Drag y minimizar/cerrar ---
     (function(){
       const w=document.getElementById('float'),d=document.getElementById('drag');
       let a=false,x=0,y=0,ox=0,oy=0;
@@ -118,12 +129,15 @@
     }
 
     function renderizar(filtro) {
-      list.innerHTML = ""; let total = 0, count = 0;
+      list.innerHTML = ""; 
+      let total = 0, count = 0;
       const hoy = new Date().toISOString().slice(0,10);
       const ayer = new Date(Date.now()-86400000).toISOString().slice(0,10);
       if (todosLosDatos.length === 0) {
         list.innerHTML = '<div class="loading-text">No hay datos</div>';
-        countEl.textContent = "0"; totalEl.textContent = "S/ 0.00"; return;
+        countEl.textContent = "0"; 
+        totalEl.textContent = "S/ 0.00"; 
+        return;
       }
       todosLosDatos.forEach(item => {
         if (!item.fecha) return;
@@ -132,8 +146,19 @@
         if (!mostrar) return;
         let importe = typeof item.importe === "number" ? item.importe : parseFloat(String(item.importe).replace(/[^0-9.-]+/g,"")) || 0;
         if (importe > 0) { total += importe; count++; }
-        const div = document.createElement("div"); div.className = "list-item";
-        div.innerHTML = `<div class="avatar">S/</div><div class="li-body"><div class="li-title"><span>${(item.titulo||"Pago").trim()}</span>${importe>0 ? `<span class="li-price">S/ ${importe.toFixed(2)}</span>` : ""}</div><div class="li-sub">${item.contenido || ""}</div><div class="li-sub"><small>${item.fecha}</small></div></div>`;
+        const div = document.createElement("div"); 
+        div.className = "list-item";
+        div.innerHTML = `
+          <div class="avatar">S/</div>
+          <div class="li-body">
+            <div class="li-title">
+              <span>${escapeHtml(item.titulo).trim() || "Pago"}</span>
+              ${importe>0 ? `<span class="li-price">S/ ${importe.toFixed(2)}</span>` : ""}
+            </div>
+            <div class="li-sub">${escapeHtml(item.contenido)}</div>
+            <div class="li-sub"><small>${escapeHtml(item.fecha)}</small></div>
+          </div>
+        `;
         list.appendChild(div);
       });
       countEl.textContent = count;
