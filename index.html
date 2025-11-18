@@ -84,9 +84,10 @@
   </div>
 
   <script>
-    // --- Función para escapar caracteres especiales ---
+    // --- Función para escapar caracteres especiales y quitar barras invertidas ---
     function escapeHtml(str) {
       return String(str || "")
+        .replace(/\\/g,'')   // <-- elimina todas las barras \
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
