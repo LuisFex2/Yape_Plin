@@ -94,7 +94,25 @@
       return str.replace(/\\(?=[^\\])/g,''); // mantiene comillas, elimina barras sobrantes
     }
 
-    // Drag, minimizar y cerrar
+    // --- Funciones de fechas ---
+    function esHoy(fechaStr){
+      const f = new Date(fechaStr);
+      const hoy = new Date();
+      return f.getFullYear()===hoy.getFullYear() &&
+             f.getMonth()===hoy.getMonth() &&
+             f.getDate()===hoy.getDate();
+    }
+
+    function esAyer(fechaStr){
+      const f = new Date(fechaStr);
+      const ayer = new Date();
+      ayer.setDate(ayer.getDate()-1);
+      return f.getFullYear()===ayer.getFullYear() &&
+             f.getMonth()===ayer.getMonth() &&
+             f.getDate()===ayer.getDate();
+    }
+
+    // --- Drag, minimizar y cerrar ---
     (function(){
       const w=document.getElementById('float'),d=document.getElementById('drag');
       let a=false,x=0,y=0,ox=0,oy=0;
@@ -139,9 +157,10 @@
       }
       todosLosDatos.forEach(item=>{
         if(!item.fecha) return;
-        const fechaItem = item.fecha.split(" ")[0];
-        const mostrar = filtro==="todos" || (filtro==="hoy" && fechaItem===new Date().toISOString().slice(0,10)) ||
-                        (filtro==="ayer" && fechaItem===new Date(Date.now()-86400000).toISOString().slice(0,10));
+
+        const mostrar = filtro==="todos" || 
+                        (filtro==="hoy" && esHoy(item.fecha)) ||
+                        (filtro==="ayer" && esAyer(item.fecha));
         if(!mostrar) return;
 
         let importe = typeof item.importe==="number"?item.importe:
