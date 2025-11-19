@@ -94,9 +94,21 @@
       return str.replace(/\\(?=[^\\])/g,''); // mantiene comillas, elimina barras sobrantes
     }
 
-    // --- Funciones de fechas ---
+    // Parsear fechas locales desde formato "YYYY-MM-DD HH:MM:SS AM/PM"
+    function parseLocalDate(fechaStr){
+      // "2025-11-18 06:26:50 PM"
+      const parts = fechaStr.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
+      if(!parts) return new Date();
+      let [_, y, m, d, h, min, s, mer] = parts.map((v,i)=>i>0?v:null);
+      y = parseInt(y); m = parseInt(m)-1; d = parseInt(d);
+      h = parseInt(h); min = parseInt(min); s = parseInt(s);
+      if(mer.toUpperCase()==='PM' && h<12) h+=12;
+      if(mer.toUpperCase()==='AM' && h===12) h=0;
+      return new Date(y,m,d,h,min,s);
+    }
+
     function esHoy(fechaStr){
-      const f = new Date(fechaStr);
+      const f = parseLocalDate(fechaStr);
       const hoy = new Date();
       return f.getFullYear()===hoy.getFullYear() &&
              f.getMonth()===hoy.getMonth() &&
@@ -104,7 +116,7 @@
     }
 
     function esAyer(fechaStr){
-      const f = new Date(fechaStr);
+      const f = parseLocalDate(fechaStr);
       const ayer = new Date();
       ayer.setDate(ayer.getDate()-1);
       return f.getFullYear()===ayer.getFullYear() &&
@@ -112,7 +124,7 @@
              f.getDate()===ayer.getDate();
     }
 
-    // --- Drag, minimizar y cerrar ---
+    // Drag, minimizar y cerrar
     (function(){
       const w=document.getElementById('float'),d=document.getElementById('drag');
       let a=false,x=0,y=0,ox=0,oy=0;
@@ -155,12 +167,11 @@
         totalEl.textContent="S/ 0.00";
         return;
       }
+
       todosLosDatos.forEach(item=>{
         if(!item.fecha) return;
 
-        const mostrar = filtro==="todos" || 
-                        (filtro==="hoy" && esHoy(item.fecha)) ||
-                        (filtro==="ayer" && esAyer(item.fecha));
+        const mostrar = filtro==="todos" || (filtro==="hoy" && esHoy(item.fecha)) || (filtro==="ayer" && esAyer(item.fecha));
         if(!mostrar) return;
 
         let importe = typeof item.importe==="number"?item.importe:
@@ -182,6 +193,7 @@
         `;
         list.appendChild(div);
       });
+
       countEl.textContent=count;
       totalEl.textContent="S/ "+total.toFixed(2);
     }
