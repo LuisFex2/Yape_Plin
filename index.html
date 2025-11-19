@@ -71,7 +71,7 @@
         <div class="tab" data-filter="ayer">Ayer</div>
       </div>
       <div class="cards">
-        <div class="card"><div class="num" id="countYape">0</div><div class="label">Operaciones totales</div></div>
+        <div class="card"><div class="num" id="countYape">0</div><div class="label">Operaciones</div></div>
         <div class="card"><div class="num" id="totalYape">S/ 0.00</div><div class="label">Total recibido</div></div>
       </div>
       <div class="list" id="list"><div class="loading-text">Cargando datos...</div></div>
@@ -84,23 +84,17 @@
   </div>
 
   <script>
-    // --- Escapar caracteres HTML ---
-    function escapeHtml(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+    function escapeHtml(str){
+      return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
     }
 
-    // --- Limpiar barras innecesarias ---
-    function cleanText(str) {
-      if (!str) return "";
-      return str.replace(/\\(?=[^\\])/g,''); // elimina barras sobrantes, mantiene comillas
+    function cleanText(str){
+      if(!str) return "";
+      return str.replace(/\\(?=[^\\])/g,''); // mantiene comillas, elimina barras sobrantes
     }
 
-    // --- Drag y minimizar/cerrar ---
+    // Drag, minimizar y cerrar
     (function(){
       const w=document.getElementById('float'),d=document.getElementById('drag');
       let a=false,x=0,y=0,ox=0,oy=0;
@@ -122,44 +116,46 @@
     let todosLosDatos = [];
     let filtroActual = "todos";
 
-    async function cargarDatos() {
-      list.innerHTML = '<div class="loading-text">Actualizando datos...</div>';
-      try {
+    async function cargarDatos(){
+      list.innerHTML='<div class="loading-text">Actualizando datos...</div>';
+      try{
         const resp = await fetch(DATA_URL + "?t=" + Date.now());
         const data = await resp.json();
-        todosLosDatos = Array.isArray(data) ? data : [];
+        todosLosDatos = Array.isArray(data)?data:[];
         renderizar(filtroActual);
-      } catch (err) {
-        list.innerHTML = '<div class="loading-text" style="color:red">Error de conexión</div>';
+      }catch(err){
+        list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';
       }
     }
 
-    function renderizar(filtro) {
-      list.innerHTML = ""; 
-      let total = 0, count = 0;
-      const hoy = new Date().toISOString().slice(0,10);
-      const ayer = new Date(Date.now()-86400000).toISOString().slice(0,10);
-      if (todosLosDatos.length === 0) {
-        list.innerHTML = '<div class="loading-text">No hay datos</div>';
-        countEl.textContent = "0"; 
-        totalEl.textContent = "S/ 0.00"; 
+    function renderizar(filtro){
+      list.innerHTML=""; 
+      let total=0,count=0;
+      if(todosLosDatos.length===0){
+        list.innerHTML='<div class="loading-text">No hay datos</div>';
+        countEl.textContent="0";
+        totalEl.textContent="S/ 0.00";
         return;
       }
-      todosLosDatos.forEach(item => {
-        if (!item.fecha) return;
+      todosLosDatos.forEach(item=>{
+        if(!item.fecha) return;
         const fechaItem = item.fecha.split(" ")[0];
-        const mostrar = filtro === "todos" || (filtro === "hoy" && fechaItem === hoy) || (filtro === "ayer" && fechaItem === ayer);
-        if (!mostrar) return;
-        let importe = typeof item.importe === "number" ? item.importe : parseFloat(String(item.importe).replace(/[^0-9.-]+/g,"")) || 0;
-        if (importe > 0) { total += importe; count++; }
-        const div = document.createElement("div"); 
-        div.className = "list-item";
-        div.innerHTML = `
+        const mostrar = filtro==="todos" || (filtro==="hoy" && fechaItem===new Date().toISOString().slice(0,10)) ||
+                        (filtro==="ayer" && fechaItem===new Date(Date.now()-86400000).toISOString().slice(0,10));
+        if(!mostrar) return;
+
+        let importe = typeof item.importe==="number"?item.importe:
+                      parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
+        if(importe>0){total+=importe;count++;}
+
+        const div=document.createElement("div");
+        div.className="list-item";
+        div.innerHTML=`
           <div class="avatar">S/</div>
           <div class="li-body">
             <div class="li-title">
-              <span>${escapeHtml(cleanText(item.titulo)).trim() || "Pago"}</span>
-              ${importe>0 ? `<span class="li-price">S/ ${importe.toFixed(2)}</span>` : ""}
+              <span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>
+              ${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}
             </div>
             <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
             <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
@@ -167,17 +163,17 @@
         `;
         list.appendChild(div);
       });
-      countEl.textContent = count;
-      totalEl.textContent = "S/ " + total.toFixed(2);
+      countEl.textContent=count;
+      totalEl.textContent="S/ "+total.toFixed(2);
     }
 
     cargarDatos();
 
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.onclick = () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab=>{
+      tab.onclick=()=>{
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         tab.classList.add('active');
-        filtroActual = tab.dataset.filter;
+        filtroActual=tab.dataset.filter;
         renderizar(filtroActual);
       };
     });
