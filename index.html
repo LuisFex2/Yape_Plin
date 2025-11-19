@@ -1,213 +1,140 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Yape & Plin Interceptor</title>
-  <style>
-    :root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;overflow:hidden;background:#f9f9fb}
-    .backdrop{position:fixed;inset:0;background:transparent;pointer-events:none}
-    .float-win{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:380px;max-width:92vw;z-index:99999;
-      box-shadow:0 20px 50px rgba(0,0,0,0.3);border-radius:16px;overflow:hidden;pointer-events:auto;
-      user-select:none;background:linear-gradient(180deg,var(--bg),#fff);max-height:92vh;display:flex;flex-direction:column}
-    .header{display:flex;align-items:center;gap:10px;padding:14px;background:var(--accent);color:white;flex-shrink:0}
-    .logo{width:38px;height:38px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
-    .title{font-weight:600;font-size:16px}
-    .hdr-actions{margin-left:auto;display:flex;gap:8px}
-    .icon-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .body{padding:14px;background:linear-gradient(180deg,#fafafa,#fff);flex:1;overflow:hidden;display:flex;flex-direction:column}
-    .pill{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 6px 12px rgba(16,24,40,0.04)}
-    .pill .left{display:flex;gap:10px;align-items:center}
-    .pill .status{font-weight:600}
-    .btn-start{background:var(--teal);color:white;padding:8px 16px;border-radius:18px;border:none;cursor:pointer;font-weight:600}
-    .tabs{display:flex;gap:6px;margin-bottom:10px;flex-shrink:0}
-    .tab{flex:1;padding:7px 8px;border-radius:9px;text-align:center;font-weight:600;font-size:14px;cursor:pointer;
-      transition:all .25s;background:#f2fbfa;color:#000;border:1px solid rgba(0,196,140,0.3);
-      box-shadow:0 2px 6px rgba(0,196,140,0.1)}
-    .tab.active{background:var(--accent);color:white;border-color:var(--accent);box-shadow:0 3px 10px rgba(110,74,209,0.3)}
-    .cards{display:flex;gap:10px;margin-bottom:12px;flex-shrink:0}
-    .card{flex:1;background:#f2fbfa;border-radius:10px;padding:12px;text-align:center;
-      border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 8px rgba(0,196,140,0.1)}
-    .card .num{font-size:20px;font-weight:700;color:var(--green)}
-    .card .label{font-size:12px;color:var(--muted);margin-top:2px}
-    .list{flex:1;overflow-y:auto;padding-right:4px;margin-bottom:10px;min-height:0}
-    .list::-webkit-scrollbar{width:6px}.list::-webkit-scrollbar-track{background:transparent}
-    .list::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2);border-radius:3px}
-    .list-item{background:white;border-radius:12px;padding:12px;box-shadow:0 8px 16px rgba(16,24,40,0.08);
-      display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
-    .avatar{width:44px;height:44px;border-radius:22px;background:linear-gradient(180deg,#7f6ee6,#b99df9);
-      display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    .li-body{flex:1}.li-title{font-weight:700;display:flex;justify-content:space-between;align-items:center}
-    .li-sub{font-size:13px;color:var(--muted);margin-top:4px}.li-price{color:var(--green);font-weight:700}
-    .controls{display:flex;gap:8px;flex-shrink:0}
-    .ctrl-btn{flex:1;padding:10px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
-    .ctrl-green{background:#22c55e;color:white}.ctrl-red{background:#ef4444;color:white}.ctrl-blue{background:#3b82f6;color:white}
-    .loading-text{text-align:center;color:var(--muted);padding:30px;font-size:14px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yape & Plin Interceptor</title>
+<style>
+:root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;overflow:hidden;background:#f9f9fb}
+.backdrop{position:fixed;inset:0;background:transparent;pointer-events:none}
+.float-win{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:380px;max-width:92vw;z-index:99999;
+box-shadow:0 20px 50px rgba(0,0,0,0.3);border-radius:16px;overflow:hidden;pointer-events:auto;
+user-select:none;background:linear-gradient(180deg,var(--bg),#fff);max-height:92vh;display:flex;flex-direction:column}
+.header{display:flex;align-items:center;gap:10px;padding:14px;background:var(--accent);color:white;flex-shrink:0}
+.logo{width:38px;height:38px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+.title{font-weight:600;font-size:16px}
+.hdr-actions{margin-left:auto;display:flex;gap:8px}
+.icon-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.body{padding:14px;background:linear-gradient(180deg,#fafafa,#fff);flex:1;overflow:hidden;display:flex;flex-direction:column}
+.pill{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 6px 12px rgba(16,24,40,0.04)}
+.pill .left{display:flex;gap:10px;align-items:center}
+.pill .status{font-weight:600}
+.btn-start{background:var(--teal);color:white;padding:8px 16px;border-radius:18px;border:none;cursor:pointer;font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-shrink:0}
+.tab{flex:1;padding:7px 8px;border-radius:9px;text-align:center;font-weight:600;font-size:14px;cursor:pointer;
+transition:all .25s;background:#f2fbfa;color:#000;border:1px solid rgba(0,196,140,0.3);
+box-shadow:0 2px 6px rgba(0,196,140,0.1)}
+.tab.active{background:var(--accent);color:white;border-color:var(--accent);box-shadow:0 3px 10px rgba(110,74,209,0.3)}
+.cards{display:flex;gap:10px;margin-bottom:12px;flex-shrink:0}
+.card{flex:1;background:#f2fbfa;border-radius:10px;padding:12px;text-align:center;
+border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 8px rgba(0,196,140,0.1)}
+.card .num{font-size:20px;font-weight:700;color:var(--green)}
+.card .label{font-size:12px;color:var(--muted);margin-top:2px}
+.list{flex:1;overflow-y:auto;padding-right:4px;margin-bottom:10px;min-height:0}
+.list::-webkit-scrollbar{width:6px}.list::-webkit-scrollbar-track{background:transparent}
+.list::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2);border-radius:3px}
+.list-item{background:white;border-radius:12px;padding:12px;box-shadow:0 8px 16px rgba(16,24,40,0.08);
+display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+.avatar{width:44px;height:44px;border-radius:22px;background:linear-gradient(180deg,#7f6ee6,#b99df9);
+display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+.li-body{flex:1}.li-title{font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.li-sub{font-size:13px;color:var(--muted);margin-top:4px}.li-price{color:var(--green);font-weight:700}
+.controls{display:flex;gap:8px;flex-shrink:0}
+.ctrl-btn{flex:1;padding:10px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.ctrl-green{background:#22c55e;color:white}.ctrl-red{background:#ef4444;color:white}.ctrl-blue{background:#3b82f6;color:white}
+.loading-text{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+</style>
 </head>
 <body>
-  <div class="backdrop"></div>
-  <div id="float" class="float-win">
-    <div id="drag" class="header">
-      <div class="logo">B</div>
-      <div class="title">Yape & Plin Interceptor</div>
-      <div class="hdr-actions">
-        <div id="minBtn" class="icon-btn">-</div>
-        <div id="closeBtn" class="icon-btn">x</div>
-      </div>
-    </div>
-    <div class="body">
-      <div class="pill">
-        <div class="left">
-          <div style="width:12px;height:12px;border-radius:6px;background:var(--green)"></div>
-          <div class="status">Conectado</div>
-        </div>
-        <button class="btn-start" onclick="cargarDatos()">Recargar</button>
-      </div>
-      <div class="tabs">
-        <div class="tab active" data-filter="todos">Todos</div>
-        <div class="tab" data-filter="hoy">Hoy</div>
-        <div class="tab" data-filter="ayer">Ayer</div>
-      </div>
-      <div class="cards">
-        <div class="card"><div class="num" id="countYape">0</div><div class="label">Operaciones</div></div>
-        <div class="card"><div class="num" id="totalYape">S/ 0.00</div><div class="label">Total recibido</div></div>
-      </div>
-      <div class="list" id="list"><div class="loading-text">Cargando datos...</div></div>
-      <div class="controls">
-        <button class="ctrl-btn ctrl-blue">Ver planes</button>
-        <button class="ctrl-btn ctrl-green">Métodos</button>
-        <button class="ctrl-btn ctrl-red">Soporte</button>
-      </div>
+<div class="backdrop"></div>
+<div id="float" class="float-win">
+  <div id="drag" class="header">
+    <div class="logo">B</div>
+    <div class="title">Yape & Plin Interceptor</div>
+    <div class="hdr-actions">
+      <div id="minBtn" class="icon-btn">-</div>
+      <div id="closeBtn" class="icon-btn">x</div>
     </div>
   </div>
+  <div class="body">
+    <div class="pill">
+      <div class="left">
+        <div style="width:12px;height:12px;border-radius:6px;background:var(--green)"></div>
+        <div class="status">Conectado</div>
+      </div>
+      <button class="btn-start" onclick="cargarDatos()">Recargar</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" data-filter="todos">Todos</div>
+      <div class="tab" data-filter="hoy">Hoy</div>
+      <div class="tab" data-filter="ayer">Ayer</div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="num" id="countYape">0</div><div class="label">Operaciones</div></div>
+      <div class="card"><div class="num" id="totalYape">S/ 0.00</div><div class="label">Total recibido</div></div>
+    </div>
+    <div class="list" id="list"><div class="loading-text">Cargando datos...</div></div>
+    <div class="controls">
+      <button class="ctrl-btn ctrl-blue">Ver planes</button>
+      <button class="ctrl-btn ctrl-green">Métodos</button>
+      <button class="ctrl-btn ctrl-red">Soporte</button>
+    </div>
+  </div>
+</div>
 
-  <script>
-    function escapeHtml(str){
-      return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-    }
+<script>
+const escapeHtml=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const cleanText=s=>s?.replace(/\\(?=[^\\])/g,'')||"";
 
-    function cleanText(str){
-      if(!str) return "";
-      return str.replace(/\\(?=[^\\])/g,''); // mantiene comillas, elimina barras sobrantes
-    }
+const parseLocalDate=s=>{
+  const m=s.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
+  if(!m) return new Date();
+  let [_,y,mon,d,h,min,sec,mer]=m.map((v,i)=>i>0?v:null);
+  h=parseInt(h); if(mer.toUpperCase()==='PM' && h<12) h+=12; if(mer.toUpperCase()==='AM' && h===12) h=0;
+  return new Date(parseInt(y),parseInt(mon)-1,parseInt(d),h,parseInt(min),parseInt(sec));
+};
 
-    // Parsear fechas locales desde formato "YYYY-MM-DD HH:MM:SS AM/PM"
-    function parseLocalDate(fechaStr){
-      // "2025-11-18 06:26:50 PM"
-      const parts = fechaStr.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
-      if(!parts) return new Date();
-      let [_, y, m, d, h, min, s, mer] = parts.map((v,i)=>i>0?v:null);
-      y = parseInt(y); m = parseInt(m)-1; d = parseInt(d);
-      h = parseInt(h); min = parseInt(min); s = parseInt(s);
-      if(mer.toUpperCase()==='PM' && h<12) h+=12;
-      if(mer.toUpperCase()==='AM' && h===12) h=0;
-      return new Date(y,m,d,h,min,s);
-    }
+const esHoy=s=>{const f=parseLocalDate(s),h=new Date(); return f.getFullYear()===h.getFullYear() && f.getMonth()===h.getMonth() && f.getDate()===h.getDate();};
+const esAyer=s=>{const f=parseLocalDate(s),a=new Date(); a.setDate(a.getDate()-1); return f.getFullYear()===a.getFullYear() && f.getMonth()===a.getMonth() && f.getDate()===a.getDate();};
 
-    function esHoy(fechaStr){
-      const f = parseLocalDate(fechaStr);
-      const hoy = new Date();
-      return f.getFullYear()===hoy.getFullYear() &&
-             f.getMonth()===hoy.getMonth() &&
-             f.getDate()===hoy.getDate();
-    }
+(function(){const w=document.getElementById('float'),d=document.getElementById('drag');let a=false,x=0,y=0,ox=0,oy=0;
+d.addEventListener('pointerdown',e=>{a=true;d.setPointerCapture(e.pointerId);x=e.clientX;y=e.clientY;const r=w.getBoundingClientRect();ox=r.left;oy=r.top;});
+window.addEventListener('pointermove',e=>{if(a)w.style.left=ox+e.clientX-x+'px',w.style.top=oy+e.clientY-y+'px',w.style.transform='none';});
+window.addEventListener('pointerup',()=>{a=false;});})();
+document.getElementById('minBtn').onclick=()=>{const f=document.getElementById('float'); f.style.transform=f.style.transform==='scale(0.07)'?'translate(-50%,-50%)':'scale(0.07)'; f.style.opacity=f.style.opacity==='0.03'?'1':'0.03';};
+document.getElementById('closeBtn').onclick=()=>{document.getElementById('float').style.display='none';};
 
-    function esAyer(fechaStr){
-      const f = parseLocalDate(fechaStr);
-      const ayer = new Date();
-      ayer.setDate(ayer.getDate()-1);
-      return f.getFullYear()===ayer.getFullYear() &&
-             f.getMonth()===ayer.getMonth() &&
-             f.getDate()===ayer.getDate();
-    }
+const DATA_URL="https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
+const list=document.getElementById("list"),countEl=document.getElementById("countYape"),totalEl=document.getElementById("totalYape");
+let todos=[],filtro="todos";
 
-    // Drag, minimizar y cerrar
-    (function(){
-      const w=document.getElementById('float'),d=document.getElementById('drag');
-      let a=false,x=0,y=0,ox=0,oy=0;
-      const p=(X,Y)=>{w.style.left=X+'px';w.style.top=Y+'px';w.style.transform='none';};
-      d.addEventListener('pointerdown',e=>{a=true;d.setPointerCapture(e.pointerId);x=e.clientX;y=e.clientY;
-        const r=w.getBoundingClientRect();ox=r.left;oy=r.top;});
-      window.addEventListener('pointermove',e=>{if(a)p(ox+e.clientX-x,oy+e.clientY-y);});
-      window.addEventListener('pointerup',()=>{a=false;});
-    })();
-    document.getElementById('minBtn').onclick=()=>{const f=document.getElementById('float');
-      f.style.transform=f.style.transform==='scale(0.07)'?'translate(-50%,-50%)':'scale(0.07)';
-      f.style.opacity=f.style.opacity==='0.03'?'1':'0.03';};
-    document.getElementById('closeBtn').onclick=()=>{document.getElementById('float').style.display='none';};
+async function cargarDatos(){
+  list.innerHTML='<div class="loading-text">Actualizando datos...</div>';
+  try{const resp=await fetch(DATA_URL+"?t="+Date.now());todos=Array.isArray(await resp.json())?await resp.json():[]; renderizar(filtro);}
+  catch(err){list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';}
+}
 
-    const DATA_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
-    const list = document.getElementById("list");
-    const countEl = document.getElementById("countYape");
-    const totalEl = document.getElementById("totalYape");
-    let todosLosDatos = [];
-    let filtroActual = "todos";
+function renderizar(f){
+  list.innerHTML=""; let total=0,count=0;
+  if(!todos.length){list.innerHTML='<div class="loading-text">No hay datos</div>'; countEl.textContent="0"; totalEl.textContent="S/ 0.00"; return;}
+  todos.forEach(item=>{
+    if(!item.fecha) return;
+    if(!(f==="todos" || (f==="hoy"&&esHoy(item.fecha)) || (f==="ayer"&&esAyer(item.fecha)))) return;
+    let imp=typeof item.importe==="number"?item.importe:parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
+    if(imp>0){total+=imp;count++;}
+    const div=document.createElement("div"); div.className="list-item";
+    div.innerHTML=`<div class="avatar">S/</div><div class="li-body">
+      <div class="li-title"><span>${escapeHtml(cleanText(item.titulo))||"Pago"}</span>${imp>0?`<span class="li-price">S/ ${imp.toFixed(2)}</span>`:""}</div>
+      <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
+      <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
+    </div>`; list.appendChild(div);
+  });
+  countEl.textContent=count; totalEl.textContent="S/ "+total.toFixed(2);
+}
 
-    async function cargarDatos(){
-      list.innerHTML='<div class="loading-text">Actualizando datos...</div>';
-      try{
-        const resp = await fetch(DATA_URL + "?t=" + Date.now());
-        const data = await resp.json();
-        todosLosDatos = Array.isArray(data)?data:[];
-        renderizar(filtroActual);
-      }catch(err){
-        list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';
-      }
-    }
-
-    function renderizar(filtro){
-      list.innerHTML=""; 
-      let total=0,count=0;
-      if(todosLosDatos.length===0){
-        list.innerHTML='<div class="loading-text">No hay datos</div>';
-        countEl.textContent="0";
-        totalEl.textContent="S/ 0.00";
-        return;
-      }
-
-      todosLosDatos.forEach(item=>{
-        if(!item.fecha) return;
-
-        const mostrar = filtro==="todos" || (filtro==="hoy" && esHoy(item.fecha)) || (filtro==="ayer" && esAyer(item.fecha));
-        if(!mostrar) return;
-
-        let importe = typeof item.importe==="number"?item.importe:
-                      parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
-        if(importe>0){total+=importe;count++;}
-
-        const div=document.createElement("div");
-        div.className="list-item";
-        div.innerHTML=`
-          <div class="avatar">S/</div>
-          <div class="li-body">
-            <div class="li-title">
-              <span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>
-              ${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}
-            </div>
-            <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
-            <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-
-      countEl.textContent=count;
-      totalEl.textContent="S/ "+total.toFixed(2);
-    }
-
-    cargarDatos();
-
-    document.querySelectorAll('.tab').forEach(tab=>{
-      tab.onclick=()=>{
-        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-        tab.classList.add('active');
-        filtroActual=tab.dataset.filter;
-        renderizar(filtroActual);
-      };
-    });
-  </script>
+cargarDatos();
+document.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); filtro=tab.dataset.filter; renderizar(filtro);});
+</script>
 </body>
 </html>
