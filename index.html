@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Yape & Plin Interceptor</title>
 <style>
-/* === REGLA DE ORO PARA EVITAR SCROLL HORIZONTAL === */
+/* === REGLA DE ORO: Esto evita el scroll en el botón de soporte === */
 * { box-sizing: border-box; } 
 
 :root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3;--dark-overlay:rgba(0,0,0,0.6)}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#222;overflow:hidden;background:#eef2f5;}
 
-/* Fondo decorativo tipo Landing */
+/* Fondo decorativo */
 .backdrop{position:fixed;inset:0;background:url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); opacity: 0.6; pointer-events:none}
 
 /* VENTANA FLOTANTE */
@@ -80,7 +80,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 
 /* Controles Inferiores */
 .controls{display:flex;gap:8px;margin-top:auto;flex-shrink:0}
-.ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s; display:flex; align-items:center; justify-content:center;}
+.ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s; display:flex; align-items:center; justify-content:center; text-align:center;}
 .ctrl-btn:hover{opacity: 0.9;}
 .ctrl-green{background:#22c55e}
 .ctrl-red{background:#ef4444}
@@ -129,12 +129,12 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 <div class="backdrop"></div>
 
 <div id="float" class="float-win">
+  <!-- Solo botón X como en el original -->
   <div id="drag" class="header">
     <div class="logo">B</div>
     <div class="title">Yape & Plin Interceptor</div>
     <div class="hdr-actions">
-      <div id="minBtn" class="icon-btn">_</div>
-      <div id="closeBtn" class="icon-btn">✕</div>
+      <div id="closeBtn" class="icon-btn">X</div>
     </div>
   </div>
   
@@ -221,11 +221,12 @@ function esAyer(fStr){
   return parseLocalDate(fStr).toDateString() === a.toDateString();
 }
 
-// ====== DRAG & DROP ======
+// ====== DRAG & DROP (Sin minimizar) ======
 (function(){
   const w=document.getElementById('float'), d=document.getElementById('drag');
   let isDragging=false, startX, startY, initialLeft, initialTop;
   d.addEventListener('mousedown', e => {
+    if(e.target.classList.contains('icon-btn')) return;
     isDragging = true; startX = e.clientX; startY = e.clientY;
     const rect = w.getBoundingClientRect();
     w.style.left = rect.left + 'px'; w.style.top = rect.top + 'px'; w.style.transform = 'none';
@@ -239,15 +240,10 @@ function esAyer(fStr){
   window.addEventListener('mouseup', () => { isDragging = false; d.style.cursor = 'grab'; });
 })();
 
-document.getElementById('minBtn').onclick = () => {
-  const f = document.getElementById('float');
-  if(f.style.opacity === '0.3') {
-    f.style.opacity = '1'; f.style.transform = f.style.transform==='none'?'none':'translate(-50%, -50%) scale(1)';
-  } else {
-    f.style.opacity = '0.3'; f.style.transform = f.style.transform==='none'?'scale(0.8)':'translate(-50%, -50%) scale(0.8)';
-  }
+document.getElementById('closeBtn').onclick = (e) => { 
+  e.stopPropagation(); 
+  document.getElementById('float').style.display = 'none'; 
 };
-document.getElementById('closeBtn').onclick = () => { document.getElementById('float').style.display = 'none'; };
 
 // ====== DATA FETCH ======
 const list = document.getElementById("list"), countEl = document.getElementById("countYape"), totalEl = document.getElementById("totalYape");
@@ -297,7 +293,7 @@ document.querySelectorAll('.tab').forEach(tab=>{
   };
 });
 
-// ====== MODALES LOGIC (Texto Original Restaurado) ======
+// ====== MODALES Y MENSAJES ======
 const modalOverlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
@@ -313,26 +309,27 @@ function showModal(type) {
   modalBody.innerHTML = '';
   if (type === 'plans') {
     modalTitle.textContent = "Planes Premium";
+    // LINKS DINÁMICOS QUE INCLUYEN EL NOMBRE DEL PLAN Y EL PRECIO
     modalBody.innerHTML = `
       <div class="plan-card">
         <div class="plan-name">PLAN MENSUAL</div>
         <div class="plan-price">S/ 6.00</div>
         <div class="plan-detail">Facturado cada mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual">Contratar</a>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
       </div>
       <div class="plan-card featured">
         <div class="plan-tag">AHORRA 33%</div>
         <div class="plan-name">TRIMESTRAL</div>
         <div class="plan-price">S/ 12.00</div>
         <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral">Contratar</a>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
       </div>
       <div class="plan-card featured">
         <div class="plan-tag">MEJOR PRECIO</div>
         <div class="plan-name">SEMESTRAL</div>
         <div class="plan-price">S/ 18.00</div>
         <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral">Contratar</a>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
       </div>`;
   } 
   else if (type === 'pay') {
@@ -356,7 +353,7 @@ function showModal(type) {
   }
   else if (type === 'support') {
     modalTitle.textContent = "Soporte Técnico";
-    // RESTAURADO EL CONTENIDO EXACTO DE TASKER
+    // TEXTOS ORIGINALES RESTAURADOS
     modalBody.innerHTML = `
       <div class="support-box">
         <div class="support-icon">🛠️</div>
