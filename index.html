@@ -3,22 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Yape & Plin Interceptor - Web View</title>
+<title>Yape & Plin Interceptor</title>
 <style>
-/* VARIABLES Y ESTILOS GENERALES (Idéntico a tu diseño Tasker) */
+/* === REGLA DE ORO PARA EVITAR SCROLL HORIZONTAL === */
+* { box-sizing: border-box; } 
+
 :root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3;--dark-overlay:rgba(0,0,0,0.6)}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#222;overflow:hidden;background:#eef2f5;}
 
-/* Fondo para que parezca una landing */
+/* Fondo decorativo tipo Landing */
 .backdrop{position:fixed;inset:0;background:url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); opacity: 0.6; pointer-events:none}
 
-/* ESTILO DE LA VENTANA FLOTANTE */
+/* VENTANA FLOTANTE */
 .float-win {
   position:fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width:380px; /* Un poco más ancho para web */
+  width:380px;
   max-width:94vw;
   z-index:100;
   box-shadow:0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.5);
@@ -28,13 +30,12 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
   flex-direction:column;
   background:linear-gradient(180deg,var(--bg),#fff);
   max-height:90vh;
-  /* Animación de entrada */
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popIn { from{transform:translate(-50%, -40%) scale(0.9);opacity:0} to{transform:translate(-50%, -50%) scale(1);opacity:1} }
 
-.header{display:flex;align-items:center;gap:10px;padding:14px;background:var(--accent);color:white;flex-shrink:0;cursor: grab;}
+.header{display:flex;align-items:center;gap:10px;padding:14px;background:var(--accent);color:white;flex-shrink:0;cursor: grab; position:relative; z-index:2;}
 .header:active{cursor: grabbing;}
 .logo{width:38px;height:38px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
 .title{font-weight:600;font-size:16px}
@@ -79,13 +80,13 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 
 /* Controles Inferiores */
 .controls{display:flex;gap:8px;margin-top:auto;flex-shrink:0}
-.ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s;}
+.ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s; display:flex; align-items:center; justify-content:center;}
 .ctrl-btn:hover{opacity: 0.9;}
 .ctrl-green{background:#22c55e}
 .ctrl-red{background:#ef4444}
 .ctrl-blue{background:#3b82f6}
 
-/* ====== ESTILOS DE MODALES (Recuperados del Código 1) ====== */
+/* ====== MODALES ====== */
 .modal-overlay {
   position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 10;
   opacity: 0; pointer-events: none; transition: opacity 0.3s;
@@ -96,55 +97,54 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
   width: 100%; background: white; border-top-left-radius: 20px; border-top-right-radius: 20px;
   padding: 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
   transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  max-height: 85%; overflow-y: auto; display: flex; flex-direction: column;
+  max-height: 85%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column;
 }
 .modal-overlay.active .modal-card { transform: translateY(0); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .modal-title { font-size: 18px; font-weight: 700; color: #333; }
 .close-modal { background: #f1f1f1; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #555; }
 
-/* Estilos Contenido Modal */
+/* Estilos Internos Modal */
 .plan-card { border: 2px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 10px; position: relative; background: #fff; }
 .plan-card.featured { border-color: var(--accent); background: #fbf9ff; }
 .plan-tag { position: absolute; top: -10px; right: 10px; background: var(--accent); color: white; font-size: 10px; padding: 4px 8px; border-radius: 10px; font-weight: bold; }
 .plan-name { font-weight: 700; color: #555; font-size: 14px; }
 .plan-price { font-size: 22px; font-weight: 800; color: #222; margin: 4px 0; }
 .plan-detail { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-.plan-btn { display: block; width: 100%; padding: 10px; background: #222; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box; }
+.plan-btn { display: block; width: 100%; padding: 10px; background: #222; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; }
 .plan-card.featured .plan-btn { background: var(--accent); }
 
 .bank-item { padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--muted); cursor: pointer; transition: background 0.2s;}
 .bank-item:active { background: #eee; }
 .bank-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; display: flex; justify-content: space-between;}
 .bank-num { font-family: monospace; font-size: 15px; color: #444; letter-spacing: 0.5px;}
-.support-box { text-align: center; padding: 20px 10px; }
+
+.support-box { text-align: center; padding: 10px 0; }
 .support-icon { font-size: 40px; margin-bottom: 10px; }
 .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-top: 15px; text-decoration: none; }
 </style>
 </head>
 <body>
 
-<!-- Fondo decorativo -->
 <div class="backdrop"></div>
 
-<!-- Ventana Principal -->
 <div id="float" class="float-win">
   <div id="drag" class="header">
     <div class="logo">B</div>
     <div class="title">Yape & Plin Interceptor</div>
     <div class="hdr-actions">
-      <div id="minBtn" class="icon-btn" title="Minimizar">_</div>
-      <div id="closeBtn" class="icon-btn" title="Cerrar">✕</div>
+      <div id="minBtn" class="icon-btn">_</div>
+      <div id="closeBtn" class="icon-btn">✕</div>
     </div>
   </div>
   
   <div class="body">
     <div class="pill">
       <div class="left">
-        <div style="width:12px;height:12px;border-radius:6px;background:#00c48c; box-shadow: 0 0 5px #00c48c;"></div>
-        <div class="status">Conectado (Web)</div>
+        <div style="width:12px;height:12px;border-radius:6px;background:#00c48c"></div>
+        <div class="status">Permisos otorgados</div>
       </div>
-      <button class="btn-start" onclick="cargarDatos()">Refrescar</button>
+      <button class="btn-start" onclick="cargarDatos()">Recargar</button>
     </div>
 
     <div class="tabs">
@@ -165,17 +165,16 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
     </div>
 
     <div class="list" id="list">
-      <div class="loading-text">Esperando datos...</div>
+      <div class="loading-text">Cargando datos...</div>
     </div>
 
-    <!-- Botones de acción (Restaurados) -->
     <div class="controls">
       <button class="ctrl-btn ctrl-blue" onclick="showModal('plans')">Ver planes</button>
-      <button class="ctrl-btn ctrl-green" onclick="showModal('pay')">Métodos</button>
+      <button class="ctrl-btn ctrl-green" onclick="showModal('pay')">Métodos de pago</button>
       <button class="ctrl-btn ctrl-red" onclick="showModal('support')">Soporte</button>
     </div>
 
-    <!-- MODAL OVERLAY (Integrado dentro de la ventana flotante) -->
+    <!-- MODAL -->
     <div id="modalOverlay" class="modal-overlay">
       <div class="modal-card" onclick="event.stopPropagation()">
         <div class="modal-header">
@@ -183,7 +182,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
           <button class="close-modal" onclick="closeModal()">✕</button>
         </div>
         <div id="modalBody" style="overflow-y: auto;">
-          <!-- Se llena dinámicamente con JS -->
+          <!-- Contenido Dinámico -->
         </div>
       </div>
     </div>
@@ -196,7 +195,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 const CONTACT_PHONE = "51960744787";
 const DATA_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
 
-// ====== UTILIDADES DE TEXTO ======
+// ====== UTILIDADES ======
 function escapeHtml(str){
   return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
@@ -204,166 +203,114 @@ function cleanText(str){
   if(!str) return "";
   return str.replace(/\\(?=[^\\])/g,''); 
 }
-function parseLocalDate(fechaStr){
-  const parts = fechaStr.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
+function parseLocalDate(fStr){
+  const parts = fStr.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
   if(!parts) return new Date();
   let [_, y, m, d, h, min, s, mer] = parts.map((v,i)=>i>0?v:null);
-  y = parseInt(y); m = parseInt(m)-1; d = parseInt(d);
-  h = parseInt(h); min = parseInt(min); s = parseInt(s);
+  y=parseInt(y); m=parseInt(m)-1; d=parseInt(d);
+  h=parseInt(h); min=parseInt(min); s=parseInt(s);
   if(mer.toUpperCase()==='PM' && h<12) h+=12;
   if(mer.toUpperCase()==='AM' && h===12) h=0;
   return new Date(y,m,d,h,min,s);
 }
 function esHoy(fStr){
-  const f = parseLocalDate(fStr); const hoy = new Date();
-  return f.toDateString() === hoy.toDateString();
+  return parseLocalDate(fStr).toDateString() === new Date().toDateString();
 }
 function esAyer(fStr){
-  const f = parseLocalDate(fStr); const ayer = new Date(); ayer.setDate(ayer.getDate()-1);
-  return f.toDateString() === ayer.toDateString();
+  const a = new Date(); a.setDate(a.getDate()-1);
+  return parseLocalDate(fStr).toDateString() === a.toDateString();
 }
 
-// ====== LÓGICA DE ARRASTRE (DRAG) ======
+// ====== DRAG & DROP ======
 (function(){
   const w=document.getElementById('float'), d=document.getElementById('drag');
   let isDragging=false, startX, startY, initialLeft, initialTop;
-
   d.addEventListener('mousedown', e => {
-    isDragging = true;
-    startX = e.clientX; startY = e.clientY;
+    isDragging = true; startX = e.clientX; startY = e.clientY;
     const rect = w.getBoundingClientRect();
-    // Convertimos a pixels fijos para quitar el transform translate(-50%, -50%)
-    w.style.left = rect.left + 'px';
-    w.style.top = rect.top + 'px';
-    w.style.transform = 'none';
-    initialLeft = rect.left;
-    initialTop = rect.top;
-    d.style.cursor = 'grabbing';
+    w.style.left = rect.left + 'px'; w.style.top = rect.top + 'px'; w.style.transform = 'none';
+    initialLeft = rect.left; initialTop = rect.top; d.style.cursor = 'grabbing';
   });
-
   window.addEventListener('mousemove', e => {
     if(!isDragging) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    w.style.left = (initialLeft + dx) + 'px';
-    w.style.top = (initialTop + dy) + 'px';
+    w.style.left = (initialLeft + (e.clientX - startX)) + 'px';
+    w.style.top = (initialTop + (e.clientY - startY)) + 'px';
   });
-
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-    d.style.cursor = 'grab';
-  });
+  window.addEventListener('mouseup', () => { isDragging = false; d.style.cursor = 'grab'; });
 })();
 
-// Botones de ventana
 document.getElementById('minBtn').onclick = () => {
   const f = document.getElementById('float');
   if(f.style.opacity === '0.3') {
-    f.style.opacity = '1';
-    f.style.transform = f.style.transform === 'none' ? 'none' : 'translate(-50%, -50%) scale(1)';
+    f.style.opacity = '1'; f.style.transform = f.style.transform==='none'?'none':'translate(-50%, -50%) scale(1)';
   } else {
-    f.style.opacity = '0.3';
-    f.style.transform = f.style.transform === 'none' ? 'scale(0.8)' : 'translate(-50%, -50%) scale(0.8)';
+    f.style.opacity = '0.3'; f.style.transform = f.style.transform==='none'?'scale(0.8)':'translate(-50%, -50%) scale(0.8)';
   }
 };
-document.getElementById('closeBtn').onclick = () => {
-  // En web no podemos cerrar la pestaña, así que ocultamos la interfaz
-  document.getElementById('float').style.display = 'none';
-  alert("Aplicación cerrada. Recarga la página para volver a abrir.");
-};
+document.getElementById('closeBtn').onclick = () => { document.getElementById('float').style.display = 'none'; };
 
-// ====== LÓGICA DE DATOS (FETCH) ======
-const list = document.getElementById("list");
-const countEl = document.getElementById("countYape");
-const totalEl = document.getElementById("totalYape");
-let todosLosDatos = [];
-let filtroActual = "todos";
+// ====== DATA FETCH ======
+const list = document.getElementById("list"), countEl = document.getElementById("countYape"), totalEl = document.getElementById("totalYape");
+let todosLosDatos = [], filtroActual = "todos";
 
 async function cargarDatos(){
-  list.innerHTML='<div class="loading-text">Conectando con Base de Datos...<br>Esto puede tardar unos segundos.</div>';
+  list.innerHTML='<div class="loading-text">Actualizando datos...</div>';
   try{
     const resp = await fetch(DATA_URL + "?t=" + Date.now());
     const data = await resp.json();
     todosLosDatos = Array.isArray(data) ? data : [];
     renderizar(filtroActual);
   } catch(err){
-    list.innerHTML='<div class="loading-text" style="color:red">Error de conexión o datos.</div>';
-    console.error(err);
+    list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';
   }
 }
 
 function renderizar(filtro){
-  list.innerHTML=""; 
-  let total=0, count=0;
+  list.innerHTML=""; let total=0, count=0;
   if(todosLosDatos.length===0){
-    list.innerHTML='<div class="loading-text">No hay operaciones registradas</div>';
-    countEl.textContent="0";
-    totalEl.textContent="S/ 0.00";
-    return;
+    list.innerHTML='<div class="loading-text">No hay datos</div>';
+    countEl.textContent="0"; totalEl.textContent="S/ 0.00"; return;
   }
-
   todosLosDatos.forEach(item=>{
     if(!item.fecha) return;
     const mostrar = filtro==="todos" || (filtro==="hoy" && esHoy(item.fecha)) || (filtro==="ayer" && esAyer(item.fecha));
     if(!mostrar) return;
-
     let importe = typeof item.importe==="number"?item.importe: parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
     if(importe>0){total+=importe;count++;}
-
-    const div=document.createElement("div");
-    div.className="list-item";
+    const div=document.createElement("div"); div.className="list-item";
     div.innerHTML=`
       <div class="avatar">S/</div>
       <div class="li-body">
-        <div class="li-title">
-          <span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>
-          ${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}
-        </div>
+        <div class="li-title"><span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}</div>
         <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
         <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
-      </div>
-    `;
+      </div>`;
     list.appendChild(div);
   });
-
-  countEl.textContent=count;
-  totalEl.textContent="S/ "+total.toFixed(2);
+  countEl.textContent=count; totalEl.textContent="S/ "+total.toFixed(2);
 }
 
-// Tabs Logic
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.onclick=()=>{
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    filtroActual=tab.dataset.filter;
-    renderizar(filtroActual);
+    tab.classList.add('active'); filtroActual=tab.dataset.filter; renderizar(filtroActual);
   };
 });
 
-// ====== LÓGICA DE MODALES (PLANES, PAGOS, SOPORTE) ======
+// ====== MODALES LOGIC (Texto Original Restaurado) ======
 const modalOverlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
 
-function closeModal() {
-  modalOverlay.classList.remove('active');
-}
-// Cerrar al hacer click fuera de la tarjeta
-modalOverlay.onclick = (e) => {
-  if(e.target === modalOverlay) closeModal();
-}
+function closeModal() { modalOverlay.classList.remove('active'); }
+modalOverlay.onclick = (e) => { if(e.target === modalOverlay) closeModal(); }
 
 function copiarTexto(txt) {
-  navigator.clipboard.writeText(txt).then(() => {
-    alert("Copiado al portapapeles: " + txt);
-  }).catch(() => {
-    prompt("Copia este número:", txt);
-  });
+  navigator.clipboard.writeText(txt).then(() => alert("Copiado: " + txt)).catch(() => prompt("Copia este número:", txt));
 }
 
 function showModal(type) {
   modalBody.innerHTML = '';
-  
   if (type === 'plans') {
     modalTitle.textContent = "Planes Premium";
     modalBody.innerHTML = `
@@ -371,16 +318,22 @@ function showModal(type) {
         <div class="plan-name">PLAN MENSUAL</div>
         <div class="plan-price">S/ 6.00</div>
         <div class="plan-detail">Facturado cada mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual">Contratar</a>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual">Contratar</a>
       </div>
       <div class="plan-card featured">
-        <div class="plan-tag">POPULAR</div>
+        <div class="plan-tag">AHORRA 33%</div>
         <div class="plan-name">TRIMESTRAL</div>
         <div class="plan-price">S/ 12.00</div>
-        <div class="plan-detail">S/ 4.00 / mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral">Contratar</a>
+        <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral">Contratar</a>
       </div>
-    `;
+      <div class="plan-card featured">
+        <div class="plan-tag">MEJOR PRECIO</div>
+        <div class="plan-name">SEMESTRAL</div>
+        <div class="plan-price">S/ 18.00</div>
+        <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
+        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral">Contratar</a>
+      </div>`;
   } 
   else if (type === 'pay') {
     modalTitle.textContent = "Métodos de Pago";
@@ -394,34 +347,33 @@ function showModal(type) {
     payments.forEach(p => {
       html += `
         <div class="bank-item" style="border-color: ${p.color};" onclick="copiarTexto('${p.num}')">
-          <div class="bank-name">
-             <span>${p.bank}</span>
-             <span style="font-size:11px; color:#999;">📋 Toca para copiar</span>
-          </div>
+          <div class="bank-name"><span>${p.bank}</span><span style="font-size:11px; color:#999;">Copiar</span></div>
           <div class="bank-num">${p.num}</div>
         </div>`;
     });
+    html += `<div style="font-size:12px; color:#999; text-align:center; margin-top:10px;">Envía la captura del pago a Soporte.</div>`
     modalBody.innerHTML = html;
   }
   else if (type === 'support') {
     modalTitle.textContent = "Soporte Técnico";
+    // RESTAURADO EL CONTENIDO EXACTO DE TASKER
     modalBody.innerHTML = `
       <div class="support-box">
         <div class="support-icon">🛠️</div>
-        <p>¿Problemas con la aplicación?</p>
-        <a class="whatsapp-btn" href="https://wa.me/${CONTACT_PHONE}" target="_blank">
+        <p>¿Tu suscripción ha vencido o tienes problemas con la aplicación?</p>
+        <a class="whatsapp-btn" href="https://wa.me/${CONTACT_PHONE}?text=Hola%20deseo%20suscribirme%20a%20este%20servicio" target="_blank">
           <span>Chatear en WhatsApp</span>
         </a>
+        <div style="margin-top:15px; font-size:12px; color:#999;">
+          Horario: 9am - 6pm<br>Número: ${CONTACT_PHONE}
+        </div>
       </div>
     `;
   }
-  
   modalOverlay.classList.add('active');
 }
 
-// Cargar datos al inicio
 cargarDatos();
-
 </script>
 </body>
 </html>
