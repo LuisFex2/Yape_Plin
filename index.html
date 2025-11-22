@@ -5,16 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Yape & Plin Interceptor</title>
 <style>
-/* === REGLA DE ORO: Esto evita el scroll en el botón de soporte === */
 * { box-sizing: border-box; } 
 
 :root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3;--dark-overlay:rgba(0,0,0,0.6)}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#222;overflow:hidden;background:#eef2f5;}
 
-/* Fondo decorativo */
 .backdrop{position:fixed;inset:0;background:url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); opacity: 0.6; pointer-events:none}
 
-/* VENTANA FLOTANTE */
 .float-win {
   position:fixed;
   top: 50%;
@@ -45,25 +42,21 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 
 .body{padding:14px;background:linear-gradient(180deg,#fafafa,#fff);flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
 
-/* Botones Superiores */
 .pill{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 6px 12px rgba(16,24,40,0.04)}
 .pill .left{display:flex;gap:10px;align-items:center}
 .pill .status{font-weight:600}
 .btn-start{background:var(--teal);color:white;padding:8px 14px;border-radius:18px;border:none;cursor:pointer;font-weight:600;transition:0.2s}
 .btn-start:hover{background:#14a085; transform:scale(1.05);}
 
-/* Tabs */
 .tabs{display:flex;gap:6px;margin-bottom:10px;flex-shrink:0}
 .tab{flex:1;padding:7px 8px;border-radius:9px;text-align:center;font-weight:600;font-size:14px;cursor:pointer;transition:all .25s;background:#f2fbfa;color:#000;border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 6px rgba(0,196,140,0.1)}
 .tab.active{background:var(--accent);color:white;border-color:var(--accent);box-shadow:0 3px 10px rgba(110,74,209,0.3)}
 
-/* Cards */
 .cards{display:flex;gap:10px;margin-bottom:12px;flex-shrink:0}
 .card{flex:1;background:#f2fbfa;border-radius:10px;padding:12px;text-align:center;border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 8px rgba(0,196,140,0.1)}
 .card .num{font-size:20px;font-weight:700;color:var(--green)}
 .card .label{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* Lista */
 .list{flex:1;overflow-y:auto;padding-right:4px;margin-bottom:10px;min-height:0}
 .list::-webkit-scrollbar{width:6px}
 .list::-webkit-scrollbar-track{background:transparent}
@@ -78,7 +71,6 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 .li-price{color:var(--green);font-weight:700; margin-left: 5px;}
 .loading-text{text-align:center;color:var(--muted);padding:30px;font-size:14px}
 
-/* Controles Inferiores */
 .controls{display:flex;gap:8px;margin-top:auto;flex-shrink:0}
 .ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s; display:flex; align-items:center; justify-content:center; text-align:center;}
 .ctrl-btn:hover{opacity: 0.9;}
@@ -104,7 +96,6 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 .modal-title { font-size: 18px; font-weight: 700; color: #333; }
 .close-modal { background: #f1f1f1; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #555; }
 
-/* Estilos Internos Modal */
 .plan-card { border: 2px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 10px; position: relative; background: #fff; }
 .plan-card.featured { border-color: var(--accent); background: #fbf9ff; }
 .plan-tag { position: absolute; top: -10px; right: 10px; background: var(--accent); color: white; font-size: 10px; padding: 4px 8px; border-radius: 10px; font-weight: bold; }
@@ -122,6 +113,26 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 .support-box { text-align: center; padding: 10px 0; }
 .support-icon { font-size: 40px; margin-bottom: 10px; }
 .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-top: 15px; text-decoration: none; }
+
+/* ====== LOGIN ====== */
+.login-form { display: flex; flex-direction: column; gap: 15px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-weight: 600; font-size: 14px; color: #333; }
+.form-input {
+  padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;
+  font-size: 14px; transition: border-color 0.2s;
+}
+.form-input:focus { outline: none; border-color: var(--accent); }
+.login-btn {
+  background: var(--accent); color: white; padding: 12px; border: none;
+  border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px;
+}
+.login-btn:active { opacity: 0.8; }
+.error-msg {
+  background: #fee; color: #c33; padding: 10px; border-radius: 8px;
+  text-align: center; font-size: 13px; display: none;
+}
+.error-msg.show { display: block; }
 </style>
 </head>
 <body>
@@ -129,7 +140,6 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 <div class="backdrop"></div>
 
 <div id="float" class="float-win">
-  <!-- Solo botón X como en el original -->
   <div id="drag" class="header">
     <div class="logo">B</div>
     <div class="title">Yape & Plin Interceptor</div>
@@ -141,10 +151,10 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
   <div class="body">
     <div class="pill">
       <div class="left">
-        <div style="width:12px;height:12px;border-radius:6px;background:#00c48c"></div>
-        <div class="status">Permisos otorgados</div>
+        <div id="statusDot" style="width:12px;height:12px;border-radius:6px;background:#ff6b6b"></div>
+        <div class="status" id="statusText">Permisos denegados</div>
       </div>
-      <button class="btn-start" onclick="cargarDatos()">Recargar</button>
+      <button id="startBtn" class="btn-start">Iniciar</button>
     </div>
 
     <div class="tabs">
@@ -165,7 +175,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
     </div>
 
     <div class="list" id="list">
-      <div class="loading-text">Cargando datos...</div>
+      <div class="loading-text">Esperando autenticación...</div>
     </div>
 
     <div class="controls">
@@ -181,9 +191,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
           <div id="modalTitle" class="modal-title">Título</div>
           <button class="close-modal" onclick="closeModal()">✕</button>
         </div>
-        <div id="modalBody" style="overflow-y: auto;">
-          <!-- Contenido Dinámico -->
-        </div>
+        <div id="modalBody"></div>
       </div>
     </div>
 
@@ -194,6 +202,12 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 // ====== CONFIGURACIÓN ======
 const CONTACT_PHONE = "51960744787";
 const DATA_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
+
+// ====== ESTADO ======
+let estaAutenticado = false;
+let credenciales = { usuario: "", password: "" };
+let todosLosDatos = [];
+let filtroActual = "todos";
 
 // ====== UTILIDADES ======
 function escapeHtml(str){
@@ -221,7 +235,7 @@ function esAyer(fStr){
   return parseLocalDate(fStr).toDateString() === a.toDateString();
 }
 
-// ====== DRAG & DROP (Sin minimizar) ======
+// ====== DRAG & DROP ======
 (function(){
   const w=document.getElementById('float'), d=document.getElementById('drag');
   let isDragging=false, startX, startY, initialLeft, initialTop;
@@ -245,16 +259,34 @@ document.getElementById('closeBtn').onclick = (e) => {
   document.getElementById('float').style.display = 'none'; 
 };
 
-// ====== DATA FETCH ======
-const list = document.getElementById("list"), countEl = document.getElementById("countYape"), totalEl = document.getElementById("totalYape");
-let todosLosDatos = [], filtroActual = "todos";
+// ====== BOTÓN INICIAR (MUESTRA LOGIN) ======
+document.getElementById('startBtn').onclick = () => {
+  if (!estaAutenticado) {
+    showModal('login');
+  } else {
+    cargarDatos();
+  }
+};
+
+// ====== CARGAR DATOS DE LA API ======
+const list = document.getElementById("list");
+const countEl = document.getElementById("countYape");
+const totalEl = document.getElementById("totalYape");
 
 async function cargarDatos(){
-  list.innerHTML='<div class="loading-text">Actualizando datos...</div>';
+  if(!estaAutenticado){
+    list.innerHTML='<div class="loading-text">Inicia sesión primero</div>';
+    return;
+  }
+  
+  list.innerHTML='<div class="loading-text">Cargando datos...</div>';
   try{
     const resp = await fetch(DATA_URL + "?t=" + Date.now());
     const data = await resp.json();
-    todosLosDatos = Array.isArray(data) ? data : [];
+    
+    // Extraer notificaciones y config
+    todosLosDatos = data.notificaciones || [];
+    
     renderizar(filtroActual);
   } catch(err){
     list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';
@@ -262,38 +294,59 @@ async function cargarDatos(){
 }
 
 function renderizar(filtro){
-  list.innerHTML=""; let total=0, count=0;
+  if(!estaAutenticado){
+    list.innerHTML='<div class="loading-text">Inicia sesión para ver los datos</div>';
+    return;
+  }
+  
+  list.innerHTML=""; 
+  let total=0, count=0;
+  
   if(todosLosDatos.length===0){
     list.innerHTML='<div class="loading-text">No hay datos</div>';
-    countEl.textContent="0"; totalEl.textContent="S/ 0.00"; return;
+    countEl.textContent="0"; 
+    totalEl.textContent="S/ 0.00"; 
+    return;
   }
+  
   todosLosDatos.forEach(item=>{
     if(!item.fecha) return;
     const mostrar = filtro==="todos" || (filtro==="hoy" && esHoy(item.fecha)) || (filtro==="ayer" && esAyer(item.fecha));
     if(!mostrar) return;
+    
     let importe = typeof item.importe==="number"?item.importe: parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
     if(importe>0){total+=importe;count++;}
-    const div=document.createElement("div"); div.className="list-item";
+    
+    const div=document.createElement("div"); 
+    div.className="list-item";
     div.innerHTML=`
       <div class="avatar">S/</div>
       <div class="li-body">
-        <div class="li-title"><span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}</div>
+        <div class="li-title">
+          <span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>
+          ${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}
+        </div>
         <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
         <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
       </div>`;
     list.appendChild(div);
   });
-  countEl.textContent=count; totalEl.textContent="S/ "+total.toFixed(2);
+  
+  countEl.textContent=count; 
+  totalEl.textContent="S/ "+total.toFixed(2);
 }
 
+// ====== TABS ======
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.onclick=()=>{
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active'); filtroActual=tab.dataset.filter; renderizar(filtroActual);
+    tab.classList.add('active'); 
+    filtroActual=tab.dataset.filter; 
+    renderizar(filtroActual);
   };
 });
 
-// ====== MODALES Y MENSAJES ======
+// ====== MODALES ======
 const modalOverlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
@@ -307,9 +360,26 @@ function copiarTexto(txt) {
 
 function showModal(type) {
   modalBody.innerHTML = '';
-  if (type === 'plans') {
+  
+  if (type === 'login') {
+    modalTitle.textContent = "Iniciar Sesión";
+    modalBody.innerHTML = `
+      <form class="login-form" onsubmit="return handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Usuario</label>
+          <input type="text" id="loginUser" class="form-input" placeholder="Ingresa tu usuario" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input type="password" id="loginPass" class="form-input" placeholder="Ingresa tu contraseña" required>
+        </div>
+        <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos</div>
+        <button type="submit" class="login-btn">Ingresar</button>
+      </form>
+    `;
+  }
+  else if (type === 'plans') {
     modalTitle.textContent = "Planes Premium";
-    // LINKS DINÁMICOS QUE INCLUYEN EL NOMBRE DEL PLAN Y EL PRECIO
     modalBody.innerHTML = `
       <div class="plan-card">
         <div class="plan-name">PLAN MENSUAL</div>
@@ -353,7 +423,6 @@ function showModal(type) {
   }
   else if (type === 'support') {
     modalTitle.textContent = "Soporte Técnico";
-    // TEXTOS ORIGINALES RESTAURADOS
     modalBody.innerHTML = `
       <div class="support-box">
         <div class="support-icon">🛠️</div>
@@ -367,10 +436,60 @@ function showModal(type) {
       </div>
     `;
   }
+  
   modalOverlay.classList.add('active');
 }
 
-cargarDatos();
+// ====== MANEJAR LOGIN ======
+async function handleLogin(event) {
+  event.preventDefault();
+  
+  const inputUser = document.getElementById('loginUser').value;
+  const inputPass = document.getElementById('loginPass').value;
+  const errorMsg = document.getElementById('errorMsg');
+  
+  // Cargar credenciales desde la API
+  try {
+    const resp = await fetch(DATA_URL + "?t=" + Date.now());
+    const data = await resp.json();
+    
+    // Extraer config
+    credenciales = data.config || {};
+    
+    // Comparar (convertir a string para comparar)
+    if (String(inputUser) === String(credenciales.usuario) && 
+        String(inputPass) === String(credenciales.password)) {
+      
+      // ✅ LOGIN EXITOSO
+      estaAutenticado = true;
+      
+      // Cambiar estado visual
+      document.getElementById('statusDot').style.background = '#00c48c';
+      document.getElementById('statusText').textContent = 'Permisos otorgados';
+      document.getElementById('startBtn').textContent = 'Recargar';
+      document.getElementById('startBtn').style.background = '#00c48c';
+      
+      // Cargar datos (ya los tenemos en data.notificaciones)
+      todosLosDatos = data.notificaciones || [];
+      renderizar(filtroActual);
+      
+      // Cerrar modal
+      closeModal();
+      
+    } else {
+      // ❌ CREDENCIALES INCORRECTAS
+      errorMsg.classList.add('show');
+      setTimeout(() => errorMsg.classList.remove('show'), 3000);
+    }
+    
+  } catch(err) {
+    errorMsg.textContent = "Error al verificar credenciales";
+    errorMsg.classList.add('show');
+    setTimeout(() => errorMsg.classList.remove('show'), 3000);
+  }
+  
+  return false;
+}
 </script>
 </body>
 </html>
