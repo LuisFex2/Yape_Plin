@@ -480,17 +480,24 @@ async function handleLogin(event) {
     // Extraer config
     const config = data.config || {};
     
-    console.log("Comparando:", {
-      inputUser, 
-      inputPass, 
-      configUser: config.campo, 
-      configPass: config.valor
-    });
+    console.log("Config completo:", config);
+    console.log("Intentando login con:", inputUser);
     
-    // Comparar campo (usuario) y valor (contraseña)
-    if (String(inputUser) === String(config.campo) && 
-        String(inputPass) === String(config.valor)) {
+    // Buscar si el campo (usuario) existe en config y si la contraseña coincide
+    let loginExitoso = false;
+    
+    if (config.hasOwnProperty(inputUser)) {
+      const passwordGuardado = String(config[inputUser]);
+      console.log(`Usuario encontrado: ${inputUser}, comparando contraseñas`);
       
+      if (passwordGuardado === String(inputPass)) {
+        loginExitoso = true;
+      }
+    } else {
+      console.log(`Usuario "${inputUser}" no encontrado en config`);
+    }
+    
+    if (loginExitoso) {
       // ✅ LOGIN EXITOSO
       estaAutenticado = true;
       
@@ -507,11 +514,14 @@ async function handleLogin(event) {
       // Cerrar modal
       closeModal();
       
+      console.log("✅ Login exitoso");
+      
     } else {
       // ❌ CREDENCIALES INCORRECTAS
       errorMsg.textContent = "Usuario o contraseña incorrectos";
       errorMsg.classList.add('show');
       setTimeout(() => errorMsg.classList.remove('show'), 3000);
+      console.log("❌ Login fallido");
     }
     
   } catch(err) {
@@ -526,7 +536,3 @@ async function handleLogin(event) {
 </script>
 </body>
 </html>
-
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
