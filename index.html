@@ -216,6 +216,46 @@ let credenciales = { usuario: "", password: "" };
 let todosLosDatos = [];
 let filtroActual = "todos";
 
+// ====== GESTIÓN DE SESIÓN ======
+const SESSION_KEY = "yape_session";
+const SESSION_HOURS = 8; // Duración de la sesión en horas
+
+function guardarSesion() {
+  const expiracion = Date.now() + (SESSION_HOURS * 60 * 60 * 1000); // 8 horas
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ expira: expiracion }));
+}
+
+function verificarSesion() {
+  try {
+    const sesion = localStorage.getItem(SESSION_KEY);
+    if (!sesion) return false;
+    
+    const data = JSON.parse(sesion);
+    if (Date.now() < data.expira) {
+      return true; // Sesión válida
+    } else {
+      localStorage.removeItem(SESSION_KEY); // Expiró
+      return false;
+    }
+  } catch(e) {
+    return false;
+  }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem(SESSION_KEY);
+  estaAutenticado = false;
+  document.getElementById('statusDot').style.background = '#ff6b6b';
+  document.getElementById('statusText').textContent = 'Permisos denegados';
+  document.getElementById('startBtn').textContent = 'Iniciar';
+  document.getElementById('startBtn').style.background = 'var(--teal)';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('startBtn').style.cursor = 'pointer';
+  document.getElementById('startBtn').style.opacity = '1';
+  todosLosDatos = [];
+  renderizar(filtroActual);
+}
+
 // ====== UTILIDADES ======
 function escapeHtml(str){
   return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
@@ -499,6 +539,7 @@ async function handleLogin(event) {
     if (loginExitoso) {
       // ✅ LOGIN EXITOSO
       estaAutenticado = true;
+      guardarSesion(); // Guardar sesión en localStorage
       
       // Cambiar estado visual
       document.getElementById('statusDot').style.background = '#00c48c';
@@ -535,6 +576,28 @@ async function handleLogin(event) {
   
   return false;
 }
+
+// ====== VERIFICAR SESIÓN AL CARGAR ======
+window.addEventListener('DOMContentLoaded', () => {
+  if (verificarSesion()) {
+    console.log("✅ Sesión activa encontrada");
+    estaAutenticado = true;
+    
+    // Cambiar estado visual
+    document.getElementById('statusDot').style.background = '#00c48c';
+    document.getElementById('statusText').textContent = 'Permisos otorgados';
+    document.getElementById('startBtn').textContent = 'Activo';
+    document.getElementById('startBtn').style.background = '#00c48c';
+    document.getElementById('startBtn').disabled = true;
+    document.getElementById('startBtn').style.cursor = 'not-allowed';
+    document.getElementById('startBtn').style.opacity = '0.7';
+    
+    // Cargar datos automáticamente
+    cargarDatos();
+  } else {
+    console.log("ℹ️ No hay sesión activa");
+  }
+});
 </script>
 </body>
 </html>
