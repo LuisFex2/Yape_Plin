@@ -270,9 +270,8 @@ document.getElementById('closeBtn').onclick = (e) => {
 document.getElementById('startBtn').onclick = () => {
   if (!estaAutenticado) {
     showModal('login');
-  } else {
-    cargarDatos();
   }
+  // Si ya está autenticado, el botón no hace nada (está deshabilitado)
 };
 
 // ====== CARGAR DATOS DE LA API ======
@@ -504,8 +503,11 @@ async function handleLogin(event) {
       // Cambiar estado visual
       document.getElementById('statusDot').style.background = '#00c48c';
       document.getElementById('statusText').textContent = 'Permisos otorgados';
-      document.getElementById('startBtn').textContent = 'Recargar';
+      document.getElementById('startBtn').textContent = 'Activo';
       document.getElementById('startBtn').style.background = '#00c48c';
+      document.getElementById('startBtn').disabled = true;
+      document.getElementById('startBtn').style.cursor = 'not-allowed';
+      document.getElementById('startBtn').style.opacity = '0.7';
       
       // Cargar datos (ya los tenemos en data.notificaciones)
       todosLosDatos = data.notificaciones || [];
