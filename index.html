@@ -116,13 +116,20 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe 
 
 /* ====== LOGIN ====== */
 .login-form { display: flex; flex-direction: column; gap: 15px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; position: relative; }
 .form-label { font-weight: 600; font-size: 14px; color: #333; }
 .form-input {
   padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;
-  font-size: 14px; transition: border-color 0.2s;
+  font-size: 14px; transition: border-color 0.2s; width: 100%;
 }
 .form-input:focus { outline: none; border-color: var(--accent); }
+.password-wrapper { position: relative; display: flex; align-items: center; }
+.password-wrapper .form-input { padding-right: 45px; }
+.toggle-password {
+  position: absolute; right: 12px; background: none; border: none;
+  cursor: pointer; font-size: 18px; color: #666; padding: 5px;
+}
+.toggle-password:hover { color: var(--accent); }
 .login-btn {
   background: var(--accent); color: white; padding: 12px; border: none;
   border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px;
@@ -367,11 +374,14 @@ function showModal(type) {
       <form class="login-form" onsubmit="return handleLogin(event)">
         <div class="form-group">
           <label class="form-label">Usuario</label>
-          <input type="text" id="loginUser" class="form-input" placeholder="Ingresa tu usuario" required>
+          <input type="text" id="loginUser" class="form-input" placeholder="Ingresa tu usuario" required autocomplete="username">
         </div>
         <div class="form-group">
           <label class="form-label">Contraseña</label>
-          <input type="password" id="loginPass" class="form-input" placeholder="Ingresa tu contraseña" required>
+          <div class="password-wrapper">
+            <input type="password" id="loginPass" class="form-input" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+            <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+          </div>
         </div>
         <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos</div>
         <button type="submit" class="login-btn">Ingresar</button>
@@ -440,12 +450,26 @@ function showModal(type) {
   modalOverlay.classList.add('active');
 }
 
+// ====== TOGGLE PASSWORD VISIBILITY ======
+function togglePassword() {
+  const passInput = document.getElementById('loginPass');
+  const btn = event.target;
+  
+  if (passInput.type === 'password') {
+    passInput.type = 'text';
+    btn.textContent = '🙈'; // Ocultar
+  } else {
+    passInput.type = 'password';
+    btn.textContent = '👁️'; // Mostrar
+  }
+}
+
 // ====== MANEJAR LOGIN ======
 async function handleLogin(event) {
   event.preventDefault();
   
-  const inputUser = document.getElementById('loginUser').value;
-  const inputPass = document.getElementById('loginPass').value;
+  const inputUser = document.getElementById('loginUser').value.trim();
+  const inputPass = document.getElementById('loginPass').value.trim();
   const errorMsg = document.getElementById('errorMsg');
   
   // Cargar credenciales desde la API
@@ -454,11 +478,18 @@ async function handleLogin(event) {
     const data = await resp.json();
     
     // Extraer config
-    credenciales = data.config || {};
+    const config = data.config || {};
     
-    // Comparar (convertir a string para comparar)
-    if (String(inputUser) === String(credenciales.usuario) && 
-        String(inputPass) === String(credenciales.password)) {
+    console.log("Comparando:", {
+      inputUser, 
+      inputPass, 
+      configUser: config.campo, 
+      configPass: config.valor
+    });
+    
+    // Comparar campo (usuario) y valor (contraseña)
+    if (String(inputUser) === String(config.campo) && 
+        String(inputPass) === String(config.valor)) {
       
       // ✅ LOGIN EXITOSO
       estaAutenticado = true;
@@ -478,11 +509,13 @@ async function handleLogin(event) {
       
     } else {
       // ❌ CREDENCIALES INCORRECTAS
+      errorMsg.textContent = "Usuario o contraseña incorrectos";
       errorMsg.classList.add('show');
       setTimeout(() => errorMsg.classList.remove('show'), 3000);
     }
     
   } catch(err) {
+    console.error("Error en login:", err);
     errorMsg.textContent = "Error al verificar credenciales";
     errorMsg.classList.add('show');
     setTimeout(() => errorMsg.classList.remove('show'), 3000);
