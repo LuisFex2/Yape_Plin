@@ -2,805 +2,623 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor Financiero Glass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INTERCEPTOR FEX</title>
     
-    <!-- Fuente Moderna: Outfit -->
+    <!-- Fuente Tecnológica -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 ESTILOS CORE & VARIABLES (Dark Glassmorphism)
+           🎨 ESTILOS CYBER-FUTURE
         ════════════════════════════════════════════════════════════════ */
         :root {
-            --bg-dark: #090e17;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.1);
-            --primary: #00f2ff; /* Cyan Neon */
-            --primary-glow: rgba(0, 242, 255, 0.4);
-            --secondary: #7000ff; /* Violeta Neon */
-            --success: #00ffa3;
-            --danger: #ff3b3b;
+            --bg-deep: #050511;
+            --card-glass: rgba(20, 20, 40, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --yape-color: #d7159c;
+            --plin-color: #00f0ff;
+            --bank-color: #27d963;
             --text-main: #ffffff;
-            --text-muted: #8b9bb4;
-            --font-family: 'Outfit', sans-serif;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --text-dim: #8f94b1;
+            --accent: #6c5ce7;
+            --danger: #ff4757;
+            --font-main: 'Space Grotesk', sans-serif;
+            --radius: 20px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.1) 0%, transparent 40%);
+            background-color: var(--bg-deep);
             color: var(--text-main);
-            font-family: var(--font-family);
+            font-family: var(--font-main);
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
             overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(108, 92, 231, 0.2), transparent 40%),
+                radial-gradient(circle at 50% 110%, rgba(0, 240, 255, 0.1), transparent 40%);
         }
 
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--glass-highlight); }
-
-        /* ════════════════════════════════════════════════════════════════
-           💻 INTERFAZ PRINCIPAL
-        ════════════════════════════════════════════════════════════════ */
-        #app-container {
+        #app {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             height: 100%;
-            max-height: 850px;
             position: relative;
+            background: rgba(10, 10, 20, 0.6);
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
-            /* Efecto Glass */
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid var(--glass-border);
-            border-left: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
+            box-shadow: 0 0 60px rgba(0,0,0,0.6);
         }
 
-        @media (min-width: 450px) {
-            #app-container {
-                height: 90vh;
-                border-radius: var(--radius-lg);
-                border: 1px solid var(--glass-border);
-            }
+        @media (min-width: 500px) {
+            #app { height: 90vh; border-radius: var(--radius); margin-top: 5vh; border: 1px solid var(--card-border); }
         }
 
-        /* Header */
+        /* ════ HEADER ════ */
         header {
-            padding: 20px;
+            padding: 20px 20px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid transparent;
         }
-
-        .logo-area h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; background: linear-gradient(90deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-close { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; transition: 0.3s; }
-        .btn-close:hover { color: var(--danger); transform: rotate(90deg); }
-
-        /* Status Bar */
-        .status-bar {
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 10px currentColor; transition: 0.3s; }
-        .status-text { letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.7rem; }
         
-        .status-denied { color: var(--danger); }
-        .status-granted { color: var(--success); }
-
-        /* Dashboard Stats */
-        .dashboard { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        
-        .card-balance {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .brand h1 { 
+            font-size: 1.3rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 700; 
+            background: linear-gradient(90deg, #fff, var(--plin-color)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
-        .card-balance::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-            opacity: 0.1; animation: rotate 10s linear infinite;
-        }
-        .balance-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; position: relative; }
-        .balance-amount { font-size: 2.5rem; font-weight: 700; color: var(--text-main); margin: 5px 0; position: relative; text-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
-        .balance-count { font-size: 0.8rem; color: var(--primary); position: relative; font-weight: 600; }
 
-        /* Botón Iniciar / Activo */
-        .btn-action-main {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: none;
-            font-family: var(--font-family);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.6rem;
             text-transform: uppercase;
+            font-weight: 700;
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(255, 71, 87, 0.3);
             letter-spacing: 1px;
         }
-        
-        .btn-start { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
-        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--primary-glow); }
-        
-        .btn-active { background: rgba(0, 255, 163, 0.1); color: var(--success); border: 1px solid rgba(0, 255, 163, 0.3); cursor: default; }
-
-        /* Filtros */
-        .filters { display: flex; gap: 10px; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 12px; }
-        .filter-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 8px;
-            font-size: 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        .status-badge.active {
+            background: rgba(39, 217, 99, 0.1);
+            color: var(--bank-color);
+            border-color: rgba(39, 217, 99, 0.3);
+            box-shadow: 0 0 10px rgba(39, 217, 99, 0.2);
         }
-        .filter-btn.active { background: var(--glass-highlight); color: var(--text-main); font-weight: 600; }
 
-        /* Lista de Transacciones */
-        .list-container {
+        /* ════ STATS (HERO) ════ */
+        .hero-stats {
+            margin: 15px 20px;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.0) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+        
+        .hero-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .hero-amount { font-size: 2.5rem; font-weight: 700; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .hero-count { font-size: 0.75rem; color: var(--plin-color); }
+
+        /* ════ CONTROLES ════ */
+        .controls-area { padding: 0 20px; margin-bottom: 15px; }
+
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn-login {
+            background: var(--text-main); color: #000;
+            box-shadow: 0 0 20px rgba(255,255,255,0.15);
+        }
+        .btn-login:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(255,255,255,0.25); }
+
+        .filters-row { display: flex; gap: 8px; }
+        .btn-filter {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            color: var(--text-dim);
+            border: 1px solid var(--card-border);
+        }
+        .btn-filter.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* ════ LISTA ════ */
+        .list-wrapper {
             flex: 1;
             overflow-y: auto;
             padding: 0 20px 20px 20px;
         }
-        
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            margin-bottom: 10px;
-            background: var(--glass-bg);
-            border: 1px solid transparent;
-            border-radius: 16px;
-            transition: 0.2s;
-            animation: slideUp 0.4s ease forwards;
-        }
-        .transaction-item:hover { border-color: var(--glass-highlight); background: rgba(255,255,255,0.05); }
-        
-        .t-left { display: flex; gap: 12px; align-items: center; }
-        .t-icon { 
-            width: 40px; height: 40px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: bold;
-        }
-        .icon-yape { background: rgba(112, 0, 255, 0.2); color: #bca3ff; }
-        .icon-plin { background: rgba(0, 242, 255, 0.2); color: #8beeff; }
-        
-        .t-details h4 { font-size: 0.9rem; color: var(--text-main); margin-bottom: 2px; }
-        .t-details p { font-size: 0.75rem; color: var(--text-muted); }
-        .t-amount { font-size: 1rem; font-weight: 700; color: var(--success); }
 
-        /* Footer Actions */
-        .footer-menu {
+        .tx-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-glass);
+            margin-bottom: 10px;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.3s ease forwards;
+        }
+        @keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+        .tx-card[data-app="Yape"] { border-left: 3px solid var(--yape-color); }
+        .tx-card[data-app="Interbank"] { border-left: 3px solid var(--bank-color); }
+        .tx-card[data-app="Plin"] { border-left: 3px solid var(--plin-color); }
+
+        .tx-icon {
+            width: 38px; height: 38px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 12px; flex-shrink: 0;
+            font-weight: bold; font-size: 0.9rem;
+        }
+        .tx-icon.yape { background: rgba(215, 21, 156, 0.15); color: var(--yape-color); }
+        .tx-icon.inter { background: rgba(39, 217, 99, 0.15); color: var(--bank-color); }
+        .tx-icon.plin { background: rgba(0, 240, 255, 0.15); color: var(--plin-color); }
+
+        .tx-info { flex: 1; overflow: hidden; }
+        .tx-title { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .tx-sub { font-size: 0.7rem; color: var(--text-dim); }
+        .tx-amount { font-size: 1rem; font-weight: 700; color: #fff; }
+        .tx-amount.promo { color: var(--text-dim); text-decoration: line-through; font-size: 0.8rem; }
+
+        /* ════ FOOTER NAV (ESTILO SOLICITADO) ════ */
+        .footer-nav {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 1px;
-            background: var(--glass-border);
-            border-top: 1px solid var(--glass-border);
+            background: rgba(5, 5, 17, 0.95);
+            border-top: 1px solid var(--card-border);
+            padding: 0;
         }
-        .menu-btn {
-            background: var(--bg-dark); /* Para tapar gaps */
-            background: rgba(0,0,0,0.3);
+
+        .nav-btn {
+            background: transparent;
             border: none;
-            color: var(--text-muted);
-            padding: 15px 5px;
+            color: var(--text-dim);
+            padding: 16px 0;
             font-size: 0.75rem;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             transition: 0.3s;
+            font-family: var(--font-main);
         }
-        .menu-btn svg { width: 20px; height: 20px; stroke: currentColor; }
-        .menu-btn:hover { color: var(--primary); background: rgba(255,255,255,0.02); }
+        .nav-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.02); }
+        .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; }
 
-        /* ════════════════════════════════════════════════════════════════
-           🔐 MODALES (Overlay)
-        ════════════════════════════════════════════════════════════════ */
+        /* ════ MODALES ════ */
         .modal-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(9, 14, 23, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: 0.3s;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            z-index: 999;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-content {
-            width: 90%;
-            max-width: 360px;
-            background: #131b2b;
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
+            width: 85%; max-width: 350px;
+            background: #10101c;
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
             padding: 25px;
-            position: relative;
-            transform: scale(0.9); transition: 0.3s;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: scale(0.95); transition: 0.3s;
+            box-shadow: 0 20px 50px #000;
         }
         .modal-overlay.active .modal-content { transform: scale(1); }
 
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
-        .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .modal-title { font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .modal-close { background: none; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; }
 
-        /* Login Form */
-        .form-group { margin-bottom: 15px; position: relative; }
-        .form-label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 5px; }
-        .form-input {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            padding: 12px 15px;
-            border-radius: 12px;
-            color: #fff;
-            font-family: var(--font-family);
-            transition: 0.3s;
+        /* Estilos específicos de contenido de modal */
+        .input-dark {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
+            padding: 12px; border-radius: 8px; color: #fff; margin-bottom: 15px; font-family: var(--font-main);
         }
-        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 242, 255, 0.1); }
-        
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 32px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
+        .input-dark:focus { border-color: var(--plin-color); }
 
-        /* Plans Cards */
-        .plan-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            border-radius: 16px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .plan-info h5 { color: var(--text-main); font-size: 1rem; margin-bottom: 4px; }
-        .plan-info span { color: var(--primary); font-weight: 700; }
-        .btn-whatsapp {
-            background: #25D366;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex; align-items: center; gap: 5px;
-        }
-
-        /* Bank List */
         .bank-item {
-            padding: 15px;
-            border-bottom: 1px solid var(--glass-border);
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .bank-item:last-child { border-bottom: none; }
-        .bank-item:hover { background: rgba(255,255,255,0.02); }
-        .bank-name { color: var(--primary); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
-        .bank-number { color: var(--text-muted); font-family: monospace; font-size: 0.95rem; display: flex; align-items: center; gap: 5px; }
-        .copy-icon { opacity: 0.5; width: 14px; }
-
-        /* Loading & Messages */
-        .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--primary); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto; }
-        .error-msg { color: var(--danger); font-size: 0.8rem; margin-top: 10px; text-align: center; display: none; }
+        .bank-item:hover { background: rgba(255,255,255,0.03); }
+        .bank-info { display: flex; flex-direction: column; }
+        .bank-name { color: var(--plin-color); font-size: 0.8rem; font-weight: 700; }
+        .bank-num { color: var(--text-dim); font-size: 0.9rem; font-family: monospace; }
         
-        /* Toast Notification */
+        .plan-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .btn-wa { background: #25D366; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 700; }
+
+        /* Toast */
         #toast {
             position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-            background: var(--primary); color: #000; padding: 8px 16px;
-            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200;
+            background: #fff; color: #000; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s;
         }
         #toast.show { opacity: 1; bottom: 90px; }
 
-        /* Animations */
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Loader */
+        .loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s infinite linear; display: none; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-txt { color: var(--danger); font-size: 0.75rem; text-align: center; margin-top: 10px; display: none; }
 
-        /* Soporte */
-        .support-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="app-container">
-        <!-- Header -->
+    <div id="app">
+        <!-- 1. Header -->
         <header>
-            <div class="logo-area">
-                <h1>FINANCE MONITOR</h1>
+            <div class="brand">
+                <h1>INTERCEPTOR FEX</h1>
             </div>
-            <button class="btn-close" onclick="closeApp()">✕</button>
+            <div id="status-badge" class="status-badge">ACCESO DENEGADO</div>
         </header>
 
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div id="status-dot" class="status-dot status-denied"></div>
-            <span id="status-text" class="status-text">Permisos Denegados</span>
+        <!-- 2. Hero Stats -->
+        <div class="hero-stats">
+            <div class="hero-label">Recaudación Total</div>
+            <div class="hero-amount" id="amount-display">S/ 0.00</div>
+            <div class="hero-count" id="count-display">0 operaciones</div>
         </div>
 
-        <!-- Dashboard -->
-        <div class="dashboard">
-            <div class="card-balance">
-                <div class="balance-label">Total Recaudado</div>
-                <div class="balance-amount" id="total-amount">S/ 0.00</div>
-                <div class="balance-count" id="op-count">0 operaciones</div>
-            </div>
-
-            <div id="login-trigger-area">
-                <button class="btn-action-main btn-start" onclick="openLogin()">INICIAR MONITOREO</button>
+        <!-- 3. Controls (Login / Filters) -->
+        <div class="controls-area">
+            <!-- Botón Login (Se oculta al loguear) -->
+            <div id="login-trigger">
+                <button class="btn-main btn-login" onclick="openModal('modal-login')">INICIAR SISTEMA</button>
             </div>
             
-            <div id="filters-area" class="filters" style="display:none;">
-                <button class="filter-btn active" onclick="setFilter('all')">Todos</button>
-                <button class="filter-btn" onclick="setFilter('today')">Hoy</button>
-                <button class="filter-btn" onclick="setFilter('yesterday')">Ayer</button>
+            <!-- Filtros (Se muestran al loguear) -->
+            <div id="filters-trigger" class="filters-row" style="display:none;">
+                <button class="btn-filter btn-main active" onclick="applyFilter('all', this)">Todos</button>
+                <button class="btn-filter btn-main" onclick="applyFilter('today', this)">Hoy</button>
+                <button class="btn-filter btn-main" onclick="applyFilter('yesterday', this)">Ayer</button>
             </div>
         </div>
 
-        <!-- Notification List -->
-        <div class="list-container">
-            <ul id="notification-list">
-                <!-- Items inyectados por JS -->
-                <li style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.9rem;">
-                    Inicia sesión para ver datos
-                </li>
-            </ul>
+        <!-- 4. List -->
+        <div class="list-wrapper">
+            <div id="tx-container">
+                <div style="text-align:center; padding:40px; color:var(--text-dim); font-size:0.85rem;">
+                    Esperando autenticación de usuario...
+                </div>
+            </div>
         </div>
 
-        <!-- Footer Navigation -->
-        <div class="footer-menu">
-            <button class="menu-btn" onclick="openModal('plans-modal')">
-                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <!-- 5. Footer Nav (Original Style) -->
+        <!-- Se le agrega id="public-footer" para ocultarlo con JS -->
+        <nav id="public-footer" class="footer-nav">
+            <button class="nav-btn" onclick="openModal('modal-planes')">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Planes
             </button>
-            <button class="menu-btn" onclick="openModal('payment-modal')">
-                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+            <button class="nav-btn" onclick="openModal('modal-pagos')">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                 Pagos
             </button>
-            <button class="menu-btn" onclick="openModal('support-modal')">
-                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+            <button class="nav-btn" onclick="openModal('modal-soporte')">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Soporte
             </button>
-        </div>
+        </nav>
     </div>
 
-    <!-- MODAL LOGIN -->
-    <div id="login-modal" class="modal-overlay">
+    <!-- ════ MODALES ════ -->
+
+    <!-- LOGIN -->
+    <div id="modal-login" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Autenticación</h3>
-                <button class="modal-close" onclick="closeModal('login-modal')">×</button>
+                <button class="modal-close" onclick="closeModal('modal-login')">×</button>
             </div>
-            <div class="form-group">
-                <label class="form-label">Usuario</label>
-                <input type="text" id="login-user" class="form-input" placeholder="Ingresa tu usuario">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Contraseña</label>
-                <input type="password" id="login-pass" class="form-input" placeholder="••••••">
-                <button class="password-toggle" onclick="togglePass()" type="button">
-                    <svg id="eye-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-            </div>
-            <button id="btn-do-login" class="btn-action-main btn-start" onclick="attemptLogin()">
-                <span id="login-text">INGRESAR</span>
-                <div id="login-loader" class="loader" style="display:none;"></div>
+            <input type="text" id="login-user" class="input-dark" placeholder="ID Usuario">
+            <input type="password" id="login-pass" class="input-dark" placeholder="Contraseña">
+            
+            <button id="btn-do-login" class="btn-main btn-login" onclick="login()">
+                INGRESAR
             </button>
-            <p id="login-error" class="error-msg">Credenciales incorrectas</p>
+            <div id="login-loader" class="loader"></div>
+            <div id="login-error" class="error-txt">Credenciales incorrectas</div>
         </div>
     </div>
 
-    <!-- MODAL PLANES -->
-    <div id="plans-modal" class="modal-overlay">
+    <!-- PLANES -->
+    <div id="modal-planes" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Planes Premium</h3>
-                <button class="modal-close" onclick="closeModal('plans-modal')">×</button>
+                <h3 class="modal-title">Planes Disponibles</h3>
+                <button class="modal-close" onclick="closeModal('modal-planes')">×</button>
             </div>
-            <div id="plans-container">
-                <!-- Generado por JS -->
-            </div>
+            <div id="planes-list"></div>
         </div>
     </div>
 
-    <!-- MODAL PAGOS -->
-    <div id="payment-modal" class="modal-overlay">
+    <!-- PAGOS -->
+    <div id="modal-pagos" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Métodos de Pago</h3>
-                <button class="modal-close" onclick="closeModal('payment-modal')">×</button>
+                <button class="modal-close" onclick="closeModal('modal-pagos')">×</button>
             </div>
-            <div id="bank-list">
-                <!-- Generado por JS -->
-            </div>
+            <p style="color:#666; font-size:0.75rem; margin-bottom:15px;">Click en la cuenta para copiar</p>
+            <div id="pagos-list"></div>
         </div>
     </div>
 
-    <!-- MODAL SOPORTE -->
-    <div id="support-modal" class="modal-overlay">
+    <!-- SOPORTE -->
+    <div id="modal-soporte" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Soporte Técnico</h3>
-                <button class="modal-close" onclick="closeModal('support-modal')">×</button>
+                <button class="modal-close" onclick="closeModal('modal-soporte')">×</button>
             </div>
-            <p class="support-text">
-                ¿Tienes problemas con la sincronización o necesitas ayuda con tu cuenta? Nuestro equipo está disponible para ayudarte.
+            <p style="color:var(--text-dim); margin-bottom:20px; font-size:0.9rem;">
+                Si tienes problemas con tu cuenta o la visualización de datos, contáctanos.
             </p>
-            <button class="btn-action-main btn-start" onclick="contactSupport()">
-                Contactar por WhatsApp
+            <button class="btn-main btn-login" style="background:#25D366; color:#fff;" onclick="contactSupport()">
+                WhatsApp Soporte
             </button>
         </div>
     </div>
 
-    <!-- TOAST -->
-    <div id="toast">¡Copiado!</div>
+    <!-- Toast Notification -->
+    <div id="toast">¡Copiado al portapapeles!</div>
 
     <script>
-        /* ════════════════════════════════════════════════════════════════
-           ⚙️ CONFIGURACIÓN Y ESTADO
-        ════════════════════════════════════════════════════════════════ */
-        const API_URL = 'https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec';
-        const CONTACT_PHONE = '51960744787';
+        /* ════ CONFIG ════ */
+        const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
+        const PHONE = "51960744787";
         
         let appState = {
-            isLoggedIn: false,
-            notifications: [],
-            filteredNotifications: [],
-            currentFilter: 'all',
-            config: null
+            data: [],
+            authed: false,
+            filter: 'all'
         };
 
-        /* ════════════════════════════════════════════════════════════════
-           🚀 INICIALIZACIÓN
-        ════════════════════════════════════════════════════════════════ */
+        /* ════ INIT ════ */
         window.onload = function() {
-            console.log("App Iniciada");
+            renderStaticContent();
             checkSession();
-            setupModalsContent();
-            
-            // Compatibilidad Tasker para Variables Globales si existen
-            if(typeof session_data !== 'undefined') {
-                console.log("Tasker session found");
-                // Lógica opcional para leer de tasker si fuera necesario
-            }
         };
 
+        /* ════ LOGIC ════ */
         function checkSession() {
-            const savedSession = localStorage.getItem('fin_session_end');
-            if (savedSession) {
-                const endTime = parseInt(savedSession);
-                if (Date.now() < endTime) {
-                    console.log("Sesión válida encontrada");
-                    performAutoLogin();
+            const s = localStorage.getItem('interceptor_session');
+            if(s) {
+                const sess = JSON.parse(s);
+                if(Date.now() < sess.exp) {
+                    silentSync();
                 } else {
-                    localStorage.removeItem('fin_session_end');
+                    localStorage.removeItem('interceptor_session');
                 }
             }
         }
 
-        /* ════════════════════════════════════════════════════════════════
-           🔐 LÓGICA DE AUTENTICACIÓN
-        ════════════════════════════════════════════════════════════════ */
-        function openLogin() {
-            if (appState.isLoggedIn) return;
-            openModal('login-modal');
-        }
+        async function login() {
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value.trim();
+            const btn = document.getElementById('btn-do-login');
+            const load = document.getElementById('login-loader');
+            const err = document.getElementById('login-error');
 
-        async function attemptLogin() {
-            const user = document.getElementById('login-user').value.trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            const btnText = document.getElementById('login-text');
-            const loader = document.getElementById('login-loader');
-            const errorMsg = document.getElementById('login-error');
+            if(!u || !p) return;
 
-            if (!user || !pass) {
-                errorMsg.textContent = "Complete todos los campos";
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            // UI Loading
-            btnText.style.display = 'none';
-            loader.style.display = 'block';
-            errorMsg.style.display = 'none';
+            btn.style.display = 'none';
+            load.style.display = 'block';
+            err.style.display = 'none';
 
             try {
-                // Fetch API
-                const response = await fetch(API_URL);
-                const data = await response.json();
+                const res = await fetch(API_URL);
+                const json = await res.json();
                 
-                // Lógica de validación dinámica
-                // API devuelve: { notificaciones: [], config: { campo: "usuario", valor: "pass" } }
-                // Interpretación: config.campo contiene el NOMBRE de la propiedad que tiene la contraseña
-                // Ejemplo: campo="Juan", entonces validamos si user === "Juan" y pass === config["Juan"]
-                
-                const config = data.config;
-                const expectedUserKey = config.campo; // El nombre del usuario esperado
-                const expectedPass = config[expectedUserKey]; // La contraseña asociada
-
-                if (user === expectedUserKey && pass === String(expectedPass)) {
-                    // Login Exitoso
-                    loginSuccess(data);
-                    closeModal('login-modal');
-                } else {
-                    throw new Error("Credenciales inválidas");
+                // Validación dinámica según tu estructura JSON
+                // config: { "usuario": "luis555", "owner_pass": "miClave123" }
+                let valid = false;
+                if(json.config && json.config[u] && String(json.config[u]) === p) {
+                    valid = true;
                 }
 
-            } catch (err) {
-                console.error(err);
-                errorMsg.textContent = "Error de acceso o conexión";
-                errorMsg.style.display = 'block';
+                if(valid) {
+                    authSuccess(json);
+                    closeModal('modal-login');
+                } else {
+                    err.style.display = 'block';
+                }
+            } catch(e) {
+                console.error(e);
+                err.textContent = "Error de conexión";
+                err.style.display = 'block';
             } finally {
-                btnText.style.display = 'block';
-                loader.style.display = 'none';
+                btn.style.display = 'block';
+                load.style.display = 'none';
             }
         }
 
-        function loginSuccess(data) {
-            appState.isLoggedIn = true;
-            appState.notifications = data.notificaciones || []; // Asegurar array
-            appState.config = data.config;
-
-            // Guardar sesión (8 horas)
-            const sessionDuration = 8 * 60 * 60 * 1000;
-            localStorage.setItem('fin_session_end', Date.now() + sessionDuration);
-
-            // Actualizar UI
-            updateUIState(true);
-            applyFilter('all');
-        }
-
-        async function performAutoLogin() {
-            // Si hay sesión, hacemos fetch silencioso para actualizar datos
+        async function silentSync() {
             try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                loginSuccess(data);
-            } catch (e) {
-                console.log("Error refrescando sesión", e);
-            }
+                const res = await fetch(API_URL);
+                const json = await res.json();
+                authSuccess(json);
+            } catch(e) {}
         }
 
-        function updateUIState(active) {
-            const statusDot = document.getElementById('status-dot');
-            const statusText = document.getElementById('status-text');
-            const triggerArea = document.getElementById('login-trigger-area');
-            const filtersArea = document.getElementById('filters-area');
-
-            if (active) {
-                statusDot.className = 'status-dot status-granted';
-                statusText.textContent = 'Permisos Otorgados';
-                
-                // Cambiar botón a "Activo"
-                triggerArea.innerHTML = '<button class="btn-action-main btn-active">MONITOREO ACTIVO</button>';
-                filtersArea.style.display = 'flex';
-            } else {
-                statusDot.className = 'status-dot status-denied';
-                statusText.textContent = 'Permisos Denegados';
-            }
-        }
-
-        function togglePass() {
-            const input = document.getElementById('login-pass');
-            input.type = input.type === 'password' ? 'text' : 'password';
-        }
-
-        /* ════════════════════════════════════════════════════════════════
-           📊 VISUALIZACIÓN DE DATOS
-        ════════════════════════════════════════════════════════════════ */
-        function setFilter(filter) {
-            // UI update buttons
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            applyFilter(filter);
-        }
-
-        function applyFilter(filterType) {
-            appState.currentFilter = filterType;
-            const list = appState.notifications;
-            const now = new Date();
-            const todayStr = now.toLocaleDateString('es-PE'); // Formato d/m/yyyy o similar
+        function authSuccess(json) {
+            appState.authed = true;
+            appState.data = json.notificaciones || [];
             
-            const yesterday = new Date(now);
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toLocaleDateString('es-PE');
+            // Session 8h
+            localStorage.setItem('interceptor_session', JSON.stringify({
+                exp: Date.now() + (8*60*60*1000)
+            }));
 
-            let filtered = [];
+            // UI Changes - OCULTAR PUBLIC FOOTER
+            document.getElementById('status-badge').textContent = "CONECTADO";
+            document.getElementById('status-badge').classList.add('active');
+            
+            document.getElementById('login-trigger').style.display = 'none';
+            document.getElementById('filters-trigger').style.display = 'flex';
+            
+            // LA CLAVE: Ocultar botones de publicidad
+            document.getElementById('public-footer').style.display = 'none';
 
-            if (filterType === 'all') {
-                filtered = list;
-            } else if (filterType === 'today') {
-                filtered = list.filter(n => {
-                    const d = new Date(n.fecha);
-                    return d.toLocaleDateString('es-PE') === todayStr;
-                });
-            } else if (filterType === 'yesterday') {
-                filtered = list.filter(n => {
-                    const d = new Date(n.fecha);
-                    return d.toLocaleDateString('es-PE') === yesterdayStr;
-                });
-            }
-
-            renderList(filtered);
-            updateStats(filtered);
+            renderList();
         }
 
-        function renderList(items) {
-            const ul = document.getElementById('notification-list');
-            ul.innerHTML = '';
+        /* ════ RENDERING ════ */
+        function applyFilter(f, btn) {
+            appState.filter = f;
+            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            renderList();
+        }
 
-            if (items.length === 0) {
-                ul.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-muted)">No hay movimientos</li>';
-                return;
-            }
+        function renderList() {
+            const container = document.getElementById('tx-container');
+            container.innerHTML = '';
+            
+            const now = new Date();
+            const todayStr = now.toLocaleDateString('es-PE');
+            const yest = new Date(now); yest.setDate(yest.getDate() -1);
+            const yestStr = yest.toLocaleDateString('es-PE');
 
-            // Ordenar: más reciente primero
-            items.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            let filtered = appState.data.filter(item => {
+                const d = new Date(item.fecha);
+                const dStr = d.toLocaleDateString('es-PE');
+                if(appState.filter === 'today') return dStr === todayStr;
+                if(appState.filter === 'yesterday') return dStr === yestStr;
+                return true;
+            });
 
-            items.forEach(item => {
-                // item: { fecha, titulo, contenido, aplicacion, importe }
-                const isYape = item.aplicacion.toLowerCase().includes('yape');
-                const iconClass = isYape ? 'icon-yape' : 'icon-plin';
-                const iconText = isYape ? 'Y' : 'P';
+            // Sort new to old
+            filtered.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+            let total = 0;
+
+            filtered.forEach(item => {
+                const imp = parseFloat(item.importe);
+                total += imp;
+
+                // Detectar App
+                let app = 'Plin';
+                let iconClass = 'plin';
+                let iconLetter = 'P';
                 
-                // Formatear fecha legible
-                const dateObj = new Date(item.fecha);
-                const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                const dateStr = dateObj.toLocaleDateString([], {day: '2-digit', month: '2-digit'});
+                const appLower = item.aplicacion.toLowerCase();
+                if(appLower.includes('yape')) { app = 'Yape'; iconClass = 'yape'; iconLetter = 'Y'; }
+                if(appLower.includes('interbank')) { app = 'Interbank'; iconClass = 'inter'; iconLetter = 'I'; }
 
-                const li = document.createElement('li');
-                li.className = 'transaction-item';
-                li.innerHTML = `
-                    <div class="t-left">
-                        <div class="t-icon ${iconClass}">${iconText}</div>
-                        <div class="t-details">
-                            <h4>${item.titulo || 'Transferencia'}</h4>
-                            <p>${dateStr} ${timeStr} • ${item.contenido || ''}</p>
-                        </div>
+                const dObj = new Date(item.fecha);
+                const time = dObj.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                const date = dObj.toLocaleDateString([], {day:'2-digit', month:'2-digit'});
+
+                const div = document.createElement('div');
+                div.className = 'tx-card';
+                div.setAttribute('data-app', app);
+                div.innerHTML = `
+                    <div class="tx-icon ${iconClass}">${iconLetter}</div>
+                    <div class="tx-info">
+                        <div class="tx-title">${item.titulo}</div>
+                        <div class="tx-sub">${app} • ${date} ${time}</div>
+                        <div class="tx-sub" style="margin-top:2px;">${item.contenido}</div>
                     </div>
-                    <div class="t-amount">+S/ ${parseFloat(item.importe).toFixed(2)}</div>
+                    <div class="tx-amount ${imp===0 ? 'promo' : ''}">
+                        ${imp > 0 ? '+ S/ '+imp.toFixed(2) : 'PROMO'}
+                    </div>
                 `;
-                ul.appendChild(li);
+                container.appendChild(div);
             });
+
+            // Update Stats
+            document.getElementById('amount-display').textContent = 'S/ ' + total.toFixed(2);
+            document.getElementById('count-display').textContent = filtered.length + ' operaciones';
         }
 
-        function updateStats(items) {
-            const total = items.reduce((sum, item) => sum + parseFloat(item.importe || 0), 0);
-            document.getElementById('total-amount').textContent = `S/ ${total.toFixed(2)}`;
-            document.getElementById('op-count').textContent = `${items.length} operaciones`;
-        }
-
-        /* ════════════════════════════════════════════════════════════════
-           🧩 CONTENIDO MODALES
-        ════════════════════════════════════════════════════════════════ */
-        function setupModalsContent() {
+        /* ════ STATIC CONTENT & UTILS ════ */
+        function renderStaticContent() {
             // Planes
-            const plans = [
-                { name: "Plan Mensual", price: 6 },
-                { name: "Plan Trimestral", price: 12 },
-                { name: "Plan Semestral", price: 18 }
+            const planes = [
+                {n:"Mensual", p:6}, {n:"Trimestral", p:12}, {n:"Semestral", p:18}
             ];
-            const plansContainer = document.getElementById('plans-container');
-            plans.forEach(p => {
-                const div = document.createElement('div');
-                div.className = 'plan-card';
-                div.innerHTML = `
-                    <div class="plan-info">
-                        <h5>${p.name}</h5>
-                        <span>S/ ${p.price}.00</span>
+            const pList = document.getElementById('planes-list');
+            planes.forEach(pl => {
+                pList.innerHTML += `
+                    <div class="plan-item">
+                        <div>
+                            <div style="font-weight:700; color:#fff;">${pl.n}</div>
+                            <div style="color:var(--plin-color)">S/ ${pl.p}.00</div>
+                        </div>
+                        <button class="btn-wa" onclick="buy('${pl.n}', ${pl.p})">SOLICITAR</button>
                     </div>
-                    <button class="btn-whatsapp" onclick="buyPlan('${p.name}', ${p.price})">
-                        Pedir
-                    </button>
                 `;
-                plansContainer.appendChild(div);
             });
 
-            // Bancos
-            const banks = [
-                { name: "Yape / Plin", number: CONTACT_PHONE },
-                { name: "BCP", number: "191-12345678-0-99" },
-                { name: "BBVA", number: "0011-0814-0123456789" },
-                { name: "Interbank", number: "898-3123456789" }
+            // Pagos
+            const bancos = [
+                {b:"Yape / Plin", n:PHONE},
+                {b:"BCP", n:"191-12345678-0-99"},
+                {b:"BBVA", n:"0011-0123-0100000000"},
+                {b:"Interbank", n:"898-3100000000"}
             ];
-            const bankList = document.getElementById('bank-list');
-            banks.forEach(b => {
-                const div = document.createElement('div');
-                div.className = 'bank-item';
-                div.onclick = () => copyToClipboard(b.number);
-                div.innerHTML = `
-                    <div class="bank-name">${b.name}</div>
-                    <div class="bank-number">
-                        ${b.number}
-                        <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            const bList = document.getElementById('pagos-list');
+            bancos.forEach(bk => {
+                bList.innerHTML += `
+                    <div class="bank-item" onclick="copyToClip('${bk.n}')">
+                        <div class="bank-info">
+                            <span class="bank-name">${bk.b}</span>
+                            <span class="bank-num">${bk.n}</span>
+                        </div>
+                        <svg width="16" height="16" fill="none" stroke="#666" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                     </div>
                 `;
-                bankList.appendChild(div);
             });
         }
 
-        /* ════════════════════════════════════════════════════════════════
-           🛠 UTILIDADES
-        ════════════════════════════════════════════════════════════════ */
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function buyPlan(plan, price) {
-            const msg = `Hola, deseo adquirir el ${plan} por S/${price}.00`;
-            const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
+        function buy(plan, price) {
+            window.open(`https://wa.me/${PHONE}?text=Hola, quiero el plan ${plan} de S/${price}`, '_blank');
         }
-
         function contactSupport() {
-            const msg = "Hola, necesito soporte con la aplicación de monitoreo.";
-            const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/${PHONE}?text=Soporte Interceptor FEX:`, '_blank');
         }
 
-        function copyToClipboard(text) {
+        function copyToClip(text) {
             navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            }).catch(err => console.error('Error al copiar', err));
-        }
-
-        function closeApp() {
-            // En contexto web cierra la pestaña, en Tasker ejecutaría exit()
-            if(typeof exit === "function") {
-                exit();
-            } else {
-                window.close();
-                // Fallback visual
-                document.body.innerHTML = "<h1 style='color:#fff;text-align:center;'>Aplicación Cerrada</h1>";
-            }
+                const t = document.getElementById('toast');
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2000);
+            });
         }
     </script>
 </body>
