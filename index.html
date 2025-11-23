@@ -125,78 +125,92 @@
         .toggle-pwd { position: absolute; right: 14px; top: 12px; background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 0; }
         .toggle-pwd svg { width: 20px; height: 20px; transition: 0.2s; }
 
-        /* ════ ESTILOS NUEVOS: TARJETAS DE PLANES (Copiado y Adaptado) ════ */
+        /* ════ TARJETAS DE PLANES COMPACTAS ════ */
         .plan-card {
             border: 1px solid var(--border-light);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
+            border-radius: 12px; /* Radio más pequeño */
+            padding: 12px; /* Padding reducido */
+            margin-bottom: 10px;
             position: relative;
             background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex; /* Flex para alinear lado a lado */
+            justify-content: space-between;
+            align-items: center;
         }
         .plan-card.featured {
-            border: 2px solid var(--yape-color); /* Borde destacado color marca */
-            background: #fcf5fd; /* Fondo muy suave morado */
+            border: 2px solid var(--yape-color); 
+            background: #fdfaff; 
         }
         .plan-tag {
             position: absolute;
-            top: -10px;
-            right: 15px;
-            background: var(--yape-color); /* Etiqueta morada */
+            top: -8px;
+            left: 12px; /* Etiqueta a la izquierda */
+            background: var(--yape-color); 
             color: white;
-            font-size: 0.65rem;
-            padding: 4px 10px;
-            border-radius: 20px;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 10px;
             font-weight: 800;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(116, 35, 132, 0.3);
+        }
+        .plan-info {
+            text-align: left;
         }
         .plan-name {
             font-weight: 800;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        .plan-price {
-            font-size: 2rem;
-            font-weight: 800;
             color: var(--text-main);
-            margin: 5px 0;
-            letter-spacing: -1px;
+            font-size: 0.9rem;
+            margin-bottom: 0px;
         }
         .plan-detail {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
-            margin-bottom: 15px;
             font-weight: 500;
         }
-        .plan-btn-action {
+        .plan-price-box {
+            text-align: right;
+        }
+        .plan-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-main);
             display: block;
-            width: 100%;
-            padding: 12px;
+        }
+        .plan-btn-action {
+            padding: 6px 12px;
             background: var(--text-main);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             cursor: pointer;
-            text-decoration: none;
-            transition: 0.2s;
+            margin-top: 4px;
+            display: inline-block;
         }
         .plan-card.featured .plan-btn-action {
-            background: var(--main-gradient); /* Botón degradado en destacados */
-            box-shadow: 0 5px 15px rgba(116, 35, 132, 0.25);
+            background: var(--main-gradient);
         }
         /* ════ FIN ESTILOS PLANES ════ */
 
+        /* ════ ESTILOS SOPORTE (COPIADO DEL EJEMPLO) ════ */
+        .support-box { text-align: center; padding: 10px 0; }
+        .support-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+        .support-text { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; font-weight: 500; }
+        .whatsapp-btn {
+            background: #25D366; color: white; width: 100%; padding: 12px;
+            border-radius: 12px; border: none; font-weight: 800; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; text-decoration: none; transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+        .whatsapp-btn:active { transform: scale(0.98); }
+        .support-footer { margin-top: 15px; font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+        /* ════ FIN ESTILOS SOPORTE ════ */
+
         .bank-row { padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
         .bank-row:hover { background: #e2e8f0; }
-        .btn-wa { background: #25D366; color: #fff; padding: 12px; border-radius: 12px; width: 100%; border:none; font-weight:700; cursor:pointer; display:flex; justify-content:center; gap:8px; }
         
         .spinner { width: 20px; height: 20px; border: 3px solid #e2e8f0; border-top-color: var(--yape-color); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -283,7 +297,24 @@
 
     <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
     <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;font-weight:600;">Toca para copiar</div><div id="bancos-list"></div></div></div>
-    <div id="modal-soporte" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Soporte</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div><p style="color:var(--text-dim);margin-bottom:20px;line-height:1.5;">Si tienes problemas de sincronización, contáctanos.</p><button class="btn-main btn-login" style="background:#25D366;color:#fff;" onclick="contactar()">WhatsApp Soporte</button></div></div>
+    
+    <!-- MODAL SOPORTE CON EL NUEVO DISEÑO -->
+    <div id="modal-soporte" class="modal-bg">
+        <div class="modal-box">
+            <div class="modal-header"><h3 class="modal-title">Soporte Técnico</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div>
+            <div class="support-box">
+                <div class="support-icon">🛠️</div>
+                <p class="support-text">¿Tu suscripción ha vencido o tienes problemas con la aplicación?</p>
+                <button class="whatsapp-btn" onclick="contactar()">
+                    <span>Chatear en WhatsApp</span>
+                </button>
+                <div class="support-footer">
+                    Horario: 9am - 6pm<br>Número: 51960744787
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="toast">¡Copiado!</div>
 
     <script>
@@ -410,30 +441,42 @@
         }
 
         function renderStaticModals() {
-            // INYECCIÓN DE HTML DE PLANES (NUEVO DISEÑO)
+            // PLANES COMPACTOS
             const pList = document.getElementById('planes-list');
             pList.innerHTML = `
                 <div class="plan-card">
-                    <div class="plan-name">PLAN MENSUAL</div>
-                    <div class="plan-price">S/ 6.00</div>
-                    <div class="plan-detail">Facturado cada mes</div>
-                    <button class="plan-btn-action" onclick="buy('Plan Mensual', 6)">CONTRATAR</button>
+                    <div class="plan-info">
+                        <div class="plan-name">PLAN MENSUAL</div>
+                        <div class="plan-detail">Facturado cada mes</div>
+                    </div>
+                    <div class="plan-price-box">
+                        <span class="plan-price">S/ 6.00</span>
+                        <button class="plan-btn-action" onclick="buy('Plan Mensual', 6)">CONTRATAR</button>
+                    </div>
                 </div>
                 
                 <div class="plan-card featured">
                     <div class="plan-tag">AHORRA 33%</div>
-                    <div class="plan-name">TRIMESTRAL</div>
-                    <div class="plan-price">S/ 12.00</div>
-                    <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
-                    <button class="plan-btn-action" onclick="buy('Plan Trimestral', 12)">CONTRATAR</button>
+                    <div class="plan-info">
+                        <div class="plan-name">TRIMESTRAL</div>
+                        <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
+                    </div>
+                    <div class="plan-price-box">
+                        <span class="plan-price">S/ 12.00</span>
+                        <button class="plan-btn-action" onclick="buy('Plan Trimestral', 12)">CONTRATAR</button>
+                    </div>
                 </div>
 
                 <div class="plan-card featured">
                     <div class="plan-tag">MEJOR PRECIO</div>
-                    <div class="plan-name">SEMESTRAL</div>
-                    <div class="plan-price">S/ 18.00</div>
-                    <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
-                    <button class="plan-btn-action" onclick="buy('Plan Semestral', 18)">CONTRATAR</button>
+                    <div class="plan-info">
+                        <div class="plan-name">SEMESTRAL</div>
+                        <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
+                    </div>
+                    <div class="plan-price-box">
+                        <span class="plan-price">S/ 18.00</span>
+                        <button class="plan-btn-action" onclick="buy('Plan Semestral', 18)">CONTRATAR</button>
+                    </div>
                 </div>
             `;
 
@@ -443,7 +486,7 @@
         }
 
         function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
-        function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Ayuda con la app`, '_blank'); }
+        function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20suscribirme%20a%20este%20servicio`, '_blank'); }
         function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
     </script>
 </body>
