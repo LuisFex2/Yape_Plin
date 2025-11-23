@@ -171,7 +171,9 @@
         .tx-info { flex: 1; overflow: hidden; }
         .tx-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
         .tx-app-name { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; }
-        .tx-time { font-size: 0.65rem; color: var(--text-secondary); font-weight: 500; }
+        
+        /* FECHA TAL CUAL VIENE: Ajustado un poco el tamaño de fuente para que entre todo */
+        .tx-time { font-size: 0.6rem; color: var(--text-secondary); font-weight: 600; letter-spacing: -0.2px; }
         
         .tx-title { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .tx-content { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -507,9 +509,8 @@
                 let appClass = isYape ? 'Yape' : (isInter ? 'Interbank' : 'Plin');
                 const letra = item.aplicacion ? item.aplicacion.charAt(0).toUpperCase() : '?';
 
-                const dObj = new Date(item.fecha);
-                // CAMBIO AQUI: Forzar formato en-US con hour12: true para que salga AM/PM
-                const hora = dObj.toLocaleTimeString('en-US', { hour: 'numeric', minute:'2-digit', hour12: true });
+                // CAMBIO: Usamos item.fecha directamente, sin formatear
+                const fechaDisplay = item.fecha; 
                 
                 const div = document.createElement('div');
                 div.className = 'tx-card';
@@ -522,7 +523,7 @@
                     <div class="tx-info">
                         <div class="tx-top-row">
                             <span class="tx-app-name">${item.aplicacion}</span>
-                            <span class="tx-time">${hora}</span>
+                            <span class="tx-time">${fechaDisplay}</span>
                         </div>
                         <div class="tx-title">${limpiarTexto(item.titulo)}</div>
                         <div class="tx-content">${limpiarTexto(item.contenido)}</div>
