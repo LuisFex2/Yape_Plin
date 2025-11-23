@@ -114,9 +114,23 @@
         .modal-bg.open { opacity: 1; pointer-events: all; }
         .modal-box { width: 85%; max-width: 350px; background: #ffffff; border-radius: 24px; padding: 25px; transform: translateY(20px); transition: 0.4s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .modal-bg.open .modal-box { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
-        .btn-close { background: none; border: none; color: var(--text-dim); font-size: 1.8rem; cursor: pointer; line-height: 1; }
+        
+        /* BOTÓN CERRAR (NUEVO ESTILO CIRCULAR TENUE) */
+        .btn-close { 
+            background: #f1f5f9; /* Fondo gris muy suave */
+            border: none; 
+            width: 32px; height: 32px; /* Cuadrado para ser circulo perfecto */
+            border-radius: 50%; 
+            color: var(--text-dim); 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; /* Centrado perfecto */
+            transition: 0.2s;
+        }
+        .btn-close:hover { background: #e2e8f0; color: var(--text-main); }
         
         /* Estilos Login */
         .input-group { margin-bottom: 15px; position: relative; }
@@ -125,89 +139,25 @@
         .toggle-pwd { position: absolute; right: 14px; top: 12px; background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 0; }
         .toggle-pwd svg { width: 20px; height: 20px; transition: 0.2s; }
 
-        /* ════ TARJETAS DE PLANES COMPACTAS ════ */
-        .plan-card {
-            border: 1px solid var(--border-light);
-            border-radius: 12px; /* Radio más pequeño */
-            padding: 12px; /* Padding reducido */
-            margin-bottom: 10px;
-            position: relative;
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            display: flex; /* Flex para alinear lado a lado */
-            justify-content: space-between;
-            align-items: center;
-        }
-        .plan-card.featured {
-            border: 2px solid var(--yape-color); 
-            background: #fdfaff; 
-        }
-        .plan-tag {
-            position: absolute;
-            top: -8px;
-            left: 12px; /* Etiqueta a la izquierda */
-            background: var(--yape-color); 
-            color: white;
-            font-size: 0.6rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-        .plan-info {
-            text-align: left;
-        }
-        .plan-name {
-            font-weight: 800;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            margin-bottom: 0px;
-        }
-        .plan-detail {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            font-weight: 500;
-        }
-        .plan-price-box {
-            text-align: right;
-        }
-        .plan-price {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--text-main);
-            display: block;
-        }
-        .plan-btn-action {
-            padding: 6px 12px;
-            background: var(--text-main);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            cursor: pointer;
-            margin-top: 4px;
-            display: inline-block;
-        }
-        .plan-card.featured .plan-btn-action {
-            background: var(--main-gradient);
-        }
-        /* ════ FIN ESTILOS PLANES ════ */
+        /* PLANES */
+        .plan-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 12px; margin-bottom: 10px; position: relative; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; }
+        .plan-card.featured { border: 2px solid var(--yape-color); background: #fdfaff; }
+        .plan-tag { position: absolute; top: -8px; left: 12px; background: var(--yape-color); color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; font-weight: 800; letter-spacing: 0.5px; }
+        .plan-info { text-align: left; }
+        .plan-name { font-weight: 800; color: var(--text-main); font-size: 0.9rem; margin-bottom: 0px; }
+        .plan-detail { font-size: 0.7rem; color: var(--text-dim); font-weight: 500; }
+        .plan-price-box { text-align: right; }
+        .plan-price { font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: block; }
+        .plan-btn-action { padding: 6px 12px; background: var(--text-main); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; margin-top: 4px; display: inline-block; }
+        .plan-card.featured .plan-btn-action { background: var(--main-gradient); }
 
-        /* ════ ESTILOS SOPORTE (COPIADO DEL EJEMPLO) ════ */
+        /* SOPORTE */
         .support-box { text-align: center; padding: 10px 0; }
         .support-icon { font-size: 40px; margin-bottom: 10px; display: block; }
         .support-text { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; font-weight: 500; }
-        .whatsapp-btn {
-            background: #25D366; color: white; width: 100%; padding: 12px;
-            border-radius: 12px; border: none; font-weight: 800; font-size: 0.9rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            cursor: pointer; text-decoration: none; transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        }
+        .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-decoration: none; transition: 0.2s; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
         .whatsapp-btn:active { transform: scale(0.98); }
         .support-footer { margin-top: 15px; font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
-        /* ════ FIN ESTILOS SOPORTE ════ */
 
         .bank-row { padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
         .bank-row:hover { background: #e2e8f0; }
@@ -295,7 +245,7 @@
         </div>
     </div>
 
-    <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
+    <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes Premium</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
     <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;font-weight:600;">Toca para copiar</div><div id="bancos-list"></div></div></div>
     
     <!-- MODAL SOPORTE CON EL NUEVO DISEÑO -->
