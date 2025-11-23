@@ -1,614 +1,807 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Yape & Plin Interceptor</title>
-<style>
-* { box-sizing: border-box; } 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Financiero Glass</title>
+    
+    <!-- Fuente Moderna: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-:root{--bg:#f6f5f9;--accent:#6e4ad1;--muted:#9aa0a6;--green:#00c48c;--teal:#18c3a3;--dark-overlay:rgba(0,0,0,0.6)}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#222;overflow:hidden;background:#eef2f5;}
+    <style>
+        /* ════════════════════════════════════════════════════════════════
+           🎨 ESTILOS CORE & VARIABLES (Dark Glassmorphism)
+        ════════════════════════════════════════════════════════════════ */
+        :root {
+            --bg-dark: #090e17;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --primary: #00f2ff; /* Cyan Neon */
+            --primary-glow: rgba(0, 242, 255, 0.4);
+            --secondary: #7000ff; /* Violeta Neon */
+            --success: #00ffa3;
+            --danger: #ff3b3b;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --font-family: 'Outfit', sans-serif;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
 
-.backdrop{position:fixed;inset:0;background:url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); opacity: 0.6; pointer-events:none}
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-.float-win {
-  position:fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width:380px;
-  max-width:94vw;
-  z-index:100;
-  box-shadow:0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.5);
-  border-radius:16px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  background:linear-gradient(180deg,var(--bg),#fff);
-  max-height:90vh;
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--glass-highlight); }
 
-@keyframes popIn { from{transform:translate(-50%, -40%) scale(0.9);opacity:0} to{transform:translate(-50%, -50%) scale(1);opacity:1} }
+        /* ════════════════════════════════════════════════════════════════
+           💻 INTERFAZ PRINCIPAL
+        ════════════════════════════════════════════════════════════════ */
+        #app-container {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            max-height: 850px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* Efecto Glass */
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            border-left: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
 
-.header{display:flex;align-items:center;gap:10px;padding:14px;background:var(--accent);color:white;flex-shrink:0;cursor: grab; position:relative; z-index:2;}
-.header:active{cursor: grabbing;}
-.logo{width:38px;height:38px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
-.title{font-weight:600;font-size:16px}
-.hdr-actions{margin-left:auto;display:flex;gap:8px}
-.icon-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
-.icon-btn:hover{background:rgba(255,255,255,0.3);}
+        @media (min-width: 450px) {
+            #app-container {
+                height: 90vh;
+                border-radius: var(--radius-lg);
+                border: 1px solid var(--glass-border);
+            }
+        }
 
-.body{padding:14px;background:linear-gradient(180deg,#fafafa,#fff);flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+        /* Header */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
 
-.pill{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 6px 12px rgba(16,24,40,0.04)}
-.pill .left{display:flex;gap:10px;align-items:center}
-.pill .status{font-weight:600}
-.btn-start{background:var(--teal);color:white;padding:8px 14px;border-radius:18px;border:none;cursor:pointer;font-weight:600;transition:0.2s}
-.btn-start:hover{background:#14a085; transform:scale(1.05);}
+        .logo-area h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; background: linear-gradient(90deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-close { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; transition: 0.3s; }
+        .btn-close:hover { color: var(--danger); transform: rotate(90deg); }
 
-.tabs{display:flex;gap:6px;margin-bottom:10px;flex-shrink:0}
-.tab{flex:1;padding:7px 8px;border-radius:9px;text-align:center;font-weight:600;font-size:14px;cursor:pointer;transition:all .25s;background:#f2fbfa;color:#000;border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 6px rgba(0,196,140,0.1)}
-.tab.active{background:var(--accent);color:white;border-color:var(--accent);box-shadow:0 3px 10px rgba(110,74,209,0.3)}
+        /* Status Bar */
+        .status-bar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 10px currentColor; transition: 0.3s; }
+        .status-text { letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.7rem; }
+        
+        .status-denied { color: var(--danger); }
+        .status-granted { color: var(--success); }
 
-.cards{display:flex;gap:10px;margin-bottom:12px;flex-shrink:0}
-.card{flex:1;background:#f2fbfa;border-radius:10px;padding:12px;text-align:center;border:1px solid rgba(0,196,140,0.3);box-shadow:0 2px 8px rgba(0,196,140,0.1)}
-.card .num{font-size:20px;font-weight:700;color:var(--green)}
-.card .label{font-size:12px;color:var(--muted);margin-top:2px}
+        /* Dashboard Stats */
+        .dashboard { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .card-balance {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-balance::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            opacity: 0.1; animation: rotate 10s linear infinite;
+        }
+        .balance-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; position: relative; }
+        .balance-amount { font-size: 2.5rem; font-weight: 700; color: var(--text-main); margin: 5px 0; position: relative; text-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
+        .balance-count { font-size: 0.8rem; color: var(--primary); position: relative; font-weight: 600; }
 
-.list{flex:1;overflow-y:auto;padding-right:4px;margin-bottom:10px;min-height:0}
-.list::-webkit-scrollbar{width:6px}
-.list::-webkit-scrollbar-track{background:transparent}
-.list::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2);border-radius:3px}
+        /* Botón Iniciar / Activo */
+        .btn-action-main {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-family: var(--font-family);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-start { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--primary-glow); }
+        
+        .btn-active { background: rgba(0, 255, 163, 0.1); color: var(--success); border: 1px solid rgba(0, 255, 163, 0.3); cursor: default; }
 
-.list-item{background:white;border-radius:12px;padding:12px;box-shadow:0 8px 16px rgba(16,24,40,0.04);display:flex;gap:12px;align-items:flex-start;margin-bottom:10px; transition: transform 0.2s;}
-.list-item:hover{transform: translateX(2px);}
-.avatar{width:44px;height:44px;border-radius:22px;background:linear-gradient(180deg,#7f6ee6,#b99df0);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;flex-shrink:0}
-.li-body{flex:1; min-width: 0;}
-.li-title{font-weight:700;display:flex;justify-content:space-between;align-items:center}
-.li-sub{font-size:13px;color:var(--muted);margin-top:4px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.li-price{color:var(--green);font-weight:700; margin-left: 5px;}
-.loading-text{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+        /* Filtros */
+        .filters { display: flex; gap: 10px; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 12px; }
+        .filter-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .filter-btn.active { background: var(--glass-highlight); color: var(--text-main); font-weight: 600; }
 
-.controls{display:flex;gap:8px;margin-top:auto;flex-shrink:0}
-.ctrl-btn{flex:1;padding:10px 4px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:13px; color:white; transition: opacity 0.2s; display:flex; align-items:center; justify-content:center; text-align:center;}
-.ctrl-btn:hover{opacity: 0.9;}
-.ctrl-green{background:#22c55e}
-.ctrl-red{background:#ef4444}
-.ctrl-blue{background:#3b82f6}
+        /* Lista de Transacciones */
+        .list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 20px 20px;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 10px;
+            background: var(--glass-bg);
+            border: 1px solid transparent;
+            border-radius: 16px;
+            transition: 0.2s;
+            animation: slideUp 0.4s ease forwards;
+        }
+        .transaction-item:hover { border-color: var(--glass-highlight); background: rgba(255,255,255,0.05); }
+        
+        .t-left { display: flex; gap: 12px; align-items: center; }
+        .t-icon { 
+            width: 40px; height: 40px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: bold;
+        }
+        .icon-yape { background: rgba(112, 0, 255, 0.2); color: #bca3ff; }
+        .icon-plin { background: rgba(0, 242, 255, 0.2); color: #8beeff; }
+        
+        .t-details h4 { font-size: 0.9rem; color: var(--text-main); margin-bottom: 2px; }
+        .t-details p { font-size: 0.75rem; color: var(--text-muted); }
+        .t-amount { font-size: 1rem; font-weight: 700; color: var(--success); }
 
-/* ====== MODALES ====== */
-.modal-overlay {
-  position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 10;
-  opacity: 0; pointer-events: none; transition: opacity 0.3s;
-  display: flex; align-items: flex-end; justify-content: center;
-}
-.modal-overlay.active { opacity: 1; pointer-events: auto; }
-.modal-card {
-  width: 100%; background: white; border-top-left-radius: 20px; border-top-right-radius: 20px;
-  padding: 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  max-height: 85%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column;
-}
-.modal-overlay.active .modal-card { transform: translateY(0); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.modal-title { font-size: 18px; font-weight: 700; color: #333; }
-.close-modal { background: #f1f1f1; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; color: #555; }
+        /* Footer Actions */
+        .footer-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--glass-border);
+            border-top: 1px solid var(--glass-border);
+        }
+        .menu-btn {
+            background: var(--bg-dark); /* Para tapar gaps */
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: var(--text-muted);
+            padding: 15px 5px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        .menu-btn svg { width: 20px; height: 20px; stroke: currentColor; }
+        .menu-btn:hover { color: var(--primary); background: rgba(255,255,255,0.02); }
 
-.plan-card { border: 2px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 10px; position: relative; background: #fff; }
-.plan-card.featured { border-color: var(--accent); background: #fbf9ff; }
-.plan-tag { position: absolute; top: -10px; right: 10px; background: var(--accent); color: white; font-size: 10px; padding: 4px 8px; border-radius: 10px; font-weight: bold; }
-.plan-name { font-weight: 700; color: #555; font-size: 14px; }
-.plan-price { font-size: 22px; font-weight: 800; color: #222; margin: 4px 0; }
-.plan-detail { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-.plan-btn { display: block; width: 100%; padding: 10px; background: #222; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; }
-.plan-card.featured .plan-btn { background: var(--accent); }
+        /* ════════════════════════════════════════════════════════════════
+           🔐 MODALES (Overlay)
+        ════════════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(9, 14, 23, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
 
-.bank-item { padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--muted); cursor: pointer; transition: background 0.2s;}
-.bank-item:active { background: #eee; }
-.bank-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; display: flex; justify-content: space-between;}
-.bank-num { font-family: monospace; font-size: 15px; color: #444; letter-spacing: 0.5px;}
+        .modal-content {
+            width: 90%;
+            max-width: 360px;
+            background: #131b2b;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            position: relative;
+            transform: scale(0.9); transition: 0.3s;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
 
-.support-box { text-align: center; padding: 10px 0; }
-.support-icon { font-size: 40px; margin-bottom: 10px; }
-.whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin-top: 15px; text-decoration: none; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+        .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
 
-/* ====== LOGIN ====== */
-.login-form { display: flex; flex-direction: column; gap: 15px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; position: relative; }
-.form-label { font-weight: 600; font-size: 14px; color: #333; }
-.form-input {
-  padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;
-  font-size: 14px; transition: border-color 0.2s; width: 100%;
-}
-.form-input:focus { outline: none; border-color: var(--accent); }
-.password-wrapper { position: relative; display: flex; align-items: center; }
-.password-wrapper .form-input { padding-right: 45px; }
-.toggle-password {
-  position: absolute; right: 12px; background: none; border: none;
-  cursor: pointer; color: #999; padding: 5px; transition: color 0.2s;
-}
-.toggle-password:hover { color: var(--accent); }
-.login-btn {
-  background: var(--accent); color: white; padding: 12px; border: none;
-  border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px;
-}
-.login-btn:active { opacity: 0.8; }
-.error-msg {
-  background: #fee; color: #c33; padding: 10px; border-radius: 8px;
-  text-align: center; font-size: 13px; display: none;
-}
-.error-msg.show { display: block; }
-</style>
+        /* Login Form */
+        .form-group { margin-bottom: 15px; position: relative; }
+        .form-label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 5px; }
+        .form-input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            padding: 12px 15px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: var(--font-family);
+            transition: 0.3s;
+        }
+        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 242, 255, 0.1); }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 32px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Plans Cards */
+        .plan-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .plan-info h5 { color: var(--text-main); font-size: 1rem; margin-bottom: 4px; }
+        .plan-info span { color: var(--primary); font-weight: 700; }
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        /* Bank List */
+        .bank-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .bank-item:last-child { border-bottom: none; }
+        .bank-item:hover { background: rgba(255,255,255,0.02); }
+        .bank-name { color: var(--primary); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+        .bank-number { color: var(--text-muted); font-family: monospace; font-size: 0.95rem; display: flex; align-items: center; gap: 5px; }
+        .copy-icon { opacity: 0.5; width: 14px; }
+
+        /* Loading & Messages */
+        .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--primary); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto; }
+        .error-msg { color: var(--danger); font-size: 0.8rem; margin-top: 10px; text-align: center; display: none; }
+        
+        /* Toast Notification */
+        #toast {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: #000; padding: 8px 16px;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200;
+        }
+        #toast.show { opacity: 1; bottom: 90px; }
+
+        /* Animations */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Soporte */
+        .support-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
 
-<div class="backdrop"></div>
+    <div id="app-container">
+        <!-- Header -->
+        <header>
+            <div class="logo-area">
+                <h1>FINANCE MONITOR</h1>
+            </div>
+            <button class="btn-close" onclick="closeApp()">✕</button>
+        </header>
 
-<div id="float" class="float-win">
-  <div id="drag" class="header">
-    <div class="logo">B</div>
-    <div class="title">Yape & Plin Interceptor</div>
-    <div class="hdr-actions">
-      <div id="closeBtn" class="icon-btn">X</div>
-    </div>
-  </div>
-  
-  <div class="body">
-    <div class="pill">
-      <div class="left">
-        <div id="statusDot" style="width:12px;height:12px;border-radius:6px;background:#ff6b6b"></div>
-        <div class="status" id="statusText">Permisos denegados</div>
-      </div>
-      <button id="startBtn" class="btn-start">Iniciar</button>
-    </div>
-
-    <div class="tabs">
-      <div class="tab active" data-filter="todos">Todos</div>
-      <div class="tab" data-filter="hoy">Hoy</div>
-      <div class="tab" data-filter="ayer">Ayer</div>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <div class="num" id="countYape">0</div>
-        <div class="label">Operaciones</div>
-      </div>
-      <div class="card">
-        <div class="num" id="totalYape">S/ 0.00</div>
-        <div class="label">Total recibido</div>
-      </div>
-    </div>
-
-    <div class="list" id="list">
-      <div class="loading-text">Esperando autenticación...</div>
-    </div>
-
-    <div class="controls">
-      <button class="ctrl-btn ctrl-blue" onclick="showModal('plans')">Ver planes</button>
-      <button class="ctrl-btn ctrl-green" onclick="showModal('pay')">Métodos de pago</button>
-      <button class="ctrl-btn ctrl-red" onclick="showModal('support')">Soporte</button>
-    </div>
-
-    <!-- MODAL -->
-    <div id="modalOverlay" class="modal-overlay">
-      <div class="modal-card" onclick="event.stopPropagation()">
-        <div class="modal-header">
-          <div id="modalTitle" class="modal-title">Título</div>
-          <button class="close-modal" onclick="closeModal()">✕</button>
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div id="status-dot" class="status-dot status-denied"></div>
+            <span id="status-text" class="status-text">Permisos Denegados</span>
         </div>
-        <div id="modalBody"></div>
-      </div>
-    </div>
 
-  </div>
-</div>
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <div class="card-balance">
+                <div class="balance-label">Total Recaudado</div>
+                <div class="balance-amount" id="total-amount">S/ 0.00</div>
+                <div class="balance-count" id="op-count">0 operaciones</div>
+            </div>
 
-<script>
-// ====== CONFIGURACIÓN ======
-const CONTACT_PHONE = "51960744787";
-const DATA_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
-
-// ====== ESTADO ======
-let estaAutenticado = false;
-let credenciales = { usuario: "", password: "" };
-let todosLosDatos = [];
-let filtroActual = "todos";
-
-// ====== GESTIÓN DE SESIÓN ======
-const SESSION_KEY = "yape_session";
-const SESSION_HOURS = 8; // Duración de la sesión en horas
-
-function guardarSesion() {
-  const expiracion = Date.now() + (SESSION_HOURS * 60 * 60 * 1000); // 8 horas
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ expira: expiracion }));
-}
-
-function verificarSesion() {
-  try {
-    const sesion = localStorage.getItem(SESSION_KEY);
-    if (!sesion) return false;
-    
-    const data = JSON.parse(sesion);
-    if (Date.now() < data.expira) {
-      return true; // Sesión válida
-    } else {
-      localStorage.removeItem(SESSION_KEY); // Expiró
-      return false;
-    }
-  } catch(e) {
-    return false;
-  }
-}
-
-function cerrarSesion() {
-  localStorage.removeItem(SESSION_KEY);
-  estaAutenticado = false;
-  document.getElementById('statusDot').style.background = '#ff6b6b';
-  document.getElementById('statusText').textContent = 'Permisos denegados';
-  document.getElementById('startBtn').textContent = 'Iniciar';
-  document.getElementById('startBtn').style.background = 'var(--teal)';
-  document.getElementById('startBtn').disabled = false;
-  document.getElementById('startBtn').style.cursor = 'pointer';
-  document.getElementById('startBtn').style.opacity = '1';
-  todosLosDatos = [];
-  renderizar(filtroActual);
-}
-
-// ====== UTILIDADES ======
-function escapeHtml(str){
-  return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-}
-function cleanText(str){
-  if(!str) return "";
-  return str.replace(/\\(?=[^\\])/g,''); 
-}
-function parseLocalDate(fStr){
-  const parts = fStr.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+) (\w+)/);
-  if(!parts) return new Date();
-  let [_, y, m, d, h, min, s, mer] = parts.map((v,i)=>i>0?v:null);
-  y=parseInt(y); m=parseInt(m)-1; d=parseInt(d);
-  h=parseInt(h); min=parseInt(min); s=parseInt(s);
-  if(mer.toUpperCase()==='PM' && h<12) h+=12;
-  if(mer.toUpperCase()==='AM' && h===12) h=0;
-  return new Date(y,m,d,h,min,s);
-}
-function esHoy(fStr){
-  return parseLocalDate(fStr).toDateString() === new Date().toDateString();
-}
-function esAyer(fStr){
-  const a = new Date(); a.setDate(a.getDate()-1);
-  return parseLocalDate(fStr).toDateString() === a.toDateString();
-}
-
-// ====== DRAG & DROP ======
-(function(){
-  const w=document.getElementById('float'), d=document.getElementById('drag');
-  let isDragging=false, startX, startY, initialLeft, initialTop;
-  d.addEventListener('mousedown', e => {
-    if(e.target.classList.contains('icon-btn')) return;
-    isDragging = true; startX = e.clientX; startY = e.clientY;
-    const rect = w.getBoundingClientRect();
-    w.style.left = rect.left + 'px'; w.style.top = rect.top + 'px'; w.style.transform = 'none';
-    initialLeft = rect.left; initialTop = rect.top; d.style.cursor = 'grabbing';
-  });
-  window.addEventListener('mousemove', e => {
-    if(!isDragging) return;
-    w.style.left = (initialLeft + (e.clientX - startX)) + 'px';
-    w.style.top = (initialTop + (e.clientY - startY)) + 'px';
-  });
-  window.addEventListener('mouseup', () => { isDragging = false; d.style.cursor = 'grab'; });
-})();
-
-document.getElementById('closeBtn').onclick = (e) => { 
-  e.stopPropagation(); 
-  document.getElementById('float').style.display = 'none'; 
-};
-
-// ====== BOTÓN INICIAR (MUESTRA LOGIN) ======
-document.getElementById('startBtn').onclick = () => {
-  if (!estaAutenticado) {
-    showModal('login');
-  }
-  // Si ya está autenticado, el botón no hace nada (está deshabilitado)
-};
-
-// ====== CARGAR DATOS DE LA API ======
-const list = document.getElementById("list");
-const countEl = document.getElementById("countYape");
-const totalEl = document.getElementById("totalYape");
-
-async function cargarDatos(){
-  if(!estaAutenticado){
-    list.innerHTML='<div class="loading-text">Inicia sesión primero</div>';
-    return;
-  }
-  
-  list.innerHTML='<div class="loading-text">Cargando datos...</div>';
-  try{
-    const resp = await fetch(DATA_URL + "?t=" + Date.now());
-    const data = await resp.json();
-    
-    // Extraer notificaciones y config
-    todosLosDatos = data.notificaciones || [];
-    
-    renderizar(filtroActual);
-  } catch(err){
-    list.innerHTML='<div class="loading-text" style="color:red">Error de conexión</div>';
-  }
-}
-
-function renderizar(filtro){
-  if(!estaAutenticado){
-    list.innerHTML='<div class="loading-text">Inicia sesión para ver los datos</div>';
-    return;
-  }
-  
-  list.innerHTML=""; 
-  let total=0, count=0;
-  
-  if(todosLosDatos.length===0){
-    list.innerHTML='<div class="loading-text">No hay datos</div>';
-    countEl.textContent="0"; 
-    totalEl.textContent="S/ 0.00"; 
-    return;
-  }
-  
-  todosLosDatos.forEach(item=>{
-    if(!item.fecha) return;
-    const mostrar = filtro==="todos" || (filtro==="hoy" && esHoy(item.fecha)) || (filtro==="ayer" && esAyer(item.fecha));
-    if(!mostrar) return;
-    
-    let importe = typeof item.importe==="number"?item.importe: parseFloat(String(item.importe).replace(/[^0-9.-]+/g,""))||0;
-    if(importe>0){total+=importe;count++;}
-    
-    const div=document.createElement("div"); 
-    div.className="list-item";
-    div.innerHTML=`
-      <div class="avatar">S/</div>
-      <div class="li-body">
-        <div class="li-title">
-          <span>${escapeHtml(cleanText(item.titulo)).trim()||"Pago"}</span>
-          ${importe>0?`<span class="li-price">S/ ${importe.toFixed(2)}</span>`:""}
+            <div id="login-trigger-area">
+                <button class="btn-action-main btn-start" onclick="openLogin()">INICIAR MONITOREO</button>
+            </div>
+            
+            <div id="filters-area" class="filters" style="display:none;">
+                <button class="filter-btn active" onclick="setFilter('all')">Todos</button>
+                <button class="filter-btn" onclick="setFilter('today')">Hoy</button>
+                <button class="filter-btn" onclick="setFilter('yesterday')">Ayer</button>
+            </div>
         </div>
-        <div class="li-sub">${escapeHtml(cleanText(item.contenido))}</div>
-        <div class="li-sub"><small>${escapeHtml(cleanText(item.fecha))}</small></div>
-      </div>`;
-    list.appendChild(div);
-  });
-  
-  countEl.textContent=count; 
-  totalEl.textContent="S/ "+total.toFixed(2);
-}
 
-// ====== TABS ======
-document.querySelectorAll('.tab').forEach(tab=>{
-  tab.onclick=()=>{
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active'); 
-    filtroActual=tab.dataset.filter; 
-    renderizar(filtroActual);
-  };
-});
-
-// ====== MODALES ======
-const modalOverlay = document.getElementById('modalOverlay');
-const modalTitle = document.getElementById('modalTitle');
-const modalBody = document.getElementById('modalBody');
-
-function closeModal() { modalOverlay.classList.remove('active'); }
-modalOverlay.onclick = (e) => { if(e.target === modalOverlay) closeModal(); }
-
-function copiarTexto(txt) {
-  navigator.clipboard.writeText(txt).then(() => alert("Copiado: " + txt)).catch(() => prompt("Copia este número:", txt));
-}
-
-function showModal(type) {
-  modalBody.innerHTML = '';
-  
-  if (type === 'login') {
-    modalTitle.textContent = "Iniciar Sesión";
-    modalBody.innerHTML = `
-      <form class="login-form" onsubmit="return handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label">Usuario</label>
-          <input type="text" id="loginUser" class="form-input" placeholder="Ingresa tu usuario" required autocomplete="username">
+        <!-- Notification List -->
+        <div class="list-container">
+            <ul id="notification-list">
+                <!-- Items inyectados por JS -->
+                <li style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.9rem;">
+                    Inicia sesión para ver datos
+                </li>
+            </ul>
         </div>
-        <div class="form-group">
-          <label class="form-label">Contraseña</label>
-          <div class="password-wrapper">
-            <input type="password" id="loginPass" class="form-input" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
-            <button type="button" class="toggle-password" onclick="togglePassword()" id="toggleBtn">
-              <svg id="eyeOpen" stroke="currentColor" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px;display:block;" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-              </svg>
-              <svg id="eyeClosed" stroke="currentColor" viewBox="0 0 24 24" fill="none" style="width:20px;height:20px;display:none;" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-              </svg>
+
+        <!-- Footer Navigation -->
+        <div class="footer-menu">
+            <button class="menu-btn" onclick="openModal('plans-modal')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Planes
             </button>
-          </div>
+            <button class="menu-btn" onclick="openModal('payment-modal')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+                Pagos
+            </button>
+            <button class="menu-btn" onclick="openModal('support-modal')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                Soporte
+            </button>
         </div>
-        <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos</div>
-        <button type="submit" class="login-btn">Ingresar</button>
-      </form>
-    `;
-  }
-  else if (type === 'plans') {
-    modalTitle.textContent = "Planes Premium";
-    modalBody.innerHTML = `
-      <div class="plan-card">
-        <div class="plan-name">PLAN MENSUAL</div>
-        <div class="plan-price">S/ 6.00</div>
-        <div class="plan-detail">Facturado cada mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
-      </div>
-      <div class="plan-card featured">
-        <div class="plan-tag">AHORRA 33%</div>
-        <div class="plan-name">TRIMESTRAL</div>
-        <div class="plan-price">S/ 12.00</div>
-        <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
-      </div>
-      <div class="plan-card featured">
-        <div class="plan-tag">MEJOR PRECIO</div>
-        <div class="plan-name">SEMESTRAL</div>
-        <div class="plan-price">S/ 18.00</div>
-        <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
-        <a class="plan-btn" target="_blank" href="https://wa.me/${CONTACT_PHONE}?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
-      </div>`;
-  } 
-  else if (type === 'pay') {
-    modalTitle.textContent = "Métodos de Pago";
-    const payments = [
-      { bank: "YAPE / PLIN", num: "960 744 787", color: "#6e4ad1" },
-      { bank: "BCP", num: "191-25487963-0-02", color: "#004586" },
-      { bank: "BBVA", num: "0011-0584-69854712", color: "#005697" },
-      { bank: "INTERBANK", num: "200-3005847961", color: "#00953a" }
-    ];
-    let html = '';
-    payments.forEach(p => {
-      html += `
-        <div class="bank-item" style="border-color: ${p.color};" onclick="copiarTexto('${p.num}')">
-          <div class="bank-name"><span>${p.bank}</span><span style="font-size:11px; color:#999;">Copiar</span></div>
-          <div class="bank-num">${p.num}</div>
-        </div>`;
-    });
-    html += `<div style="font-size:12px; color:#999; text-align:center; margin-top:10px;">Envía la captura del pago a Soporte.</div>`
-    modalBody.innerHTML = html;
-  }
-  else if (type === 'support') {
-    modalTitle.textContent = "Soporte Técnico";
-    modalBody.innerHTML = `
-      <div class="support-box">
-        <div class="support-icon">🛠️</div>
-        <p>¿Tu suscripción ha vencido o tienes problemas con la aplicación?</p>
-        <a class="whatsapp-btn" href="https://wa.me/${CONTACT_PHONE}?text=Hola%20deseo%20suscribirme%20a%20este%20servicio" target="_blank">
-          <span>Chatear en WhatsApp</span>
-        </a>
-        <div style="margin-top:15px; font-size:12px; color:#999;">
-          Horario: 9am - 6pm<br>Número: ${CONTACT_PHONE}
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Autenticación</h3>
+                <button class="modal-close" onclick="closeModal('login-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Usuario</label>
+                <input type="text" id="login-user" class="form-input" placeholder="Ingresa tu usuario">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Contraseña</label>
+                <input type="password" id="login-pass" class="form-input" placeholder="••••••">
+                <button class="password-toggle" onclick="togglePass()" type="button">
+                    <svg id="eye-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+            <button id="btn-do-login" class="btn-action-main btn-start" onclick="attemptLogin()">
+                <span id="login-text">INGRESAR</span>
+                <div id="login-loader" class="loader" style="display:none;"></div>
+            </button>
+            <p id="login-error" class="error-msg">Credenciales incorrectas</p>
         </div>
-      </div>
-    `;
-  }
-  
-  modalOverlay.classList.add('active');
-}
+    </div>
 
-// ====== TOGGLE PASSWORD VISIBILITY ======
-function togglePassword() {
-  const passInput = document.getElementById('loginPass');
-  const eyeOpen = document.getElementById('eyeOpen');
-  const eyeClosed = document.getElementById('eyeClosed');
-  
-  if (passInput.type === 'password') {
-    passInput.type = 'text';
-    eyeOpen.style.display = 'none';
-    eyeClosed.style.display = 'block';
-  } else {
-    passInput.type = 'password';
-    eyeOpen.style.display = 'block';
-    eyeClosed.style.display = 'none';
-  }
-}
+    <!-- MODAL PLANES -->
+    <div id="plans-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Planes Premium</h3>
+                <button class="modal-close" onclick="closeModal('plans-modal')">×</button>
+            </div>
+            <div id="plans-container">
+                <!-- Generado por JS -->
+            </div>
+        </div>
+    </div>
 
-// ====== MANEJAR LOGIN ======
-async function handleLogin(event) {
-  event.preventDefault();
-  
-  const inputUser = document.getElementById('loginUser').value.trim();
-  const inputPass = document.getElementById('loginPass').value.trim();
-  const errorMsg = document.getElementById('errorMsg');
-  
-  // Cargar credenciales desde la API
-  try {
-    const resp = await fetch(DATA_URL + "?t=" + Date.now());
-    const data = await resp.json();
-    
-    // Extraer config
-    const config = data.config || {};
-    
-    console.log("Config completo:", config);
-    console.log("Intentando login con:", inputUser);
-    
-    // Buscar si el campo (usuario) existe en config y si la contraseña coincide
-    let loginExitoso = false;
-    
-    if (config.hasOwnProperty(inputUser)) {
-      const passwordGuardado = String(config[inputUser]);
-      console.log(`Usuario encontrado: ${inputUser}, comparando contraseñas`);
-      
-      if (passwordGuardado === String(inputPass)) {
-        loginExitoso = true;
-      }
-    } else {
-      console.log(`Usuario "${inputUser}" no encontrado en config`);
-    }
-    
-    if (loginExitoso) {
-      // ✅ LOGIN EXITOSO
-      estaAutenticado = true;
-      guardarSesion(); // Guardar sesión en localStorage
-      
-      // Cambiar estado visual
-      document.getElementById('statusDot').style.background = '#00c48c';
-      document.getElementById('statusText').textContent = 'Permisos otorgados';
-      document.getElementById('startBtn').textContent = 'Activo';
-      document.getElementById('startBtn').style.background = '#00c48c';
-      document.getElementById('startBtn').disabled = true;
-      document.getElementById('startBtn').style.cursor = 'not-allowed';
-      document.getElementById('startBtn').style.opacity = '0.7';
-      
-      // Cargar datos (ya los tenemos en data.notificaciones)
-      todosLosDatos = data.notificaciones || [];
-      renderizar(filtroActual);
-      
-      // Cerrar modal
-      closeModal();
-      
-      console.log("✅ Login exitoso");
-      
-    } else {
-      // ❌ CREDENCIALES INCORRECTAS
-      errorMsg.textContent = "Usuario o contraseña incorrectos";
-      errorMsg.classList.add('show');
-      setTimeout(() => errorMsg.classList.remove('show'), 3000);
-      console.log("❌ Login fallido");
-    }
-    
-  } catch(err) {
-    console.error("Error en login:", err);
-    errorMsg.textContent = "Error al verificar credenciales";
-    errorMsg.classList.add('show');
-    setTimeout(() => errorMsg.classList.remove('show'), 3000);
-  }
-  
-  return false;
-}
+    <!-- MODAL PAGOS -->
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Métodos de Pago</h3>
+                <button class="modal-close" onclick="closeModal('payment-modal')">×</button>
+            </div>
+            <div id="bank-list">
+                <!-- Generado por JS -->
+            </div>
+        </div>
+    </div>
 
-// ====== VERIFICAR SESIÓN AL CARGAR ======
-window.addEventListener('DOMContentLoaded', () => {
-  if (verificarSesion()) {
-    console.log("✅ Sesión activa encontrada");
-    estaAutenticado = true;
-    
-    // Cambiar estado visual
-    document.getElementById('statusDot').style.background = '#00c48c';
-    document.getElementById('statusText').textContent = 'Permisos otorgados';
-    document.getElementById('startBtn').textContent = 'Activo';
-    document.getElementById('startBtn').style.background = '#00c48c';
-    document.getElementById('startBtn').disabled = true;
-    document.getElementById('startBtn').style.cursor = 'not-allowed';
-    document.getElementById('startBtn').style.opacity = '0.7';
-    
-    // Cargar datos automáticamente
-    cargarDatos();
-  } else {
-    console.log("ℹ️ No hay sesión activa");
-  }
-});
-</script>
+    <!-- MODAL SOPORTE -->
+    <div id="support-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Soporte Técnico</h3>
+                <button class="modal-close" onclick="closeModal('support-modal')">×</button>
+            </div>
+            <p class="support-text">
+                ¿Tienes problemas con la sincronización o necesitas ayuda con tu cuenta? Nuestro equipo está disponible para ayudarte.
+            </p>
+            <button class="btn-action-main btn-start" onclick="contactSupport()">
+                Contactar por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast">¡Copiado!</div>
+
+    <script>
+        /* ════════════════════════════════════════════════════════════════
+           ⚙️ CONFIGURACIÓN Y ESTADO
+        ════════════════════════════════════════════════════════════════ */
+        const API_URL = 'https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec';
+        const CONTACT_PHONE = '51960744787';
+        
+        let appState = {
+            isLoggedIn: false,
+            notifications: [],
+            filteredNotifications: [],
+            currentFilter: 'all',
+            config: null
+        };
+
+        /* ════════════════════════════════════════════════════════════════
+           🚀 INICIALIZACIÓN
+        ════════════════════════════════════════════════════════════════ */
+        window.onload = function() {
+            console.log("App Iniciada");
+            checkSession();
+            setupModalsContent();
+            
+            // Compatibilidad Tasker para Variables Globales si existen
+            if(typeof session_data !== 'undefined') {
+                console.log("Tasker session found");
+                // Lógica opcional para leer de tasker si fuera necesario
+            }
+        };
+
+        function checkSession() {
+            const savedSession = localStorage.getItem('fin_session_end');
+            if (savedSession) {
+                const endTime = parseInt(savedSession);
+                if (Date.now() < endTime) {
+                    console.log("Sesión válida encontrada");
+                    performAutoLogin();
+                } else {
+                    localStorage.removeItem('fin_session_end');
+                }
+            }
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           🔐 LÓGICA DE AUTENTICACIÓN
+        ════════════════════════════════════════════════════════════════ */
+        function openLogin() {
+            if (appState.isLoggedIn) return;
+            openModal('login-modal');
+        }
+
+        async function attemptLogin() {
+            const user = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+            const btnText = document.getElementById('login-text');
+            const loader = document.getElementById('login-loader');
+            const errorMsg = document.getElementById('login-error');
+
+            if (!user || !pass) {
+                errorMsg.textContent = "Complete todos los campos";
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // UI Loading
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+            errorMsg.style.display = 'none';
+
+            try {
+                // Fetch API
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Lógica de validación dinámica
+                // API devuelve: { notificaciones: [], config: { campo: "usuario", valor: "pass" } }
+                // Interpretación: config.campo contiene el NOMBRE de la propiedad que tiene la contraseña
+                // Ejemplo: campo="Juan", entonces validamos si user === "Juan" y pass === config["Juan"]
+                
+                const config = data.config;
+                const expectedUserKey = config.campo; // El nombre del usuario esperado
+                const expectedPass = config[expectedUserKey]; // La contraseña asociada
+
+                if (user === expectedUserKey && pass === String(expectedPass)) {
+                    // Login Exitoso
+                    loginSuccess(data);
+                    closeModal('login-modal');
+                } else {
+                    throw new Error("Credenciales inválidas");
+                }
+
+            } catch (err) {
+                console.error(err);
+                errorMsg.textContent = "Error de acceso o conexión";
+                errorMsg.style.display = 'block';
+            } finally {
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        }
+
+        function loginSuccess(data) {
+            appState.isLoggedIn = true;
+            appState.notifications = data.notificaciones || []; // Asegurar array
+            appState.config = data.config;
+
+            // Guardar sesión (8 horas)
+            const sessionDuration = 8 * 60 * 60 * 1000;
+            localStorage.setItem('fin_session_end', Date.now() + sessionDuration);
+
+            // Actualizar UI
+            updateUIState(true);
+            applyFilter('all');
+        }
+
+        async function performAutoLogin() {
+            // Si hay sesión, hacemos fetch silencioso para actualizar datos
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                loginSuccess(data);
+            } catch (e) {
+                console.log("Error refrescando sesión", e);
+            }
+        }
+
+        function updateUIState(active) {
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const triggerArea = document.getElementById('login-trigger-area');
+            const filtersArea = document.getElementById('filters-area');
+
+            if (active) {
+                statusDot.className = 'status-dot status-granted';
+                statusText.textContent = 'Permisos Otorgados';
+                
+                // Cambiar botón a "Activo"
+                triggerArea.innerHTML = '<button class="btn-action-main btn-active">MONITOREO ACTIVO</button>';
+                filtersArea.style.display = 'flex';
+            } else {
+                statusDot.className = 'status-dot status-denied';
+                statusText.textContent = 'Permisos Denegados';
+            }
+        }
+
+        function togglePass() {
+            const input = document.getElementById('login-pass');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           📊 VISUALIZACIÓN DE DATOS
+        ════════════════════════════════════════════════════════════════ */
+        function setFilter(filter) {
+            // UI update buttons
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            applyFilter(filter);
+        }
+
+        function applyFilter(filterType) {
+            appState.currentFilter = filterType;
+            const list = appState.notifications;
+            const now = new Date();
+            const todayStr = now.toLocaleDateString('es-PE'); // Formato d/m/yyyy o similar
+            
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toLocaleDateString('es-PE');
+
+            let filtered = [];
+
+            if (filterType === 'all') {
+                filtered = list;
+            } else if (filterType === 'today') {
+                filtered = list.filter(n => {
+                    const d = new Date(n.fecha);
+                    return d.toLocaleDateString('es-PE') === todayStr;
+                });
+            } else if (filterType === 'yesterday') {
+                filtered = list.filter(n => {
+                    const d = new Date(n.fecha);
+                    return d.toLocaleDateString('es-PE') === yesterdayStr;
+                });
+            }
+
+            renderList(filtered);
+            updateStats(filtered);
+        }
+
+        function renderList(items) {
+            const ul = document.getElementById('notification-list');
+            ul.innerHTML = '';
+
+            if (items.length === 0) {
+                ul.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-muted)">No hay movimientos</li>';
+                return;
+            }
+
+            // Ordenar: más reciente primero
+            items.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+            items.forEach(item => {
+                // item: { fecha, titulo, contenido, aplicacion, importe }
+                const isYape = item.aplicacion.toLowerCase().includes('yape');
+                const iconClass = isYape ? 'icon-yape' : 'icon-plin';
+                const iconText = isYape ? 'Y' : 'P';
+                
+                // Formatear fecha legible
+                const dateObj = new Date(item.fecha);
+                const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const dateStr = dateObj.toLocaleDateString([], {day: '2-digit', month: '2-digit'});
+
+                const li = document.createElement('li');
+                li.className = 'transaction-item';
+                li.innerHTML = `
+                    <div class="t-left">
+                        <div class="t-icon ${iconClass}">${iconText}</div>
+                        <div class="t-details">
+                            <h4>${item.titulo || 'Transferencia'}</h4>
+                            <p>${dateStr} ${timeStr} • ${item.contenido || ''}</p>
+                        </div>
+                    </div>
+                    <div class="t-amount">+S/ ${parseFloat(item.importe).toFixed(2)}</div>
+                `;
+                ul.appendChild(li);
+            });
+        }
+
+        function updateStats(items) {
+            const total = items.reduce((sum, item) => sum + parseFloat(item.importe || 0), 0);
+            document.getElementById('total-amount').textContent = `S/ ${total.toFixed(2)}`;
+            document.getElementById('op-count').textContent = `${items.length} operaciones`;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           🧩 CONTENIDO MODALES
+        ════════════════════════════════════════════════════════════════ */
+        function setupModalsContent() {
+            // Planes
+            const plans = [
+                { name: "Plan Mensual", price: 6 },
+                { name: "Plan Trimestral", price: 12 },
+                { name: "Plan Semestral", price: 18 }
+            ];
+            const plansContainer = document.getElementById('plans-container');
+            plans.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'plan-card';
+                div.innerHTML = `
+                    <div class="plan-info">
+                        <h5>${p.name}</h5>
+                        <span>S/ ${p.price}.00</span>
+                    </div>
+                    <button class="btn-whatsapp" onclick="buyPlan('${p.name}', ${p.price})">
+                        Pedir
+                    </button>
+                `;
+                plansContainer.appendChild(div);
+            });
+
+            // Bancos
+            const banks = [
+                { name: "Yape / Plin", number: CONTACT_PHONE },
+                { name: "BCP", number: "191-12345678-0-99" },
+                { name: "BBVA", number: "0011-0814-0123456789" },
+                { name: "Interbank", number: "898-3123456789" }
+            ];
+            const bankList = document.getElementById('bank-list');
+            banks.forEach(b => {
+                const div = document.createElement('div');
+                div.className = 'bank-item';
+                div.onclick = () => copyToClipboard(b.number);
+                div.innerHTML = `
+                    <div class="bank-name">${b.name}</div>
+                    <div class="bank-number">
+                        ${b.number}
+                        <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    </div>
+                `;
+                bankList.appendChild(div);
+            });
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           🛠 UTILIDADES
+        ════════════════════════════════════════════════════════════════ */
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function buyPlan(plan, price) {
+            const msg = `Hola, deseo adquirir el ${plan} por S/${price}.00`;
+            const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        function contactSupport() {
+            const msg = "Hola, necesito soporte con la aplicación de monitoreo.";
+            const url = `https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }).catch(err => console.error('Error al copiar', err));
+        }
+
+        function closeApp() {
+            // En contexto web cierra la pestaña, en Tasker ejecutaría exit()
+            if(typeof exit === "function") {
+                exit();
+            } else {
+                window.close();
+                // Fallback visual
+                document.body.innerHTML = "<h1 style='color:#fff;text-align:center;'>Aplicación Cerrada</h1>";
+            }
+        }
+    </script>
 </body>
 </html>
