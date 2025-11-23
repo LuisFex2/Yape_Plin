@@ -19,8 +19,8 @@
             --card-glass: rgba(20, 20, 40, 0.6);
             --card-border: rgba(255, 255, 255, 0.08);
             --yape-color: #d7159c;
-            --plin-color: #00f0ff;
-            --bank-color: #27d963;
+            --plin-color: #00f0ff; /* Cyan */
+            --bank-color: #27d963; /* Verde */
             --text-main: #ffffff;
             --text-dim: #8f94b1;
             --accent: #6c5ce7;
@@ -55,7 +55,7 @@
         }
 
         /* Header */
-        header { padding: 25px 20px 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+        header { padding: 25px 20px 15px; display: flex; justify-content: space-between; align-items: flex-start; }
         .brand h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .brand span { font-size: 0.7rem; color: var(--text-dim); display: block; margin-top: 2px; }
 
@@ -67,29 +67,53 @@
             background: rgba(39, 217, 99, 0.1); color: var(--bank-color); border-color: rgba(39, 217, 99, 0.3); box-shadow: 0 0 15px rgba(39, 217, 99, 0.2);
         }
 
-        /* Hero Stats (MODIFICADO: PESTAÑAS) */
-        .hero-stats {
-            margin: 15px 20px; padding: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border-radius: 24px; border: 1px solid var(--card-border); text-align: center; position: relative; overflow: hidden;
+        /* ════ NUEVO DISEÑO DE ESTADÍSTICAS (2 COLUMNAS) ════ */
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            padding: 0 20px 20px 20px;
         }
-        .hero-stats::before { content:''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--yape-color), var(--plin-color)); }
         
-        /* Nuevos Estilos para los 2 Botones de Stats */
-        .stats-tabs {
-            display: flex; gap: 5px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 12px; margin-bottom: 15px;
+        .stat-card {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
-        .stat-btn {
-            flex: 1; border: none; background: transparent; color: var(--text-dim); padding: 8px;
-            font-family: var(--font-main); font-weight: 700; font-size: 0.8rem; border-radius: 8px; cursor: pointer; transition: 0.3s;
-        }
-        .stat-btn.active {
-            background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--card-border);
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        
+        /* Brillo superior sutil */
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
-        .hero-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-        .hero-amount { font-size: 2.8rem; font-weight: 700; letter-spacing: -1px; text-shadow: 0 0 20px rgba(255,255,255,0.2); color: #fff; }
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        
+        /* Colores específicos para diferenciar */
+        .stat-value.ops { color: var(--plin-color); } /* Cyan para Operaciones */
+        .stat-value.money { color: var(--bank-color); } /* Verde para Dinero */
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
 
         /* Actions */
         .action-row { padding: 0 20px; display: flex; gap: 10px; margin-bottom: 20px; }
@@ -98,7 +122,7 @@
         .btn-filter { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid transparent; }
         .btn-filter.active { background: rgba(255,255,255,0.1); color: var(--text-main); border-color: var(--card-border); }
 
-        /* LISTA */
+        /* Lista */
         .list-wrapper { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; }
         
         .tx-card {
@@ -176,15 +200,17 @@
             <div id="status-indicator" class="status-badge">Sin Acceso</div>
         </header>
 
-        <!-- HERO MODIFICADO: CON PESTAÑAS PARA EVITAR CONFUSIÓN -->
-        <div class="hero-stats">
-            <div class="stats-tabs">
-                <button class="stat-btn active" id="tab-money" onclick="switchStats('money')">DINERO</button>
-                <button class="stat-btn" id="tab-ops" onclick="switchStats('ops')">OPS</button>
+        <!-- ESTRUCTURA DE 2 TARJETAS (ESTILO IMAGEN REFERENCIA) -->
+        <div class="stats-row">
+            <!-- Tarjeta 1: Operaciones -->
+            <div class="stat-card">
+                <div class="stat-value ops" id="count-display">0</div>
+                <div class="stat-label">Operaciones</div>
             </div>
-            <div id="hero-display-area">
-                <div class="hero-amount" id="main-value">S/ 0.00</div>
-                <div class="hero-label" id="main-label">Total Recaudado</div>
+            <!-- Tarjeta 2: Dinero Total -->
+            <div class="stat-card">
+                <div class="stat-value money" id="total-display">S/ 0.00</div>
+                <div class="stat-label">Total Recibido</div>
             </div>
         </div>
 
@@ -242,7 +268,7 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
         const CONTACTO = "51960744787";
-        let state = { data: [], config: {}, authed: false, filter: 'todos', currentTotal: 0, currentOps: 0, viewMode: 'money' };
+        let state = { data: [], config: {}, authed: false, filter: 'todos' };
 
         window.onload = () => { renderStaticModals(); checkSession(); };
 
@@ -294,28 +320,6 @@
             document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
             processData();
-        }
-
-        // LÓGICA DE PESTAÑAS (DINERO / OPS)
-        function switchStats(mode) {
-            state.viewMode = mode;
-            // Actualizar botones
-            document.getElementById('tab-money').className = mode === 'money' ? 'stat-btn active' : 'stat-btn';
-            document.getElementById('tab-ops').className = mode === 'ops' ? 'stat-btn active' : 'stat-btn';
-            
-            // Actualizar vista
-            const valEl = document.getElementById('main-value');
-            const labelEl = document.getElementById('main-label');
-            
-            if (mode === 'money') {
-                valEl.textContent = 'S/ ' + state.currentTotal.toFixed(2);
-                valEl.style.color = '#fff';
-                labelEl.textContent = 'Total Recaudado';
-            } else {
-                valEl.textContent = state.currentOps + ' Ops';
-                valEl.style.color = 'var(--plin-color)';
-                labelEl.textContent = 'Operaciones Válidas';
-            }
         }
 
         function limpiarTexto(texto) { if(!texto) return ""; return texto.replace(/\\"/g, '"'); }
@@ -373,10 +377,9 @@
                 list.appendChild(div);
             });
 
-            // Guardar valores en estado global y actualizar vista actual
-            state.currentTotal = total;
-            state.currentOps = opsValidas;
-            switchStats(state.viewMode);
+            // ACTUALIZACIÓN DE LOS 2 VALORES SIMULTÁNEAMENTE
+            document.getElementById('total-display').textContent = 'S/ ' + total.toFixed(2);
+            document.getElementById('count-display').textContent = opsValidas;
         }
 
         function renderStaticModals() {
