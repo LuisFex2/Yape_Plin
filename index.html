@@ -12,7 +12,7 @@
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 DISEÑO CYBER (Base recuperada intacta)
+           🎨 DISEÑO CYBER (Estilos Originales Intactos)
         ════════════════════════════════════════════════════════════════ */
         :root {
             --bg-deep: #050511;
@@ -69,7 +69,6 @@
             align-items: flex-start;
         }
         
-        /* TÍTULO ACTUALIZADO */
         .brand h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .brand span { font-size: 0.7rem; color: var(--text-dim); display: block; margin-top: 2px; }
 
@@ -188,11 +187,11 @@
         .tx-amount.positive { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
         .tx-amount.promo { color: var(--text-dim); font-size: 0.9rem; text-decoration: line-through; }
 
-        /* ════ NUEVO FOOTER (ESTILO PRIMER EJEMPLO ADAPTADO) ════ */
+        /* Footer Menu (Grid Style) */
         .footer-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            background: rgba(10, 10, 25, 0.95); /* Fondo oscuro cyber */
+            background: rgba(10, 10, 25, 0.95);
             border-top: 1px solid var(--card-border);
             padding: 0;
             z-index: 50;
@@ -217,7 +216,7 @@
         .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.5; }
         .footer-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.03); }
 
-        /* ════ MODALES ════ */
+        /* Modales */
         .modal-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 5, 17, 0.9);
@@ -246,7 +245,6 @@
         .modal-title { font-size: 1.2rem; font-weight: 700; }
         .btn-close { background: none; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; }
 
-        /* Inputs & Password Toggle (RECUPERADO) */
         .input-group { margin-bottom: 15px; position: relative; }
         .input-cyber {
             width: 100%;
@@ -267,7 +265,6 @@
         }
         .toggle-pwd svg { width: 22px; height: 22px; }
 
-        /* Listas en Modales */
         .plan-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--card-border); }
         .plan-price { font-weight: 700; color: var(--plin-color); font-size: 1.1rem; }
         .btn-sm { padding: 6px 12px; border-radius: 8px; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
@@ -276,7 +273,6 @@
         .bank-row { padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; }
         .bank-row:active { background: rgba(255,255,255,0.08); border-color: var(--plin-color); }
         
-        /* Spinner & Toast */
         .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .msg-error { color: var(--danger); font-size: 0.8rem; text-align: center; margin-top: 10px; display: none; }
@@ -287,7 +283,6 @@
             font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200;
         }
         #toast.visible { opacity: 1; bottom: 90px; }
-
     </style>
 </head>
 <body>
@@ -347,9 +342,9 @@
         </div>
     </div>
 
-    <!-- ════════ MODALES ════════ -->
+    <!-- MODALES -->
 
-    <!-- LOGIN CON OJO FUNCIONAL -->
+    <!-- LOGIN -->
     <div id="login-modal" class="modal-bg">
         <div class="modal-box">
             <div class="modal-header">
@@ -362,7 +357,6 @@
             <div class="input-group">
                 <input type="password" id="pass" class="input-cyber" placeholder="Contraseña">
                 <button class="toggle-pwd" onclick="togglePass()" type="button">
-                    <!-- Icono Ojo SVG -->
                     <svg id="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 </button>
             </div>
@@ -381,9 +375,7 @@
                 <h3 class="modal-title">Suscripciones</h3>
                 <button class="btn-close" onclick="modal('modal-planes', false)">×</button>
             </div>
-            <div id="planes-list">
-                <!-- JS Inject -->
-            </div>
+            <div id="planes-list"></div>
         </div>
     </div>
 
@@ -395,9 +387,7 @@
                 <button class="btn-close" onclick="modal('modal-pagos', false)">×</button>
             </div>
             <div style="font-size:0.8rem; color:var(--text-dim); margin-bottom:10px;">Toca para copiar</div>
-            <div id="bancos-list">
-                <!-- JS Inject -->
-            </div>
+            <div id="bancos-list"></div>
         </div>
     </div>
 
@@ -417,7 +407,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast">¡Copiado!</div>
 
     <script>
@@ -447,7 +436,6 @@
             document.getElementById('error-msg').style.display = 'none';
         }
 
-        // FUNCIÓN DEL OJO (TOGGLE)
         function togglePass() {
             const i = document.getElementById('pass');
             i.type = i.type === 'password' ? 'text' : 'password';
@@ -503,15 +491,12 @@
         function loginSuccess(json) {
             state.authed = true;
             state.data = json.notificaciones || [];
-            
             localStorage.setItem('cyber_session_v2', JSON.stringify({ exp: Date.now() + (8 * 3600 * 1000) }));
 
             document.getElementById('status-indicator').textContent = "Conectado";
             document.getElementById('status-indicator').classList.add('active');
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('filters-container').style.display = 'flex';
-            
-            // OCULTAR FOOTER PUBLICITARIO
             document.getElementById('public-footer').style.display = 'none';
 
             processData();
@@ -522,6 +507,13 @@
             document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
             processData();
+        }
+
+        // 🟢 FUNCIÓN NUEVA: LIMPIEZA DE COMILLAS ESCAPADAS
+        function limpiarTexto(texto) {
+            if(!texto) return "";
+            // Reemplaza \" por "
+            return texto.replace(/\\"/g, '"');
         }
 
         function processData() {
@@ -564,13 +556,15 @@
                 const div = document.createElement('div');
                 div.className = 'tx-card';
                 div.setAttribute('data-app', appClass);
+                
+                // 🟢 AQUÍ USAMOS limpiarTexto() EN TITULO Y CONTENIDO
                 div.innerHTML = `
                     <div class="tx-icon">${iconSvg}</div>
                     <div class="tx-info">
-                        <div class="tx-title">${item.titulo}</div>
+                        <div class="tx-title">${limpiarTexto(item.titulo)}</div>
                         <div class="tx-meta">${item.aplicacion} • ${fechaCorta} ${hora}</div>
                         <div style="font-size:0.75rem; color:#666; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                           ${item.contenido.substring(0, 40)}...
+                           ${limpiarTexto(item.contenido).substring(0, 40)}...
                         </div>
                     </div>
                     <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">
