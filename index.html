@@ -118,18 +118,8 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
         
-        /* BOTÓN CERRAR (NUEVO ESTILO CIRCULAR TENUE) */
-        .btn-close { 
-            background: #f1f5f9; /* Fondo gris muy suave */
-            border: none; 
-            width: 32px; height: 32px; /* Cuadrado para ser circulo perfecto */
-            border-radius: 50%; 
-            color: var(--text-dim); 
-            font-size: 1.2rem; 
-            cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; /* Centrado perfecto */
-            transition: 0.2s;
-        }
+        /* Botón Cerrar Circular Tenue */
+        .btn-close { background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .btn-close:hover { background: #e2e8f0; color: var(--text-main); }
         
         /* Estilos Login */
@@ -159,8 +149,31 @@
         .whatsapp-btn:active { transform: scale(0.98); }
         .support-footer { margin-top: 15px; font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
 
-        .bank-row { padding: 12px; background: var(--bg-body); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
-        .bank-row:hover { background: #e2e8f0; }
+        /* ════ ESTILOS BANCOS CON ICONO COPY ════ */
+        .bank-row { 
+            padding: 12px 16px; 
+            background: var(--bg-body); 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            border: 1px solid transparent; 
+            transition: 0.2s; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .bank-row:hover { background: #e2e8f0; border-color: var(--border-light); }
+        .bank-info { display: flex; flex-direction: column; gap: 2px; }
+        .bank-name { color: var(--text-main); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; }
+        .bank-num { font-family: monospace; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.5px; }
+        .copy-icon { 
+            color: var(--yape-color); 
+            width: 20px; height: 20px; 
+            opacity: 0.6; 
+            transition: 0.2s; 
+        }
+        .bank-row:hover .copy-icon { opacity: 1; transform: scale(1.1); }
+        /* ════ FIN ESTILOS BANCOS ════ */
         
         .spinner { width: 20px; height: 20px; border: 3px solid #e2e8f0; border-top-color: var(--yape-color); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -248,7 +261,6 @@
     <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes Premium</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
     <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;font-weight:600;">Toca para copiar</div><div id="bancos-list"></div></div></div>
     
-    <!-- MODAL SOPORTE CON EL NUEVO DISEÑO -->
     <div id="modal-soporte" class="modal-bg">
         <div class="modal-box">
             <div class="modal-header"><h3 class="modal-title">Soporte Técnico</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div>
@@ -430,9 +442,21 @@
                 </div>
             `;
 
+            // BANCOS CON ICONO COPY SVG
             const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
             const bList = document.getElementById('bancos-list');
-            bancos.forEach(bk => { bList.innerHTML += `<div class="bank-row" onclick="copiar('${bk.n}')"><div style="color:var(--text-main);font-size:0.8rem;font-weight:700">${bk.b}</div><div style="font-family:monospace;font-size:0.85rem;color:var(--text-dim);">${bk.n}</div></div>`; });
+            const copyIcon = `<svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>`;
+            
+            bancos.forEach(bk => { 
+                bList.innerHTML += `
+                <div class="bank-row" onclick="copiar('${bk.n}')">
+                    <div class="bank-info">
+                        <div class="bank-name">${bk.b}</div>
+                        <div class="bank-num">${bk.n}</div>
+                    </div>
+                    ${copyIcon}
+                </div>`; 
+            });
         }
 
         function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
