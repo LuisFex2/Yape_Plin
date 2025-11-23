@@ -503,7 +503,8 @@
                 const letra = item.aplicacion ? item.aplicacion.charAt(0).toUpperCase() : '?';
 
                 const dObj = new Date(item.fecha);
-                const hora = dObj.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit' });
+                // CAMBIO AQUI: Forzar formato en-US con hour12: true para que salga AM/PM
+                const hora = dObj.toLocaleTimeString('en-US', { hour: 'numeric', minute:'2-digit', hour12: true });
                 
                 const div = document.createElement('div');
                 div.className = 'tx-card';
