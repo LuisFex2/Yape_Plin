@@ -67,16 +67,29 @@
             background: rgba(39, 217, 99, 0.1); color: var(--bank-color); border-color: rgba(39, 217, 99, 0.3); box-shadow: 0 0 15px rgba(39, 217, 99, 0.2);
         }
 
-        /* Hero Stats */
+        /* Hero Stats (MODIFICADO: PESTAÑAS) */
         .hero-stats {
-            margin: 15px 20px; padding: 25px;
+            margin: 15px 20px; padding: 20px;
             background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             border-radius: 24px; border: 1px solid var(--card-border); text-align: center; position: relative; overflow: hidden;
         }
         .hero-stats::before { content:''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--yape-color), var(--plin-color)); }
-        .hero-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-        .hero-amount { font-size: 2.8rem; font-weight: 700; margin: 10px 0; letter-spacing: -1px; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .hero-count { font-size: 0.8rem; color: var(--plin-color); background: rgba(0, 240, 255, 0.1); padding: 4px 10px; border-radius: 12px; display: inline-block; }
+        
+        /* Nuevos Estilos para los 2 Botones de Stats */
+        .stats-tabs {
+            display: flex; gap: 5px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 12px; margin-bottom: 15px;
+        }
+        .stat-btn {
+            flex: 1; border: none; background: transparent; color: var(--text-dim); padding: 8px;
+            font-family: var(--font-main); font-weight: 700; font-size: 0.8rem; border-radius: 8px; cursor: pointer; transition: 0.3s;
+        }
+        .stat-btn.active {
+            background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--card-border);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+        .hero-amount { font-size: 2.8rem; font-weight: 700; letter-spacing: -1px; text-shadow: 0 0 20px rgba(255,255,255,0.2); color: #fff; }
 
         /* Actions */
         .action-row { padding: 0 20px; display: flex; gap: 10px; margin-bottom: 20px; }
@@ -85,11 +98,11 @@
         .btn-filter { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid transparent; }
         .btn-filter.active { background: rgba(255,255,255,0.1); color: var(--text-main); border-color: var(--card-border); }
 
-        /* LISTA - CAMBIOS APLICADOS AQUÍ */
+        /* LISTA */
         .list-wrapper { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; }
         
         .tx-card {
-            display: flex; align-items: flex-start; /* Alineación superior para textos largos */
+            display: flex; align-items: flex-start;
             background: var(--card-glass); margin-bottom: 12px; padding: 16px;
             border-radius: 18px; border: 1px solid transparent; transition: 0.2s; position: relative;
         }
@@ -104,23 +117,13 @@
             color: var(--plin-color); background: rgba(0, 240, 255, 0.1); 
             width: 42px; height: 42px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            margin-right: 15px; flex-shrink: 0; margin-top: 5px; /* Ajuste visual */
+            margin-right: 15px; flex-shrink: 0; margin-top: 5px;
         }
 
         .tx-info { flex: 1; overflow: hidden; }
-        
-        /* FECHA / APP PEQUEÑO ARRIBA */
         .tx-meta-top { font-size: 0.65rem; color: var(--text-dim); margin-bottom: 4px; font-weight: 500; letter-spacing: 0.5px; }
-
         .tx-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
-        
-        /* CONTENIDO COMPLETO */
-        .tx-content-full { 
-            font-size: 0.8rem; color: #ccc; 
-            line-height: 1.4; 
-            white-space: normal; /* Permite saltos de línea */
-            word-wrap: break-word; 
-        }
+        .tx-content-full { font-size: 0.8rem; color: #ccc; line-height: 1.4; white-space: normal; word-wrap: break-word; }
 
         .tx-amount { font-size: 1.1rem; font-weight: 700; white-space: nowrap; margin-left: 10px; margin-top: 5px; }
         .tx-amount.positive { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
@@ -132,7 +135,7 @@
         .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.5; }
         .footer-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.03); }
 
-        /* Modales Generales */
+        /* Modales */
         .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 17, 0.9); backdrop-filter: blur(15px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-bg.open { opacity: 1; pointer-events: all; }
         .modal-box { width: 85%; max-width: 380px; background: #111122; border: 1px solid var(--card-border); border-radius: 24px; padding: 30px; transform: translateY(50px); transition: 0.4s; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
@@ -173,10 +176,16 @@
             <div id="status-indicator" class="status-badge">Sin Acceso</div>
         </header>
 
+        <!-- HERO MODIFICADO: CON PESTAÑAS PARA EVITAR CONFUSIÓN -->
         <div class="hero-stats">
-            <div class="hero-label">Recaudación Total (S/)</div>
-            <div class="hero-amount" id="total-display">0.00</div>
-            <div class="hero-count" id="count-display">0 Ops</div>
+            <div class="stats-tabs">
+                <button class="stat-btn active" id="tab-money" onclick="switchStats('money')">DINERO</button>
+                <button class="stat-btn" id="tab-ops" onclick="switchStats('ops')">OPS</button>
+            </div>
+            <div id="hero-display-area">
+                <div class="hero-amount" id="main-value">S/ 0.00</div>
+                <div class="hero-label" id="main-label">Total Recaudado</div>
+            </div>
         </div>
 
         <div class="action-row" id="login-container">
@@ -233,7 +242,7 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
         const CONTACTO = "51960744787";
-        let state = { data: [], config: {}, authed: false, filter: 'todos' };
+        let state = { data: [], config: {}, authed: false, filter: 'todos', currentTotal: 0, currentOps: 0, viewMode: 'money' };
 
         window.onload = () => { renderStaticModals(); checkSession(); };
 
@@ -287,6 +296,28 @@
             processData();
         }
 
+        // LÓGICA DE PESTAÑAS (DINERO / OPS)
+        function switchStats(mode) {
+            state.viewMode = mode;
+            // Actualizar botones
+            document.getElementById('tab-money').className = mode === 'money' ? 'stat-btn active' : 'stat-btn';
+            document.getElementById('tab-ops').className = mode === 'ops' ? 'stat-btn active' : 'stat-btn';
+            
+            // Actualizar vista
+            const valEl = document.getElementById('main-value');
+            const labelEl = document.getElementById('main-label');
+            
+            if (mode === 'money') {
+                valEl.textContent = 'S/ ' + state.currentTotal.toFixed(2);
+                valEl.style.color = '#fff';
+                labelEl.textContent = 'Total Recaudado';
+            } else {
+                valEl.textContent = state.currentOps + ' Ops';
+                valEl.style.color = 'var(--plin-color)';
+                labelEl.textContent = 'Operaciones Válidas';
+            }
+        }
+
         function limpiarTexto(texto) { if(!texto) return ""; return texto.replace(/\\"/g, '"'); }
 
         function processData() {
@@ -303,16 +334,12 @@
             items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
 
             let total = 0;
-            let opsValidas = 0; // NUEVO: Contador solo para operaciones > 0
+            let opsValidas = 0;
 
             items.forEach(item => {
                 const importe = parseFloat(item.importe);
                 total += importe;
-                
-                // SOLO CONTAMOS SI IMPORTE > 0
-                if(importe > 0) {
-                    opsValidas++;
-                }
+                if(importe > 0) opsValidas++;
 
                 const isYape = item.aplicacion.toLowerCase().includes('yape');
                 const isInter = item.aplicacion.toLowerCase().includes('interbank');
@@ -346,12 +373,11 @@
                 list.appendChild(div);
             });
 
-            animateValue("total-display", total);
-            // USAMOS opsValidas EN LUGAR DE items.length
-            document.getElementById('count-display').textContent = opsValidas + " Ops";
+            // Guardar valores en estado global y actualizar vista actual
+            state.currentTotal = total;
+            state.currentOps = opsValidas;
+            switchStats(state.viewMode);
         }
-
-        function animateValue(id, end) { const obj = document.getElementById(id); obj.textContent = end.toFixed(2); }
 
         function renderStaticModals() {
             const planes = [{n: "Mensual", p: 6}, {n: "Trimestral", p: 12}, {n: "Semestral", p: 18}];
