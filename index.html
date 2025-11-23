@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INTERCEPTOR FEX</title>
     
-    <!-- Fuente Tecnológica -->
+    <!-- Fuente Tecnológica: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 ESTILOS CYBER-FUTURE
+           🎨 DISEÑO CYBER (Base recuperada intacta)
         ════════════════════════════════════════════════════════════════ */
         :root {
             --bg-deep: #050511;
             --card-glass: rgba(20, 20, 40, 0.6);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --yape-color: #d7159c;
-            --plin-color: #00f0ff;
-            --bank-color: #27d963;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --yape-color: #d7159c; /* Rosa Neon */
+            --plin-color: #00f0ff; /* Cyan Neon */
+            --bank-color: #27d963; /* Verde Interbank */
             --text-main: #ffffff;
             --text-dim: #8f94b1;
             --accent: #6c5ce7;
@@ -40,167 +40,169 @@
             justify-content: center;
             overflow: hidden;
             background-image: 
-                radial-gradient(circle at 50% -10%, rgba(108, 92, 231, 0.2), transparent 40%),
-                radial-gradient(circle at 50% 110%, rgba(0, 240, 255, 0.1), transparent 40%);
+                radial-gradient(circle at 15% 50%, rgba(108, 92, 231, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(215, 21, 156, 0.1), transparent 25%);
         }
 
+        /* Contenedor Principal */
         #app {
             width: 100%;
             max-width: 480px;
             height: 100%;
             position: relative;
-            background: rgba(10, 10, 20, 0.6);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 60px rgba(0,0,0,0.6);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
         @media (min-width: 500px) {
             #app { height: 90vh; border-radius: var(--radius); margin-top: 5vh; border: 1px solid var(--card-border); }
         }
 
-        /* ════ HEADER ════ */
+        /* Header */
         header {
-            padding: 20px 20px 10px;
+            padding: 25px 20px 10px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid transparent;
+            align-items: flex-start;
         }
         
-        .brand h1 { 
-            font-size: 1.3rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-weight: 700; 
-            background: linear-gradient(90deg, #fff, var(--plin-color)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-        }
+        /* TÍTULO ACTUALIZADO */
+        .brand h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand span { font-size: 0.7rem; color: var(--text-dim); display: block; margin-top: 2px; }
 
         .status-badge {
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.6rem;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
             background: rgba(255, 71, 87, 0.1);
             color: var(--danger);
             border: 1px solid rgba(255, 71, 87, 0.3);
-            letter-spacing: 1px;
+            transition: 0.3s;
         }
         .status-badge.active {
             background: rgba(39, 217, 99, 0.1);
             color: var(--bank-color);
             border-color: rgba(39, 217, 99, 0.3);
-            box-shadow: 0 0 10px rgba(39, 217, 99, 0.2);
+            box-shadow: 0 0 15px rgba(39, 217, 99, 0.2);
         }
 
-        /* ════ STATS (HERO) ════ */
+        /* Stats Card (Hero) */
         .hero-stats {
             margin: 15px 20px;
-            padding: 20px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.0) 100%);
-            border-radius: 16px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border-radius: 24px;
             border: 1px solid var(--card-border);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
-        .hero-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .hero-amount { font-size: 2.5rem; font-weight: 700; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .hero-count { font-size: 0.75rem; color: var(--plin-color); }
+        .hero-stats::before {
+            content:''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--yape-color), var(--plin-color));
+        }
 
-        /* ════ CONTROLES ════ */
-        .controls-area { padding: 0 20px; margin-bottom: 15px; }
+        .hero-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .hero-amount { font-size: 2.8rem; font-weight: 700; margin: 10px 0; letter-spacing: -1px; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .hero-count { font-size: 0.8rem; color: var(--plin-color); background: rgba(0, 240, 255, 0.1); padding: 4px 10px; border-radius: 12px; display: inline-block; }
 
+        /* Actions */
+        .action-row { padding: 0 20px; display: flex; gap: 10px; margin-bottom: 20px; }
+        
         .btn-main {
-            width: 100%;
-            padding: 12px;
+            flex: 1;
+            padding: 14px;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-family: var(--font-main);
             font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
+            transition: all 0.2s;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            transition: 0.2s;
         }
+        
         .btn-login {
             background: var(--text-main); color: #000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.15);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
-        .btn-login:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(255,255,255,0.25); }
-
-        .filters-row { display: flex; gap: 8px; }
+        .btn-login:active { transform: scale(0.98); }
+        
         .btn-filter {
-            flex: 1;
-            background: rgba(255,255,255,0.03);
-            color: var(--text-dim);
-            border: 1px solid var(--card-border);
+            background: rgba(255,255,255,0.05); color: var(--text-dim);
+            border: 1px solid transparent;
         }
         .btn-filter.active {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1); color: var(--text-main);
+            border-color: var(--card-border);
         }
 
-        /* ════ LISTA ════ */
+        /* Lista de Transacciones */
         .list-wrapper {
             flex: 1;
             overflow-y: auto;
             padding: 0 20px 20px 20px;
         }
-
+        
         .tx-card {
             display: flex;
             align-items: center;
             background: var(--card-glass);
-            margin-bottom: 10px;
-            padding: 14px;
-            border-radius: 14px;
+            margin-bottom: 12px;
+            padding: 16px;
+            border-radius: 18px;
             border: 1px solid transparent;
+            transition: 0.2s;
             position: relative;
-            overflow: hidden;
-            animation: slideIn 0.3s ease forwards;
         }
-        @keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
+        
+        .tx-card::after {
+            content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px;
+            background: var(--accent); transition: 0.3s;
+        }
+        
         .tx-card[data-app="Yape"] { border-left: 3px solid var(--yape-color); }
+        .tx-card[data-app="Yape"] .tx-icon { color: var(--yape-color); background: rgba(215, 21, 156, 0.1); }
+        
         .tx-card[data-app="Interbank"] { border-left: 3px solid var(--bank-color); }
-        .tx-card[data-app="Plin"] { border-left: 3px solid var(--plin-color); }
-
-        .tx-icon {
-            width: 38px; height: 38px; border-radius: 10px;
+        .tx-card[data-app="Interbank"] .tx-icon { color: var(--bank-color); background: rgba(39, 217, 99, 0.1); }
+        
+        .tx-card .tx-icon { 
+            color: var(--plin-color); background: rgba(0, 240, 255, 0.1); 
+            width: 42px; height: 42px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            margin-right: 12px; flex-shrink: 0;
-            font-weight: bold; font-size: 0.9rem;
+            margin-right: 15px; flex-shrink: 0;
         }
-        .tx-icon.yape { background: rgba(215, 21, 156, 0.15); color: var(--yape-color); }
-        .tx-icon.inter { background: rgba(39, 217, 99, 0.15); color: var(--bank-color); }
-        .tx-icon.plin { background: rgba(0, 240, 255, 0.15); color: var(--plin-color); }
 
         .tx-info { flex: 1; overflow: hidden; }
-        .tx-title { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
-        .tx-sub { font-size: 0.7rem; color: var(--text-dim); }
-        .tx-amount { font-size: 1rem; font-weight: 700; color: #fff; }
-        .tx-amount.promo { color: var(--text-dim); text-decoration: line-through; font-size: 0.8rem; }
+        .tx-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tx-meta { font-size: 0.7rem; color: var(--text-dim); display: flex; align-items: center; gap: 5px; }
+        
+        .tx-amount { font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
+        .tx-amount.positive { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .tx-amount.promo { color: var(--text-dim); font-size: 0.9rem; text-decoration: line-through; }
 
-        /* ════ FOOTER NAV (ESTILO SOLICITADO) ════ */
-        .footer-nav {
+        /* ════ NUEVO FOOTER (ESTILO PRIMER EJEMPLO ADAPTADO) ════ */
+        .footer-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            background: rgba(5, 5, 17, 0.95);
+            background: rgba(10, 10, 25, 0.95); /* Fondo oscuro cyber */
             border-top: 1px solid var(--card-border);
             padding: 0;
+            z-index: 50;
         }
 
-        .nav-btn {
+        .footer-btn {
             background: transparent;
             border: none;
             color: var(--text-dim);
-            padding: 16px 0;
+            padding: 15px 5px;
             font-size: 0.75rem;
             cursor: pointer;
             display: flex;
@@ -209,415 +211,432 @@
             gap: 6px;
             transition: 0.3s;
             font-family: var(--font-main);
+            border-right: 1px solid rgba(255,255,255,0.02);
         }
-        .nav-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.02); }
-        .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; }
+        .footer-btn:last-child { border-right: none; }
+        .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.5; }
+        .footer-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.03); }
 
         /* ════ MODALES ════ */
-        .modal-overlay {
+        .modal-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            z-index: 999;
-            opacity: 0; pointer-events: none; transition: 0.3s;
+            background: rgba(5, 5, 17, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            opacity: 0; pointer-events: none;
+            transition: 0.3s;
             display: flex; align-items: center; justify-content: center;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-bg.open { opacity: 1; pointer-events: all; }
 
-        .modal-content {
-            width: 85%; max-width: 350px;
-            background: #10101c;
+        .modal-box {
+            width: 85%;
+            max-width: 380px;
+            background: #111122;
             border: 1px solid var(--card-border);
-            border-radius: 18px;
-            padding: 25px;
-            transform: scale(0.95); transition: 0.3s;
-            box-shadow: 0 20px 50px #000;
+            border-radius: 24px;
+            padding: 30px;
+            transform: translateY(50px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-bg.open .modal-box { transform: translateY(0); }
 
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-title { font-size: 1.1rem; font-weight: 700; color: #fff; }
-        .modal-close { background: none; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .modal-title { font-size: 1.2rem; font-weight: 700; }
+        .btn-close { background: none; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; }
 
-        /* Estilos específicos de contenido de modal */
-        .input-dark {
-            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
-            padding: 12px; border-radius: 8px; color: #fff; margin-bottom: 15px; font-family: var(--font-main);
+        /* Inputs & Password Toggle (RECUPERADO) */
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-cyber {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--card-border);
+            padding: 15px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: var(--font-main);
+            transition: 0.3s;
         }
-        .input-dark:focus { border-color: var(--plin-color); }
+        .input-cyber:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(108, 92, 231, 0.2); }
 
-        .bank-item {
-            padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
+        .toggle-pwd { 
+            position: absolute; right: 15px; top: 14px; 
+            background: none; border: none; color: var(--text-dim); 
+            cursor: pointer; padding: 0; 
         }
-        .bank-item:hover { background: rgba(255,255,255,0.03); }
-        .bank-info { display: flex; flex-direction: column; }
-        .bank-name { color: var(--plin-color); font-size: 0.8rem; font-weight: 700; }
-        .bank-num { color: var(--text-dim); font-size: 0.9rem; font-family: monospace; }
+        .toggle-pwd svg { width: 22px; height: 22px; }
+
+        /* Listas en Modales */
+        .plan-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--card-border); }
+        .plan-price { font-weight: 700; color: var(--plin-color); font-size: 1.1rem; }
+        .btn-sm { padding: 6px 12px; border-radius: 8px; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+        .btn-wa { background: #25D366; color: #fff; }
+
+        .bank-row { padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; }
+        .bank-row:active { background: rgba(255,255,255,0.08); border-color: var(--plin-color); }
         
-        .plan-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .btn-wa { background: #25D366; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 700; }
-
-        /* Toast */
+        /* Spinner & Toast */
+        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .msg-error { color: var(--danger); font-size: 0.8rem; text-align: center; margin-top: 10px; display: none; }
+        
         #toast {
             position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
             background: #fff; color: #000; padding: 8px 16px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s;
+            font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200;
         }
-        #toast.show { opacity: 1; bottom: 90px; }
-
-        /* Loader */
-        .loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s infinite linear; display: none; margin: 0 auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-txt { color: var(--danger); font-size: 0.75rem; text-align: center; margin-top: 10px; display: none; }
+        #toast.visible { opacity: 1; bottom: 90px; }
 
     </style>
 </head>
 <body>
 
     <div id="app">
-        <!-- 1. Header -->
+        <!-- Header -->
         <header>
             <div class="brand">
                 <h1>INTERCEPTOR FEX</h1>
+                <span>Monitoreo Tiempo Real</span>
             </div>
-            <div id="status-badge" class="status-badge">ACCESO DENEGADO</div>
+            <div id="status-indicator" class="status-badge">Sin Acceso</div>
         </header>
 
-        <!-- 2. Hero Stats -->
+        <!-- Totales -->
         <div class="hero-stats">
-            <div class="hero-label">Recaudación Total</div>
-            <div class="hero-amount" id="amount-display">S/ 0.00</div>
-            <div class="hero-count" id="count-display">0 operaciones</div>
+            <div class="hero-label">Recaudación Total (S/)</div>
+            <div class="hero-amount" id="total-display">0.00</div>
+            <div class="hero-count" id="count-display">0 Ops</div>
         </div>
 
-        <!-- 3. Controls (Login / Filters) -->
-        <div class="controls-area">
-            <!-- Botón Login (Se oculta al loguear) -->
-            <div id="login-trigger">
-                <button class="btn-main btn-login" onclick="openModal('modal-login')">INICIAR SISTEMA</button>
-            </div>
-            
-            <!-- Filtros (Se muestran al loguear) -->
-            <div id="filters-trigger" class="filters-row" style="display:none;">
-                <button class="btn-filter btn-main active" onclick="applyFilter('all', this)">Todos</button>
-                <button class="btn-filter btn-main" onclick="applyFilter('today', this)">Hoy</button>
-                <button class="btn-filter btn-main" onclick="applyFilter('yesterday', this)">Ayer</button>
-            </div>
+        <!-- Botones de Acción / Filtros -->
+        <div class="action-row" id="login-container">
+            <button class="btn-main btn-login" onclick="modal('login-modal', true)">Iniciar Sesión</button>
         </div>
 
-        <!-- 4. List -->
+        <div class="action-row" id="filters-container" style="display:none;">
+            <button class="btn-main btn-filter active" onclick="filtrar('todos', this)">Todos</button>
+            <button class="btn-main btn-filter" onclick="filtrar('hoy', this)">Hoy</button>
+            <button class="btn-main btn-filter" onclick="filtrar('ayer', this)">Ayer</button>
+        </div>
+
+        <!-- Lista -->
         <div class="list-wrapper">
-            <div id="tx-container">
-                <div style="text-align:center; padding:40px; color:var(--text-dim); font-size:0.85rem;">
-                    Esperando autenticación de usuario...
+            <div id="tx-list">
+                <div style="text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.9rem;">
+                    <svg style="width: 40px; margin-bottom:10px; opacity:0.3;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <p>Esperando autenticación...</p>
                 </div>
             </div>
         </div>
 
-        <!-- 5. Footer Nav (Original Style) -->
-        <!-- Se le agrega id="public-footer" para ocultarlo con JS -->
-        <nav id="public-footer" class="footer-nav">
-            <button class="nav-btn" onclick="openModal('modal-planes')">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <!-- FOOTER MENU (Grid Style) -->
+        <div id="public-footer" class="footer-grid">
+            <button class="footer-btn" onclick="modal('modal-planes', true)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 Planes
             </button>
-            <button class="nav-btn" onclick="openModal('modal-pagos')">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+            <button class="footer-btn" onclick="modal('modal-pagos', true)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
                 Pagos
             </button>
-            <button class="nav-btn" onclick="openModal('modal-soporte')">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <button class="footer-btn" onclick="modal('modal-soporte', true)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
                 Soporte
             </button>
-        </nav>
+        </div>
     </div>
 
-    <!-- ════ MODALES ════ -->
+    <!-- ════════ MODALES ════════ -->
 
-    <!-- LOGIN -->
-    <div id="modal-login" class="modal-overlay">
-        <div class="modal-content">
+    <!-- LOGIN CON OJO FUNCIONAL -->
+    <div id="login-modal" class="modal-bg">
+        <div class="modal-box">
             <div class="modal-header">
-                <h3 class="modal-title">Autenticación</h3>
-                <button class="modal-close" onclick="closeModal('modal-login')">×</button>
+                <h3 class="modal-title">Acceso Seguro</h3>
+                <button class="btn-close" onclick="modal('login-modal', false)">×</button>
             </div>
-            <input type="text" id="login-user" class="input-dark" placeholder="ID Usuario">
-            <input type="password" id="login-pass" class="input-dark" placeholder="Contraseña">
-            
-            <button id="btn-do-login" class="btn-main btn-login" onclick="login()">
-                INGRESAR
+            <div class="input-group">
+                <input type="text" id="user" class="input-cyber" placeholder="Usuario / ID">
+            </div>
+            <div class="input-group">
+                <input type="password" id="pass" class="input-cyber" placeholder="Contraseña">
+                <button class="toggle-pwd" onclick="togglePass()" type="button">
+                    <!-- Icono Ojo SVG -->
+                    <svg id="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+            </div>
+            <button class="btn-main btn-login" onclick="doLogin()">
+                <span id="btn-txt">Validar Credenciales</span>
+                <div class="spinner" id="login-spin"></div>
             </button>
-            <div id="login-loader" class="loader"></div>
-            <div id="login-error" class="error-txt">Credenciales incorrectas</div>
+            <p id="error-msg" class="msg-error">Usuario o clave incorrectos</p>
         </div>
     </div>
 
     <!-- PLANES -->
-    <div id="modal-planes" class="modal-overlay">
-        <div class="modal-content">
+    <div id="modal-planes" class="modal-bg">
+        <div class="modal-box">
             <div class="modal-header">
-                <h3 class="modal-title">Planes Disponibles</h3>
-                <button class="modal-close" onclick="closeModal('modal-planes')">×</button>
+                <h3 class="modal-title">Suscripciones</h3>
+                <button class="btn-close" onclick="modal('modal-planes', false)">×</button>
             </div>
-            <div id="planes-list"></div>
+            <div id="planes-list">
+                <!-- JS Inject -->
+            </div>
         </div>
     </div>
 
     <!-- PAGOS -->
-    <div id="modal-pagos" class="modal-overlay">
-        <div class="modal-content">
+    <div id="modal-pagos" class="modal-bg">
+        <div class="modal-box">
             <div class="modal-header">
-                <h3 class="modal-title">Métodos de Pago</h3>
-                <button class="modal-close" onclick="closeModal('modal-pagos')">×</button>
+                <h3 class="modal-title">Métodos de Depósito</h3>
+                <button class="btn-close" onclick="modal('modal-pagos', false)">×</button>
             </div>
-            <p style="color:#666; font-size:0.75rem; margin-bottom:15px;">Click en la cuenta para copiar</p>
-            <div id="pagos-list"></div>
+            <div style="font-size:0.8rem; color:var(--text-dim); margin-bottom:10px;">Toca para copiar</div>
+            <div id="bancos-list">
+                <!-- JS Inject -->
+            </div>
         </div>
     </div>
 
     <!-- SOPORTE -->
-    <div id="modal-soporte" class="modal-overlay">
-        <div class="modal-content">
+    <div id="modal-soporte" class="modal-bg">
+        <div class="modal-box">
             <div class="modal-header">
-                <h3 class="modal-title">Soporte Técnico</h3>
-                <button class="modal-close" onclick="closeModal('modal-soporte')">×</button>
+                <h3 class="modal-title">Centro de Ayuda</h3>
+                <button class="btn-close" onclick="modal('modal-soporte', false)">×</button>
             </div>
-            <p style="color:var(--text-dim); margin-bottom:20px; font-size:0.9rem;">
-                Si tienes problemas con tu cuenta o la visualización de datos, contáctanos.
+            <p style="color:var(--text-dim); margin-bottom:20px; line-height:1.6;">
+                ¿Problemas con la sincronización de datos? Contáctanos directamente.
             </p>
-            <button class="btn-main btn-login" style="background:#25D366; color:#fff;" onclick="contactSupport()">
+            <button class="btn-main btn-login" style="background:#25D366; color:#fff;" onclick="contactar()">
                 WhatsApp Soporte
             </button>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast">¡Copiado al portapapeles!</div>
+    <div id="toast">¡Copiado!</div>
 
     <script>
-        /* ════ CONFIG ════ */
         const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
-        const PHONE = "51960744787";
+        const CONTACTO = "51960744787";
         
-        let appState = {
-            data: [],
-            authed: false,
-            filter: 'all'
-        };
+        let state = { data: [], config: {}, authed: false, filter: 'todos' };
 
-        /* ════ INIT ════ */
-        window.onload = function() {
-            renderStaticContent();
+        window.onload = () => {
+            renderStaticModals();
             checkSession();
         };
 
-        /* ════ LOGIC ════ */
         function checkSession() {
-            const s = localStorage.getItem('interceptor_session');
-            if(s) {
-                const sess = JSON.parse(s);
-                if(Date.now() < sess.exp) {
-                    silentSync();
-                } else {
-                    localStorage.removeItem('interceptor_session');
-                }
+            const sess = localStorage.getItem('cyber_session_v2');
+            if(sess) {
+                const { exp } = JSON.parse(sess);
+                if(Date.now() < exp) silentLogin();
+                else localStorage.removeItem('cyber_session_v2');
             }
         }
 
-        async function login() {
-            const u = document.getElementById('login-user').value.trim();
-            const p = document.getElementById('login-pass').value.trim();
-            const btn = document.getElementById('btn-do-login');
-            const load = document.getElementById('login-loader');
-            const err = document.getElementById('login-error');
+        function modal(id, show) {
+            const el = document.getElementById(id);
+            if(show) el.classList.add('open');
+            else el.classList.remove('open');
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        // FUNCIÓN DEL OJO (TOGGLE)
+        function togglePass() {
+            const i = document.getElementById('pass');
+            i.type = i.type === 'password' ? 'text' : 'password';
+        }
+
+        async function doLogin() {
+            const u = document.getElementById('user').value.trim();
+            const p = document.getElementById('pass').value.trim();
+            const spin = document.getElementById('login-spin');
+            const txt = document.getElementById('btn-txt');
+            const err = document.getElementById('error-msg');
 
             if(!u || !p) return;
 
-            btn.style.display = 'none';
-            load.style.display = 'block';
+            txt.style.display = 'none';
+            spin.style.display = 'block';
             err.style.display = 'none';
 
             try {
                 const res = await fetch(API_URL);
                 const json = await res.json();
                 
-                // Validación dinámica según tu estructura JSON
-                // config: { "usuario": "luis555", "owner_pass": "miClave123" }
-                let valid = false;
+                let isValid = false;
                 if(json.config && json.config[u] && String(json.config[u]) === p) {
-                    valid = true;
+                    isValid = true;
                 }
 
-                if(valid) {
-                    authSuccess(json);
-                    closeModal('modal-login');
+                if(isValid) {
+                    loginSuccess(json);
+                    modal('login-modal', false);
                 } else {
                     err.style.display = 'block';
                 }
+
             } catch(e) {
                 console.error(e);
                 err.textContent = "Error de conexión";
                 err.style.display = 'block';
             } finally {
-                btn.style.display = 'block';
-                load.style.display = 'none';
+                txt.style.display = 'block';
+                spin.style.display = 'none';
             }
         }
 
-        async function silentSync() {
+        async function silentLogin() {
             try {
                 const res = await fetch(API_URL);
                 const json = await res.json();
-                authSuccess(json);
+                loginSuccess(json);
             } catch(e) {}
         }
 
-        function authSuccess(json) {
-            appState.authed = true;
-            appState.data = json.notificaciones || [];
+        function loginSuccess(json) {
+            state.authed = true;
+            state.data = json.notificaciones || [];
             
-            // Session 8h
-            localStorage.setItem('interceptor_session', JSON.stringify({
-                exp: Date.now() + (8*60*60*1000)
-            }));
+            localStorage.setItem('cyber_session_v2', JSON.stringify({ exp: Date.now() + (8 * 3600 * 1000) }));
 
-            // UI Changes - OCULTAR PUBLIC FOOTER
-            document.getElementById('status-badge').textContent = "CONECTADO";
-            document.getElementById('status-badge').classList.add('active');
+            document.getElementById('status-indicator').textContent = "Conectado";
+            document.getElementById('status-indicator').classList.add('active');
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('filters-container').style.display = 'flex';
             
-            document.getElementById('login-trigger').style.display = 'none';
-            document.getElementById('filters-trigger').style.display = 'flex';
-            
-            // LA CLAVE: Ocultar botones de publicidad
+            // OCULTAR FOOTER PUBLICITARIO
             document.getElementById('public-footer').style.display = 'none';
 
-            renderList();
+            processData();
         }
 
-        /* ════ RENDERING ════ */
-        function applyFilter(f, btn) {
-            appState.filter = f;
+        function filtrar(tipo, btn) {
+            state.filter = tipo;
             document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            renderList();
+            processData();
         }
 
-        function renderList() {
-            const container = document.getElementById('tx-container');
-            container.innerHTML = '';
+        function processData() {
+            const list = document.getElementById('tx-list');
+            list.innerHTML = '';
             
-            const now = new Date();
-            const todayStr = now.toLocaleDateString('es-PE');
-            const yest = new Date(now); yest.setDate(yest.getDate() -1);
-            const yestStr = yest.toLocaleDateString('es-PE');
+            const hoy = new Date();
+            const ayer = new Date(hoy); ayer.setDate(ayer.getDate() - 1);
+            const strHoy = hoy.toLocaleDateString('es-PE');
+            const strAyer = ayer.toLocaleDateString('es-PE');
 
-            let filtered = appState.data.filter(item => {
-                const d = new Date(item.fecha);
+            let items = state.data.filter(item => {
+                const d = new Date(item.fecha); 
                 const dStr = d.toLocaleDateString('es-PE');
-                if(appState.filter === 'today') return dStr === todayStr;
-                if(appState.filter === 'yesterday') return dStr === yestStr;
+                if(state.filter === 'hoy') return dStr === strHoy;
+                if(state.filter === 'ayer') return dStr === strAyer;
                 return true;
             });
 
-            // Sort new to old
-            filtered.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+            items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
 
             let total = 0;
+            items.forEach(item => {
+                const importe = parseFloat(item.importe);
+                total += importe;
 
-            filtered.forEach(item => {
-                const imp = parseFloat(item.importe);
-                total += imp;
-
-                // Detectar App
-                let app = 'Plin';
-                let iconClass = 'plin';
-                let iconLetter = 'P';
+                const isYape = item.aplicacion.toLowerCase().includes('yape');
+                const isInter = item.aplicacion.toLowerCase().includes('interbank');
+                let appClass = isYape ? 'Yape' : (isInter ? 'Interbank' : 'Plin');
                 
-                const appLower = item.aplicacion.toLowerCase();
-                if(appLower.includes('yape')) { app = 'Yape'; iconClass = 'yape'; iconLetter = 'Y'; }
-                if(appLower.includes('interbank')) { app = 'Interbank'; iconClass = 'inter'; iconLetter = 'I'; }
+                let iconSvg = '';
+                if(isYape) iconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:24px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>`;
+                else if(isInter) iconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:24px"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z"/></svg>`;
+                else iconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:24px"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>`;
 
                 const dObj = new Date(item.fecha);
-                const time = dObj.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                const date = dObj.toLocaleDateString([], {day:'2-digit', month:'2-digit'});
+                const hora = dObj.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit' });
+                const fechaCorta = dObj.toLocaleDateString([], { day:'2-digit', month:'2-digit' });
 
                 const div = document.createElement('div');
                 div.className = 'tx-card';
-                div.setAttribute('data-app', app);
+                div.setAttribute('data-app', appClass);
                 div.innerHTML = `
-                    <div class="tx-icon ${iconClass}">${iconLetter}</div>
+                    <div class="tx-icon">${iconSvg}</div>
                     <div class="tx-info">
                         <div class="tx-title">${item.titulo}</div>
-                        <div class="tx-sub">${app} • ${date} ${time}</div>
-                        <div class="tx-sub" style="margin-top:2px;">${item.contenido}</div>
+                        <div class="tx-meta">${item.aplicacion} • ${fechaCorta} ${hora}</div>
+                        <div style="font-size:0.75rem; color:#666; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                           ${item.contenido.substring(0, 40)}...
+                        </div>
                     </div>
-                    <div class="tx-amount ${imp===0 ? 'promo' : ''}">
-                        ${imp > 0 ? '+ S/ '+imp.toFixed(2) : 'PROMO'}
+                    <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">
+                        ${importe > 0 ? '+ S/ ' + importe.toFixed(2) : 'PROMO'}
                     </div>
                 `;
-                container.appendChild(div);
+                list.appendChild(div);
             });
 
-            // Update Stats
-            document.getElementById('amount-display').textContent = 'S/ ' + total.toFixed(2);
-            document.getElementById('count-display').textContent = filtered.length + ' operaciones';
+            animateValue("total-display", total);
+            document.getElementById('count-display').textContent = items.length + " Ops";
         }
 
-        /* ════ STATIC CONTENT & UTILS ════ */
-        function renderStaticContent() {
-            // Planes
+        function animateValue(id, end) {
+            const obj = document.getElementById(id);
+            obj.textContent = end.toFixed(2);
+        }
+
+        function renderStaticModals() {
             const planes = [
-                {n:"Mensual", p:6}, {n:"Trimestral", p:12}, {n:"Semestral", p:18}
+                {n: "Mensual", p: 6}, {n: "Trimestral", p: 12}, {n: "Semestral", p: 18}
             ];
             const pList = document.getElementById('planes-list');
             planes.forEach(pl => {
                 pList.innerHTML += `
-                    <div class="plan-item">
+                    <div class="plan-row">
                         <div>
-                            <div style="font-weight:700; color:#fff;">${pl.n}</div>
-                            <div style="color:var(--plin-color)">S/ ${pl.p}.00</div>
+                            <div style="font-weight:700">${pl.n}</div>
+                            <div class="plan-price">S/ ${pl.p}.00</div>
                         </div>
-                        <button class="btn-wa" onclick="buy('${pl.n}', ${pl.p})">SOLICITAR</button>
+                        <button class="btn-sm btn-wa" onclick="buy('${pl.n}', ${pl.p})">SOLICITAR</button>
                     </div>
                 `;
             });
 
-            // Pagos
             const bancos = [
-                {b:"Yape / Plin", n:PHONE},
-                {b:"BCP", n:"191-12345678-0-99"},
-                {b:"BBVA", n:"0011-0123-0100000000"},
-                {b:"Interbank", n:"898-3100000000"}
+                {b:"Yape / Plin", n:CONTACTO},
+                {b:"BCP", n:"191-22334455-0-99"},
+                {b:"BBVA", n:"0011-0123-45678901"},
+                {b:"Interbank", n:"898-3001234567"}
             ];
-            const bList = document.getElementById('pagos-list');
+            const bList = document.getElementById('bancos-list');
             bancos.forEach(bk => {
                 bList.innerHTML += `
-                    <div class="bank-item" onclick="copyToClip('${bk.n}')">
-                        <div class="bank-info">
-                            <span class="bank-name">${bk.b}</span>
-                            <span class="bank-num">${bk.n}</span>
-                        </div>
-                        <svg width="16" height="16" fill="none" stroke="#666" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <div class="bank-row" onclick="copiar('${bk.n}')">
+                        <div style="color:var(--accent); font-size:0.8rem; font-weight:700">${bk.b}</div>
+                        <div style="font-family:monospace; font-size:1rem;">${bk.n}</div>
                     </div>
                 `;
             });
         }
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function buy(plan, price) {
-            window.open(`https://wa.me/${PHONE}?text=Hola, quiero el plan ${plan} de S/${price}`, '_blank');
-        }
-        function contactSupport() {
-            window.open(`https://wa.me/${PHONE}?text=Soporte Interceptor FEX:`, '_blank');
+        function buy(plan, precio) {
+            const txt = `Hola, deseo el plan ${plan} de S/${precio}`;
+            window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(txt)}`, '_blank');
         }
 
-        function copyToClip(text) {
-            navigator.clipboard.writeText(text).then(() => {
+        function contactar() {
+            window.open(`https://wa.me/${CONTACTO}?text=Hola, necesito ayuda con la app`, '_blank');
+        }
+
+        function copiar(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
                 const t = document.getElementById('toast');
-                t.classList.add('show');
-                setTimeout(() => t.classList.remove('show'), 2000);
+                t.classList.add('visible');
+                setTimeout(() => t.classList.remove('visible'), 2000);
             });
         }
     </script>
