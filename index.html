@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>INTERCEPTOR FEX</title>
     
     <!-- Fuente Premium Fintech -->
@@ -50,7 +50,9 @@
             background-color: var(--bg-body);
             color: var(--text-primary);
             font-family: var(--font-main);
+            /* Corrección Móvil: Usar 100dvh para evitar que la barra del navegador tape el footer */
             height: 100vh;
+            height: 100dvh; 
             width: 100vw;
             display: flex;
             justify-content: center;
@@ -180,7 +182,10 @@
         /* FOOTER */
         .footer-grid { 
             display: grid; grid-template-columns: 1fr 1fr 1fr; background: #ffffff; 
-            border-top: 1px solid var(--border); padding: 0 0 10px 0; z-index: 50; flex-shrink: 0; 
+            border-top: 1px solid var(--border); 
+            /* Corrección Móvil: Padding seguro para evitar la barra home del iPhone y asegurar visibilidad */
+            padding: 0 0 calc(10px + env(safe-area-inset-bottom)) 0;
+            z-index: 50; flex-shrink: 0; 
         }
         .footer-btn { 
             background: transparent; border: none; color: #94a3b8; padding: 12px 0; 
