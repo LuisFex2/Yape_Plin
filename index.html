@@ -5,45 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INTERCEPTOR FEX</title>
     
-    <!-- Fuente Tecnológica -->
+    <!-- Fuente Moderna -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 DISEÑO CYBER
+           🎨 DISEÑO CLEAN FINTECH (LUMINOSO)
         ════════════════════════════════════════════════════════════════ */
         :root {
-            --bg-deep: #050511;
-            --card-glass: rgba(20, 20, 40, 0.6);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --yape-color: #d7159c; /* Rosa */
-            --plin-color: #00f0ff; /* Cyan */
-            --bank-color: #27d963; /* Verde */
-            --text-main: #ffffff;
-            --text-dim: #8f94b1;
-            --danger: #ff4757;
-            --font-main: 'Space Grotesk', sans-serif;
+            /* Colores Base Claros */
+            --bg-body: #f4f6f9;
+            --bg-app: #ffffff;
+            --bg-card: #ffffff;
+            --bg-input: #f3f4f6;
+            
+            /* Textos */
+            --text-main: #1e293b; /* Azul noche muy oscuro */
+            --text-dim: #64748b;  /* Gris elegante */
+            --text-light: #ffffff;
+
+            /* Marcas (Mismos colores, base blanca) */
+            --yape-color: #d2006e; 
+            --plin-color: #00a4bd; 
+            --bank-color: #009c56; 
+            
+            /* UI */
+            --accent: #6366f1;
+            --danger: #ef4444;
+            --border-light: #e2e8f0;
+            --font-main: 'Manrope', sans-serif;
             --radius: 20px;
-            --main-gradient: linear-gradient(90deg, var(--yape-color), var(--plin-color));
+            
+            /* Sombras Suaves */
+            --shadow-soft: 0 4px 20px -5px rgba(0,0,0,0.05);
+            --shadow-hover: 0 10px 25px -5px rgba(0,0,0,0.1);
+            
+            /* Gradiente de Identidad */
+            --main-gradient: linear-gradient(135deg, #d2006e 0%, #00a4bd 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-body);
             color: var(--text-main);
             font-family: var(--font-main);
-            /* AJUSTE MÓVIL: Usar dvh para evitar que la barra de navegación tape el footer */
-            height: 100dvh; 
+            height: 100dvh; /* Altura dinámica móvil */
             width: 100vw;
             display: flex;
             justify-content: center;
-            overflow: hidden; /* Evita scroll en el body, solo en la lista */
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(108, 92, 231, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(215, 21, 156, 0.1), transparent 25%);
+            overflow: hidden;
         }
 
         #app {
@@ -51,142 +64,199 @@
             max-width: 480px; 
             height: 100%; 
             position: relative;
-            background: rgba(255, 255, 255, 0.01); 
-            backdrop-filter: blur(10px);
+            background: var(--bg-app);
             display: flex; 
             flex-direction: column; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
         }
 
         @media (min-width: 500px) {
-            #app { height: 90vh; border-radius: var(--radius); margin-top: 5vh; border: 1px solid var(--card-border); }
+            #app { height: 90vh; margin-top: 5vh; border-radius: var(--radius); border: 1px solid var(--border-light); }
         }
 
         /* HEADER */
-        header { padding: 20px 20px 10px; display: flex; justify-content: space-between; align-items: flex-start; flex-shrink: 0; }
-        .brand h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .brand span { font-size: 0.7rem; color: var(--text-dim); display: block; margin-top: 2px; }
+        header { 
+            padding: 25px 25px 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start;
+            flex-shrink: 0;
+            background: var(--bg-app);
+        }
+        
+        .brand h1 { 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            letter-spacing: -0.5px;
+            background: var(--text-main);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-image: linear-gradient(90deg, #1e293b, #475569);
+        }
+        .brand span { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; display: block; margin-top: 2px; }
 
         .status-badge {
-            padding: 6px 12px; border-radius: 30px; font-size: 0.6rem; text-transform: uppercase; font-weight: 700;
-            background: rgba(255, 71, 87, 0.1); color: var(--danger); border: 1px solid rgba(255, 71, 87, 0.3); transition: 0.3s;
+            padding: 6px 14px; border-radius: 30px; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
+            background: #fef2f2; color: var(--danger); border: 1px solid #fee2e2; transition: 0.3s;
         }
         .status-badge.active {
-            background: rgba(39, 217, 99, 0.1); color: var(--bank-color); border-color: rgba(39, 217, 99, 0.3); box-shadow: 0 0 15px rgba(39, 217, 99, 0.2);
+            background: #f0fdf4; color: var(--bank-color); border-color: #dcfce7;
         }
 
         /* ESTADÍSTICAS */
-        .stats-row { display: flex; gap: 12px; padding: 0 20px 15px 20px; flex-shrink: 0; }
+        .stats-row { display: flex; gap: 15px; padding: 0 25px 20px 25px; flex-shrink: 0; }
+        
         .stat-card {
-            flex: 1; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--card-border); border-radius: 16px; padding: 15px 10px;
-            text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative; overflow: hidden;
+            flex: 1; 
+            background: #ffffff;
+            border: 1px solid var(--border-light); 
+            border-radius: 18px; 
+            padding: 20px 10px;
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            position: relative; 
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
         }
+        
+        /* Línea Gradiente Superior */
         .stat-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: var(--main-gradient);
-            box-shadow: 0 0 10px rgba(215, 21, 156, 0.4);
         }
-        .stat-value { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .stat-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+
+        .stat-value { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; color: var(--text-main); letter-spacing: -1px; }
+        .stat-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
         /* CONTROLES */
-        .action-row { padding: 0 20px; display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0; }
-        .btn-main { flex: 1; padding: 12px; border: none; border-radius: 14px; font-family: var(--font-main); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
-        .btn-login { background: var(--text-main); color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .action-row { padding: 0 25px; display: flex; gap: 12px; margin-bottom: 20px; flex-shrink: 0; }
+        
+        .btn-main { 
+            flex: 1; padding: 14px; border: none; border-radius: 14px; 
+            font-family: var(--font-main); font-weight: 700; font-size: 0.9rem; 
+            cursor: pointer; transition: all 0.2s; 
+        }
+        .btn-login { background: var(--text-main); color: #fff; box-shadow: 0 5px 15px rgba(30, 41, 59, 0.2); }
+        .btn-login:hover { transform: translateY(-2px); }
 
-        .btn-filter { background: rgba(255,255,255,0.03); color: var(--text-dim); border: 1px solid var(--card-border); transition: 0.3s; }
-        .btn-filter.active { background: var(--main-gradient); color: #fff; border: none; box-shadow: 0 0 15px rgba(215, 21, 156, 0.3); text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .btn-filter { 
+            background: #ffffff; color: var(--text-dim); border: 1px solid var(--border-light); 
+            transition: 0.3s; font-size: 0.75rem; letter-spacing: 0.5px;
+        }
+        .btn-filter.active { 
+            background: var(--main-gradient); 
+            color: #fff; border-color: transparent; 
+            box-shadow: 0 4px 12px rgba(210, 0, 110, 0.25);
+        }
 
-        /* LISTA (Flexible para ocupar espacio restante) */
+        /* LISTA */
         .list-wrapper { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 0 20px 10px 20px;
-            min-height: 0; /* Importante para que el scroll funcione bien en flexbox */
+            flex: 1; overflow-y: auto; padding: 0 25px 10px 25px; min-height: 0; 
+            background: #fcfcfc; /* Ligero contraste para el área de lista */
+            border-top: 1px solid var(--border-light);
         }
         
         .tx-card {
             display: flex; align-items: center;
-            background: var(--card-glass); margin-bottom: 8px; padding: 12px;
-            border-radius: 16px; border: 1px solid transparent; transition: 0.2s; position: relative;
+            background: #ffffff; margin-top: 15px; margin-bottom: 0; padding: 16px;
+            border-radius: 18px; 
+            border: 1px solid var(--border-light);
+            transition: 0.2s; position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
-        .tx-card::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px; background: var(--plin-color); transition: 0.3s; }
-        
-        /* COLORES LATERALES Y DE MONTO */
-        .tx-card[data-app="Yape"] { border-left: 3px solid var(--yape-color); }
-        .tx-card[data-app="Yape"] .tx-icon { color: var(--yape-color); background: rgba(215, 21, 156, 0.15); }
-        .tx-card[data-app="Yape"] .tx-amount.positive { color: var(--yape-color); text-shadow: 0 0 15px rgba(215, 21, 156, 0.4); }
+        .tx-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
 
-        .tx-card[data-app="Interbank"] { border-left: 3px solid var(--bank-color); }
-        .tx-card[data-app="Interbank"] .tx-icon { color: var(--bank-color); background: rgba(39, 217, 99, 0.15); }
-        .tx-card[data-app="Interbank"] .tx-amount.positive { color: var(--bank-color); text-shadow: 0 0 15px rgba(39, 217, 99, 0.4); }
+        /* Bordes de color por App */
+        .tx-card[data-app="Yape"] { border-left: 4px solid var(--yape-color); }
+        .tx-card[data-app="Yape"] .tx-icon { color: var(--yape-color); background: #fdf2f8; }
+        .tx-card[data-app="Yape"] .tx-amount.positive { color: var(--yape-color); }
 
-        .tx-card[data-app="Plin"] { border-left: 3px solid var(--plin-color); }
-        .tx-card[data-app="Plin"] .tx-icon { color: var(--plin-color); background: rgba(0, 240, 255, 0.15); }
-        .tx-card[data-app="Plin"] .tx-amount.positive { color: var(--plin-color); text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+        .tx-card[data-app="Interbank"] { border-left: 4px solid var(--bank-color); }
+        .tx-card[data-app="Interbank"] .tx-icon { color: var(--bank-color); background: #f0fdf4; }
+        .tx-card[data-app="Interbank"] .tx-amount.positive { color: var(--bank-color); }
+
+        .tx-card[data-app="Plin"] { border-left: 4px solid var(--plin-color); }
+        .tx-card[data-app="Plin"] .tx-icon { color: var(--plin-color); background: #ecfeff; }
+        .tx-card[data-app="Plin"] .tx-amount.positive { color: var(--plin-color); }
         
         .tx-icon { 
-            width: 36px; height: 36px; border-radius: 10px;
+            width: 42px; height: 42px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            margin-right: 12px; flex-shrink: 0; margin-top: 0;
-            font-size: 1.1rem; font-weight: 800;
+            margin-right: 15px; flex-shrink: 0; 
+            font-size: 1.2rem; font-weight: 800;
         }
 
         .tx-info { flex: 1; overflow: hidden; }
-        .tx-meta-top { font-size: 0.6rem; color: var(--text-dim); margin-bottom: 2px; font-weight: 500; }
-        .tx-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 3px; color: #fff; }
-        .tx-content-full { font-size: 0.75rem; color: #ccc; line-height: 1.3; white-space: normal; word-wrap: break-word; }
+        .tx-meta-top { font-size: 0.65rem; color: var(--text-dim); margin-bottom: 2px; font-weight: 600; text-transform: uppercase; }
+        .tx-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; color: var(--text-main); }
+        .tx-content-full { font-size: 0.8rem; color: #64748b; line-height: 1.4; white-space: normal; word-wrap: break-word; font-weight: 500; }
 
-        /* MONTO (Estilos base, colores definidos arriba) */
-        .tx-amount { font-size: 1rem; font-weight: 700; white-space: nowrap; margin-left: 8px; }
-        .tx-amount.promo { color: var(--text-dim) !important; font-size: 0.75rem; text-decoration: line-through; text-shadow: none !important; }
+        .tx-amount { font-size: 1.1rem; font-weight: 800; white-space: nowrap; margin-left: 10px; }
+        .tx-amount.promo { color: #94a3b8 !important; font-size: 0.75rem; text-decoration: line-through; }
 
-        /* FOOTER MENU (Ajustado para móvil) */
+        /* FOOTER MENU */
         .footer-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; 
-            background: rgba(10, 10, 25, 0.98); 
-            border-top: 1px solid var(--card-border); 
-            padding: 0; 
-            z-index: 50;
-            flex-shrink: 0; /* Evita que se aplaste */
-            /* En móviles se pegará abajo gracias a flex y height 100dvh */
+            display: grid; grid-template-columns: 1fr 1fr 1fr; 
+            background: #ffffff; 
+            border-top: 1px solid var(--border-light); 
+            padding: 5px 0; z-index: 50; flex-shrink: 0; 
         }
-        .footer-btn { background: transparent; border: none; color: var(--text-dim); padding: 12px 5px; font-size: 0.7rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; font-family: var(--font-main); border-right: 1px solid rgba(255,255,255,0.02); }
-        .footer-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; }
-        .footer-btn:hover { color: var(--plin-color); background: rgba(255,255,255,0.03); }
+        .footer-btn { 
+            background: transparent; border: none; color: var(--text-dim); 
+            padding: 12px 5px; font-size: 0.7rem; font-weight: 600;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; 
+            transition: 0.3s; font-family: var(--font-main); 
+        }
+        .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; }
+        .footer-btn:hover { color: var(--text-main); }
 
-        /* Modales */
-        .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 17, 0.9); backdrop-filter: blur(15px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        /* MODALES (Estilo Clean) */
+        .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(5px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-bg.open { opacity: 1; pointer-events: all; }
-        .modal-box { width: 85%; max-width: 350px; background: #111122; border: 1px solid var(--card-border); border-radius: 20px; padding: 25px; transform: translateY(50px); transition: 0.4s; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+        
+        .modal-box { 
+            width: 85%; max-width: 350px; 
+            background: #ffffff; 
+            border-radius: 24px; padding: 30px; 
+            transform: translateY(20px); transition: 0.4s; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+        }
         .modal-bg.open .modal-box { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .modal-title { font-size: 1.1rem; font-weight: 700; }
-        .btn-close { background: none; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; }
         
-        .input-group { margin-bottom: 15px; position: relative; }
-        .input-cyber { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px; color: #fff; font-family: var(--font-main); transition: 0.3s; font-size: 0.9rem; }
-        .input-cyber:focus { border-color: var(--plin-color); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 25px; }
+        .modal-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); }
+        .btn-close { background: none; border: none; color: var(--text-dim); font-size: 1.8rem; cursor: pointer; line-height: 1; }
         
-        .toggle-pwd { position: absolute; right: 12px; top: 12px; background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 0; }
-        .toggle-pwd svg { width: 20px; height: 20px; transition: 0.2s; }
-        .toggle-pwd:hover { color: #fff; }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-cyber { 
+            width: 100%; background: var(--bg-input); 
+            border: 1px solid transparent; 
+            padding: 14px 16px; border-radius: 12px; 
+            color: var(--text-main); font-family: var(--font-main); 
+            font-size: 0.95rem; font-weight: 600; transition: 0.3s; 
+        }
+        .input-cyber:focus { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .input-cyber::placeholder { color: #94a3b8; }
+        
+        .toggle-pwd { position: absolute; right: 14px; top: 14px; background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 0; }
+        .toggle-pwd svg { width: 22px; height: 22px; }
 
-        .plan-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--card-border); }
-        .plan-price { font-weight: 700; color: var(--plin-color); font-size: 1rem; }
-        .btn-sm { padding: 5px 10px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .plan-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-light); }
+        .plan-price { font-weight: 800; color: var(--text-main); font-size: 1.1rem; }
+        .btn-sm { padding: 6px 14px; border-radius: 8px; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn-wa { background: #25D366; color: #fff; }
-        .bank-row { padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; }
-        .bank-row:active { background: rgba(255,255,255,0.08); border-color: var(--plin-color); }
         
-        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
+        .bank-row { padding: 15px; background: var(--bg-input); border-radius: 12px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        .bank-row:hover { background: #e2e8f0; }
+        
+        .spinner { width: 20px; height: 20px; border: 3px solid #e2e8f0; border-top-color: var(--text-main); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .msg-error { color: var(--danger); font-size: 0.8rem; text-align: center; margin-top: 10px; display: none; }
+        .msg-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600; }
         
-        #toast { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; }
+        #toast { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         #toast.visible { opacity: 1; bottom: 90px; }
     </style>
 </head>
@@ -213,7 +283,7 @@
         </div>
 
         <div class="action-row" id="login-container">
-            <button class="btn-main btn-login" onclick="modal('login-modal', true)">Iniciar Sesión</button>
+            <button class="btn-main btn-login" onclick="modal('login-modal', true)">INICIAR SESIÓN</button>
         </div>
 
         <div class="action-row" id="filters-container" style="display:none;">
@@ -224,9 +294,11 @@
 
         <div class="list-wrapper">
             <div id="tx-list">
-                <div style="text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.8rem;">
-                    <svg style="width: 30px; margin-bottom:10px; opacity:0.3;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <p>Esperando autenticación...</p>
+                <div style="text-align: center; padding: 60px 20px; color: var(--text-dim); font-size: 0.9rem;">
+                    <div style="background:var(--bg-input); width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px auto;">
+                        <svg style="width: 28px; opacity:0.5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <p style="font-weight:600;">Esperando autenticación...</p>
                 </div>
             </div>
         </div>
@@ -263,9 +335,9 @@
         </div>
     </div>
 
-    <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Suscripciones</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
-    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;">Toca para copiar</div><div id="bancos-list"></div></div></div>
-    <div id="modal-soporte" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Soporte Técnico</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div><p style="color:var(--text-dim);margin-bottom:20px;">Contacta con soporte si tienes dudas.</p><button class="btn-main btn-login" style="background:#25D366;color:#fff;" onclick="contactar()">WhatsApp Soporte</button></div></div>
+    <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
+    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;font-weight:600;">Toca para copiar</div><div id="bancos-list"></div></div></div>
+    <div id="modal-soporte" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Soporte</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div><p style="color:var(--text-dim);margin-bottom:20px;line-height:1.5;">Si tienes problemas de sincronización, contáctanos.</p><button class="btn-main btn-login" style="background:#25D366;color:#fff;" onclick="contactar()">WhatsApp Soporte</button></div></div>
     <div id="toast">¡Copiado!</div>
 
     <script>
@@ -279,8 +351,8 @@
         window.onload = () => { renderStaticModals(); checkSession(); };
 
         function checkSession() {
-            const sess = localStorage.getItem('cyber_session_v2');
-            if(sess) { const { exp } = JSON.parse(sess); if(Date.now() < exp) silentLogin(); else localStorage.removeItem('cyber_session_v2'); }
+            const sess = localStorage.getItem('clean_session_v1');
+            if(sess) { const { exp } = JSON.parse(sess); if(Date.now() < exp) silentLogin(); else localStorage.removeItem('clean_session_v1'); }
         }
 
         function modal(id, show) {
@@ -317,8 +389,8 @@
 
         function loginSuccess(json) {
             state.authed = true; state.data = json.notificaciones || [];
-            localStorage.setItem('cyber_session_v2', JSON.stringify({ exp: Date.now() + (8 * 3600 * 1000) }));
-            document.getElementById('status-indicator').textContent = "Conectado";
+            localStorage.setItem('clean_session_v1', JSON.stringify({ exp: Date.now() + (8 * 3600 * 1000) }));
+            document.getElementById('status-indicator').textContent = "CONECTADO";
             document.getElementById('status-indicator').classList.add('active');
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('filters-container').style.display = 'flex';
@@ -369,7 +441,6 @@
                 div.className = 'tx-card';
                 div.setAttribute('data-app', appClass);
                 
-                // Monto formateado
                 let montoDisplay = importe > 0 ? 'S/ ' + importe.toFixed(2) : 'PROMO';
 
                 div.innerHTML = `
@@ -395,10 +466,10 @@
         function renderStaticModals() {
             const planes = [{n: "Mensual", p: 6}, {n: "Trimestral", p: 12}, {n: "Semestral", p: 18}];
             const pList = document.getElementById('planes-list');
-            planes.forEach(pl => { pList.innerHTML += `<div class="plan-row"><div><div style="font-weight:700">${pl.n}</div><div class="plan-price">S/ ${pl.p}.00</div></div><button class="btn-sm btn-wa" onclick="buy('${pl.n}', ${pl.p})">SOLICITAR</button></div>`; });
+            planes.forEach(pl => { pList.innerHTML += `<div class="plan-row"><div><div style="font-weight:700;color:var(--text-main);">${pl.n}</div><div class="plan-price">S/ ${pl.p}.00</div></div><button class="btn-sm btn-wa" onclick="buy('${pl.n}', ${pl.p})">SOLICITAR</button></div>`; });
             const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
             const bList = document.getElementById('bancos-list');
-            bancos.forEach(bk => { bList.innerHTML += `<div class="bank-row" onclick="copiar('${bk.n}')"><div style="color:var(--accent);font-size:0.8rem;font-weight:700">${bk.b}</div><div style="font-family:monospace;font-size:0.8rem;">${bk.n}</div></div>`; });
+            bancos.forEach(bk => { bList.innerHTML += `<div class="bank-row" onclick="copiar('${bk.n}')"><div style="color:var(--text-main);font-size:0.8rem;font-weight:700">${bk.b}</div><div style="font-family:monospace;font-size:0.85rem;color:var(--text-dim);">${bk.n}</div></div>`; });
         }
 
         function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
