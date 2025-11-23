@@ -164,9 +164,16 @@
         .list-wrapper { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; min-height: 0; background: #fafafa; border-top: 1px solid var(--border); }
         
         .tx-card { 
-            display: flex; align-items: center; background: #ffffff; margin-bottom: 10px; padding: 14px; 
-            border-radius: var(--radius-md); border: 1px solid transparent; 
-            transition: 0.2s; position: relative; box-shadow: var(--shadow-card); 
+            display: flex; 
+            align-items: flex-start; /* Alineación superior */
+            background: #ffffff; 
+            margin-bottom: 10px; 
+            padding: 14px; 
+            border-radius: var(--radius-md); 
+            border: 1px solid transparent; 
+            transition: 0.2s; 
+            position: relative; 
+            box-shadow: var(--shadow-card); 
         }
         .tx-card:active { transform: scale(0.99); background: #f8fafc; }
         
@@ -186,20 +193,67 @@
         .tx-icon { 
             width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; 
             margin-right: 12px; flex-shrink: 0; font-size: 1rem; font-weight: 800; 
+            margin-top: 2px; /* Ajuste visual alineación */
         }
         
-        .tx-info { flex: 1; overflow: hidden; }
-        .tx-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-        .tx-app-name { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; }
+        /* ESTRUCTURA FLEX INTERNA */
+        .tx-info { 
+            flex: 1; 
+            min-width: 0; /* CRÍTICO: Permite que el flex item se encoja más allá de su contenido */
+            display: flex; 
+            flex-direction: column; 
+            gap: 2px;
+        }
+
+        .tx-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
         
-        /* FECHA TAL CUAL VIENE */
-        .tx-time { font-size: 0.6rem; color: var(--text-secondary); font-weight: 600; letter-spacing: -0.2px; }
+        .tx-title { 
+            font-size: 0.9rem; 
+            font-weight: 700; 
+            color: var(--text-primary); 
+            line-height: 1.2; 
+            padding-right: 8px;
+        }
         
-        .tx-title { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .tx-content { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .tx-amount { font-size: 0.9rem; font-weight: 800; white-space: nowrap; margin-left: 10px; }
+        .tx-amount { 
+            font-size: 1rem; 
+            font-weight: 800; 
+            white-space: nowrap; 
+            flex-shrink: 0; /* El monto no se encoge */
+        }
         .tx-amount.promo { color: #cbd5e1; text-decoration: line-through; font-size: 0.7rem; }
+
+        .tx-content { 
+            font-size: 0.8rem; 
+            color: var(--text-secondary); 
+            line-height: 1.35; 
+            font-weight: 500; 
+            margin-top: 4px;
+            /* Permitir que el texto ocupe todo el ancho y baje de línea */
+            white-space: normal; 
+            word-wrap: break-word;
+        }
+
+        .tx-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        
+        .tx-app-pill {
+            font-size: 0.6rem; font-weight: 800; text-transform: uppercase; 
+            color: var(--text-primary); opacity: 0.7; letter-spacing: 0.5px;
+        }
+        
+        .tx-time { 
+            font-size: 0.65rem; color: #94a3b8; font-weight: 600; 
+        }
 
         /* FOOTER */
         .footer-grid { 
@@ -528,8 +582,6 @@
                 const isInter = item.aplicacion.toLowerCase().includes('interbank');
                 let appClass = isYape ? 'Yape' : (isInter ? 'Interbank' : 'Plin');
                 const letra = item.aplicacion ? item.aplicacion.charAt(0).toUpperCase() : '?';
-
-                // CAMBIO: Usamos item.fecha directamente, sin formatear
                 const fechaDisplay = item.fecha; 
                 
                 const div = document.createElement('div');
@@ -541,15 +593,16 @@
                 div.innerHTML = `
                     <div class="tx-icon">${letra}</div>
                     <div class="tx-info">
-                        <div class="tx-top-row">
-                            <span class="tx-app-name">${item.aplicacion}</span>
+                        <div class="tx-header">
+                            <div class="tx-title">${limpiarTexto(item.titulo)}</div>
+                            <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">${montoDisplay}</div>
+                        </div>
+                        <div class="tx-content">${limpiarTexto(item.contenido)}</div>
+                        <div class="tx-footer">
+                            <span class="tx-app-pill">${item.aplicacion}</span>
+                            <span>•</span>
                             <span class="tx-time">${fechaDisplay}</span>
                         </div>
-                        <div class="tx-title">${limpiarTexto(item.titulo)}</div>
-                        <div class="tx-content">${limpiarTexto(item.contenido)}</div>
-                    </div>
-                    <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">
-                        ${montoDisplay}
                     </div>
                 `;
                 list.appendChild(div);
