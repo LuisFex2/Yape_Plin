@@ -5,306 +5,301 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INTERCEPTOR FEX</title>
     
-    <!-- Fuente Manrope (Moderna y Geométrica) -->
+    <!-- Fuente Premium Fintech -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 DISEÑO "LUMINOUS HORIZON" (Vibrante y Claro)
+           🎨 DISEÑO PREMIUM LIGHT (FINTECH STYLE)
         ════════════════════════════════════════════════════════════════ */
         :root {
-            /* Fondo con personalidad (No es blanco plano) */
-            --bg-body: #eef2ff; /* Indigo muy suave */
-            --bg-gradient: linear-gradient(180deg, #e0e7ff 0%, #f3e8ff 100%); /* Indigo a Lavanda */
+            --bg-body: #f1f5f9;       /* Slate 100 */
+            --bg-card: #ffffff;       /* White */
+            --text-primary: #0f172a;  /* Slate 900 */
+            --text-secondary: #64748b;/* Slate 500 */
             
-            /* Superficies */
-            --bg-card: #ffffff;
-            --bg-glass: rgba(255, 255, 255, 0.7);
+            --primary: #4f46e5;       /* Indigo 600 */
+            --primary-soft: #e0e7ff;  /* Indigo 100 */
             
-            /* Textos (Alto contraste, no negro puro) */
-            --text-main: #1e1b4b; /* Indigo muy oscuro */
-            --text-dim: #6366f1;  /* Indigo medio (para subtítulos) */
+            --yape: #d946ef;          /* Fuchsia 500 */
+            --yape-bg: #fae8ff;       /* Fuchsia 100 */
             
-            /* Colores de Marca (Vibrantes) */
-            --yape-color: #742384;
-            --plin-color: #0ea5e9; /* Sky Blue vibrante */
-            --bank-color: #10b981; /* Emerald vibrante */
+            --plin: #06b6d4;          /* Cyan 500 */
+            --plin-bg: #cffafe;       /* Cyan 100 */
             
-            /* El "Toque Mágico" - Gradiente Principal */
-            --main-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); /* Indigo a Violeta */
-            --accent-glow: 0 10px 25px -5px rgba(79, 70, 229, 0.3); /* Sombra de color */
+            --bank: #10b981;          /* Emerald 500 */
+            --bank-bg: #d1fae5;       /* Emerald 100 */
             
             --danger: #ef4444;
-            --border-soft: #eef2ff;
-            --font-main: 'Manrope', sans-serif;
-            --radius: 24px;
+            --border: #e2e8f0;
+            
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             font-family: var(--font-main);
-            height: 100dvh;
+            height: 100vh;
             width: 100vw;
             display: flex;
             justify-content: center;
             overflow: hidden;
         }
 
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
         #app {
             width: 100%; max-width: 480px; height: 100%; position: relative;
-            background: rgba(255,255,255,0.4); /* Semi-transparente */
-            backdrop-filter: blur(20px); /* Efecto vidrio */
-            display: flex; flex-direction: column; 
-            box-shadow: 0 0 60px rgba(79, 70, 229, 0.1); /* Sombra ambiental suave */
+            background: var(--bg-card); display: flex; flex-direction: column; 
+            box-shadow: var(--shadow-soft);
         }
 
         @media (min-width: 500px) {
-            #app { height: 90vh; margin-top: 5vh; border-radius: var(--radius); border: 1px solid #fff; }
+            #app { height: 92vh; margin-top: 4vh; border-radius: var(--radius-lg); border: 1px solid #fff; }
         }
 
         /* HEADER */
-        header { padding: 25px 25px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        
-        .brand h1 { 
-            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; 
-            background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(124, 58, 237, 0.1);
+        header { 
+            padding: 24px 24px 16px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-shrink: 0; 
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            border-bottom: 1px solid transparent;
         }
-        .brand span { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px; }
+        .brand { display: flex; flex-direction: column; }
+        .brand h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .brand h1::before { content:''; display:block; width:8px; height:8px; background:var(--primary); border-radius:50%; box-shadow: 0 0 0 4px var(--primary-soft); }
+        .brand span { font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; margin-left: 16px; margin-top: 2px; }
 
         .status-badge {
-            padding: 6px 14px; border-radius: 30px; font-size: 0.65rem; text-transform: uppercase; font-weight: 800;
-            background: #fff1f2; color: var(--danger); border: 1px solid #ffe4e6; 
-            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.1); transition: 0.3s;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;
+            background: #f1f5f9; color: var(--text-secondary); transition: 0.3s;
         }
-        .status-badge.active { background: #ecfdf5; color: var(--bank-color); border-color: #d1fae5; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.15); }
+        .status-badge.active { background: var(--bank-bg); color: var(--bank); }
 
-        /* ESTADÍSTICAS (Las tarjetas flotantes) */
-        .stats-row { display: flex; gap: 12px; padding: 0 25px 20px 25px; flex-shrink: 0; }
-        
+        /* ESTADÍSTICAS */
+        .stats-row { display: flex; gap: 12px; padding: 0 24px 20px 24px; flex-shrink: 0; }
         .stat-card {
-            flex: 1; 
-            background: #ffffff;
-            border: none;
-            border-radius: 20px; 
-            padding: 18px 10px;
-            text-align: center; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative; overflow: hidden;
-            box-shadow: var(--accent-glow); /* Sombra de color vibrante */
-            transition: transform 0.2s;
+            flex: 1; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 12px;
+            text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden; box-shadow: var(--shadow-card); transition: transform 0.2s;
         }
-        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card:active { transform: scale(0.98); }
+        .stat-value { font-size: 1.35rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; margin-bottom: 4px; }
+        .stat-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
-        /* Barra superior degradada */
-        .stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--main-gradient);
-        }
-
-        .stat-value { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; color: var(--text-main); letter-spacing: -0.5px; }
-        .stat-label { font-size: 0.65rem; color: #818cf8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        /* Decoración sutil en cards */
+        .stat-card::after { content:''; position: absolute; top:0; left:0; width: 100%; height: 3px; background: var(--border); }
+        .stat-card:first-child::after { background: var(--primary); }
+        .stat-card:last-child::after { background: var(--bank); }
 
         /* CONTROLES */
-        .action-row { padding: 0 25px; display: flex; gap: 12px; margin-bottom: 15px; flex-shrink: 0; }
+        .action-row { padding: 0 24px; display: flex; gap: 8px; margin-bottom: 20px; flex-shrink: 0; }
         
         .btn-main { 
-            flex: 1; padding: 14px; border: none; border-radius: 16px; 
-            font-family: var(--font-main); font-weight: 800; font-size: 0.9rem; 
-            cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px;
+            flex: 1; padding: 14px; border: none; border-radius: var(--radius-sm); 
+            font-family: var(--font-main); font-weight: 700; font-size: 0.9rem; cursor: pointer; 
+            transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
+        
         .btn-login { 
-            background: var(--main-gradient); color: #fff; 
-            box-shadow: 0 8px 20px -5px rgba(124, 58, 237, 0.4); 
+            background: var(--primary); color: #fff; 
+            box-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.4); 
         }
-        .btn-login:active { transform: scale(0.98); box-shadow: none; }
+        .btn-login:hover { background: #4338ca; }
+        .btn-login:active { transform: scale(0.98); }
 
+        .filter-group { display: flex; background: #f8fafc; padding: 4px; border-radius: var(--radius-sm); width: 100%; }
         .btn-filter { 
-            background: #ffffff; color: var(--text-dim); border: 1px solid #e0e7ff; 
-            font-size: 0.75rem; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            flex: 1; background: transparent; color: var(--text-secondary); border: none; 
+            padding: 10px; font-size: 0.75rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.2s; 
         }
-        .btn-filter.active { 
-            background: var(--main-gradient); 
-            color: #fff; border: none; 
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
-        }
+        .btn-filter.active { background: #ffffff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         /* LISTA */
-        .list-wrapper { 
-            flex: 1; overflow-y: auto; padding: 0 25px 10px 25px; min-height: 0; 
-            /* Sin borde superior, solo espacio limpio */
-        }
+        .list-wrapper { flex: 1; overflow-y: auto; padding: 0 24px 20px 24px; min-height: 0; background: #fafafa; border-top: 1px solid var(--border); }
         
-        .tx-card {
-            display: flex; align-items: center;
-            background: #ffffff; 
-            margin-bottom: 10px; /* Espaciado óptimo */
-            padding: 10px 14px; /* Compacto */
-            border-radius: 18px; 
-            border: 1px solid #fff;
-            transition: 0.2s; position: relative;
-            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.15); /* Sombra suave azulada */
+        .tx-card { 
+            display: flex; align-items: center; background: #ffffff; margin-bottom: 12px; padding: 16px; 
+            border-radius: var(--radius-md); border: 1px solid transparent; 
+            transition: 0.2s; position: relative; box-shadow: var(--shadow-card); 
         }
-        .tx-card:active { transform: scale(0.98); }
-
-        /* Bordes y Colores */
-        .tx-card[data-app="Yape"] { border-left: 5px solid var(--yape-color); }
-        .tx-card[data-app="Yape"] .tx-icon { color: var(--yape-color); background: #fdf4ff; }
-        .tx-card[data-app="Yape"] .tx-amount.positive { color: var(--yape-color); }
-
-        .tx-card[data-app="Interbank"] { border-left: 5px solid var(--bank-color); }
-        .tx-card[data-app="Interbank"] .tx-icon { color: var(--bank-color); background: #ecfdf5; }
-        .tx-card[data-app="Interbank"] .tx-amount.positive { color: var(--bank-color); }
-
-        .tx-card[data-app="Plin"] { border-left: 5px solid var(--plin-color); }
-        .tx-card[data-app="Plin"] .tx-icon { color: var(--plin-color); background: #f0f9ff; }
-        .tx-card[data-app="Plin"] .tx-amount.positive { color: var(--plin-color); }
+        .tx-card:active { transform: scale(0.99); background: #f8fafc; }
         
+        /* Estilos condicionales por App */
+        .tx-card[data-app="Yape"] .tx-icon { background: var(--yape-bg); color: var(--yape); }
+        .tx-card[data-app="Yape"] .tx-amount.positive { color: var(--yape); }
+        .tx-card[data-app="Yape"] { border-left: 4px solid var(--yape); }
+
+        .tx-card[data-app="Plin"] .tx-icon { background: var(--plin-bg); color: var(--plin); }
+        .tx-card[data-app="Plin"] .tx-amount.positive { color: var(--plin); }
+        .tx-card[data-app="Plin"] { border-left: 4px solid var(--plin); }
+
+        .tx-card[data-app="Interbank"] .tx-icon { background: var(--bank-bg); color: var(--bank); }
+        .tx-card[data-app="Interbank"] .tx-amount.positive { color: var(--bank); }
+        .tx-card[data-app="Interbank"] { border-left: 4px solid var(--bank); }
+
         .tx-icon { 
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            margin-right: 14px; flex-shrink: 0; 
-            font-size: 1.2rem; font-weight: 800;
+            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            margin-right: 14px; flex-shrink: 0; font-size: 1.1rem; font-weight: 800; 
         }
-
+        
         .tx-info { flex: 1; overflow: hidden; }
-        .tx-meta-top { font-size: 0.65rem; color: #818cf8; margin-bottom: 2px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .tx-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 2px; color: var(--text-main); line-height: 1.2; }
-        .tx-content-full { font-size: 0.75rem; color: #64748b; line-height: 1.3; white-space: normal; word-wrap: break-word; font-weight: 500; }
+        .tx-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .tx-app-name { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; }
+        .tx-time { font-size: 0.65rem; color: var(--text-secondary); font-weight: 500; }
+        
+        .tx-title { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tx-content { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .tx-amount { font-size: 0.95rem; font-weight: 800; white-space: nowrap; margin-left: 10px; }
+        .tx-amount.promo { color: #cbd5e1; text-decoration: line-through; font-size: 0.7rem; }
 
-        .tx-amount { font-size: 1.1rem; font-weight: 800; white-space: nowrap; margin-left: 8px; }
-        .tx-amount.promo { color: #cbd5e1 !important; font-size: 0.7rem; text-decoration: line-through; }
-
-        /* FOOTER MENU */
+        /* FOOTER */
         .footer-grid { 
-            display: grid; grid-template-columns: 1fr 1fr 1fr; 
-            background: #ffffff; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.03);
-            padding: 5px 0; z-index: 50; flex-shrink: 0; 
-            border-radius: 24px 24px 0 0; /* Redondeado arriba */
+            display: grid; grid-template-columns: 1fr 1fr 1fr; background: #ffffff; 
+            border-top: 1px solid var(--border); padding: 0 0 10px 0; z-index: 50; flex-shrink: 0; 
         }
         .footer-btn { 
-            background: transparent; border: none; color: #94a3b8; 
-            padding: 12px 5px; font-size: 0.65rem; font-weight: 700;
-            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; 
-            transition: 0.3s; font-family: var(--font-main); 
+            background: transparent; border: none; color: #94a3b8; padding: 12px 0; 
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; 
+            display: flex; flex-direction: column; align-items: center; gap: 6px; 
+            transition: 0.2s; font-family: var(--font-main); 
         }
-        .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; }
-        .footer-btn:hover { color: #4f46e5; }
+        .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; transition: 0.2s; }
+        .footer-btn:hover { color: var(--primary); }
+        .footer-btn:hover svg { transform: translateY(-2px); }
 
-        /* MODALES (Estilo Clean Premium) */
-        .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 27, 75, 0.3); backdrop-filter: blur(8px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        /* MODALES */
+        .modal-bg { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(15, 23, 42, 0.2); backdrop-filter: blur(4px); 
+            z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; 
+            display: flex; align-items: center; justify-content: center; 
+        }
         .modal-bg.open { opacity: 1; pointer-events: all; }
         
         .modal-box { 
-            width: 90%; max-width: 360px; 
-            background: #ffffff; 
-            border-radius: 28px; padding: 28px; 
-            transform: scale(0.9) translateY(20px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.25); 
+            width: 90%; max-width: 360px; background: #ffffff; border-radius: 28px; padding: 28px; 
+            transform: translateY(30px); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.15); 
         }
-        .modal-bg.open .modal-box { transform: scale(1) translateY(0); }
+        .modal-bg.open .modal-box { transform: translateY(0); }
         
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .modal-title { font-size: 1.3rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-title { font-size: 1.25rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
         
-        /* Botón Cerrar Estilo iOS */
         .btn-close { 
-            background: #f1f5f9; border: none; 
-            width: 36px; height: 36px; border-radius: 50%; 
-            color: #64748b; font-size: 1.2rem; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; 
+            background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; 
+            color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s; 
+        }
+        .btn-close:hover { background: #e2e8f0; color: var(--text-primary); }
+        
+        /* Inputs */
+        .input-group { margin-bottom: 16px; position: relative; }
+        .input-clean { 
+            width: 100%; background: #f8fafc; border: 1px solid var(--border); padding: 14px 18px; 
+            border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-main); 
+            font-size: 0.95rem; font-weight: 500; transition: 0.3s; 
+        }
+        .input-clean:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+        .toggle-pwd { position: absolute; right: 16px; top: 14px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; }
+        
+        /* PLANES */
+        .plan-card { 
+            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; 
+            position: relative; background: #ffffff; display: flex; justify-content: space-between; align-items: center; 
             transition: 0.2s;
         }
-        .btn-close:hover { background: #e2e8f0; color: var(--text-main); transform: rotate(90deg); }
+        .plan-card:hover { border-color: #cbd5e1; }
+        .plan-card.featured { border: 1px solid var(--primary-soft); background: #fcfcff; box-shadow: 0 4px 15px -3px rgba(79, 70, 229, 0.1); }
         
-        /* Estilos Login */
-        .input-group { margin-bottom: 18px; position: relative; }
-        .input-cyber { 
-            width: 100%; background: #f8fafc; 
-            border: 2px solid #e2e8f0; 
-            padding: 14px 16px; border-radius: 16px; 
-            color: var(--text-main); font-family: var(--font-main); 
-            font-size: 0.95rem; font-weight: 600; transition: 0.3s; 
+        .plan-tag { 
+            position: absolute; top: -10px; left: 16px; background: var(--primary); color: white; 
+            font-size: 0.6rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; 
+            box-shadow: 0 4px 10px -2px rgba(79, 70, 229, 0.3);
         }
-        .input-cyber:focus { background: #fff; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
-        .toggle-pwd { position: absolute; right: 16px; top: 16px; background: none; border: none; color: #94a3b8; cursor: pointer; padding: 0; }
-        .toggle-pwd svg { width: 22px; height: 22px; transition: 0.2s; }
+        
+        .plan-name { font-weight: 800; color: var(--text-primary); font-size: 0.9rem; }
+        .plan-detail { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; margin-top: 2px; }
+        
+        .plan-price { font-size: 1.25rem; font-weight: 800; color: var(--text-primary); display: block; text-align: right; }
+        .plan-btn-action { 
+            padding: 6px 14px; background: #f1f5f9; color: var(--text-primary); border: none; 
+            border-radius: 8px; font-weight: 700; font-size: 0.7rem; cursor: pointer; margin-top: 4px; 
+            transition: 0.2s; 
+        }
+        .plan-card.featured .plan-btn-action { background: var(--primary); color: white; }
+        .plan-card.featured .plan-btn-action:hover { background: #4338ca; }
 
-        /* ════ TARJETAS PLANES (Estilo Compacto & Clean) ════ */
-        .plan-card {
-            border: 1px solid #eef2ff;
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
-            position: relative;
-            background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        /* SOPORTE */
+        .support-box { text-align: center; }
+        .whatsapp-btn { 
+            background: #25D366; color: white; width: 100%; padding: 16px; border-radius: var(--radius-sm); 
+            border: none; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; 
+            gap: 10px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 8px 20px -6px rgba(37, 211, 102, 0.4);
+            transition: 0.2s;
+        }
+        .whatsapp-btn:hover { background: #20bd5a; }
+        .whatsapp-btn:active { transform: scale(0.98); }
+
+        /* BANCOS */
+        .bank-row { 
+            padding: 14px 16px; background: #ffffff; border-radius: var(--radius-sm); margin-bottom: 10px; 
+            cursor: pointer; border: 1px solid var(--border); transition: 0.2s; 
             display: flex; justify-content: space-between; align-items: center;
         }
-        .plan-card.featured {
-            background: linear-gradient(to right, #fdf4ff, #fff);
-            border: 1px solid #f0abfc;
+        .bank-row:hover { background: #f8fafc; border-color: var(--primary); }
+        .bank-info { display: flex; flex-direction: column; gap: 4px; }
+        .bank-name { color: var(--text-primary); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; }
+        .bank-num { font-family: 'Plus Jakarta Sans', monospace; font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.5px; }
+        
+        .copy-icon { 
+            color: var(--primary); 
+            width: 24px; height: 24px; 
+            opacity: 0.5; 
+            transition: 0.2s; 
         }
-        .plan-tag {
-            position: absolute; top: -9px; left: 14px;
-            background: var(--yape-color); color: white;
-            font-size: 0.6rem; padding: 3px 10px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(116, 35, 132, 0.3);
-        }
-        .plan-info { text-align: left; }
-        .plan-name { font-weight: 800; color: var(--text-main); font-size: 0.9rem; margin-bottom: 2px; }
-        .plan-detail { font-size: 0.7rem; color: var(--text-dim); font-weight: 600; }
-        .plan-price-box { text-align: right; }
-        .plan-price { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px; }
-        .plan-btn-action {
-            padding: 7px 14px; background: var(--text-main); color: white;
-            border: none; border-radius: 10px; font-weight: 700; font-size: 0.7rem;
-            cursor: pointer; box-shadow: 0 4px 10px rgba(30, 41, 59, 0.2);
-        }
-        .plan-card.featured .plan-btn-action {
-            background: var(--main-gradient);
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-        }
-
-        /* SOPORTE (Moderno) */
-        .support-box { text-align: center; padding: 10px 0; }
-        .support-icon { font-size: 48px; margin-bottom: 15px; display: inline-block; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        .support-text { color: var(--text-main); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6; font-weight: 600; }
-        .whatsapp-btn {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white; width: 100%; padding: 14px; border-radius: 16px; border: none; font-weight: 800; font-size: 0.95rem;
-            display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; text-decoration: none;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); transition: 0.2s;
-        }
-        .whatsapp-btn:active { transform: scale(0.98); }
-        .support-footer { margin-top: 20px; font-size: 0.75rem; color: #94a3b8; line-height: 1.5; font-weight: 500; }
-
-        /* BANCOS (Con Icono Copy) */
-        .bank-row { 
-            padding: 14px 18px; background: #f8fafc; border-radius: 16px; 
-            margin-bottom: 10px; cursor: pointer; border: 1px solid transparent; 
-            transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
-        }
-        .bank-row:hover { background: #fff; border-color: #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .bank-info { display: flex; flex-direction: column; gap: 3px; }
-        .bank-name { color: var(--text-main); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .bank-num { font-family: monospace; font-size: 0.95rem; color: #64748b; font-weight: 600; }
-        .copy-icon { color: var(--yape-color); width: 22px; height: 22px; opacity: 0.7; transition: 0.2s; }
         .bank-row:hover .copy-icon { opacity: 1; transform: scale(1.1); }
         
-        .spinner { width: 20px; height: 20px; border: 3px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; }
+        /* Utils */
+        .spinner { 
+            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; 
+            border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; 
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .msg-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 700; background: #fef2f2; padding: 10px; border-radius: 12px; }
         
-        #toast { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text-main); color: #fff; padding: 12px 24px; border-radius: 40px; font-size: 0.9rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200; box-shadow: 0 15px 35px rgba(30, 41, 59, 0.3); display: flex; align-items: center; gap: 8px; }
-        #toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .msg-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600; background: #fef2f2; padding: 10px; border-radius: 10px; }
+        
+        #toast { 
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); 
+            background: var(--text-primary); color: #fff; padding: 10px 24px; border-radius: 30px; 
+            font-size: 0.85rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; 
+            z-index: 200; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+        }
+        #toast.visible { opacity: 1; bottom: 100px; }
+        
+        .support-footer { margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; font-weight: 500; }
+        .support-icon-lg { font-size: 3rem; margin-bottom: 12px; display: block; filter: grayscale(100%); opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -330,23 +325,27 @@
         </div>
 
         <div class="action-row" id="login-container">
-            <button class="btn-main btn-login" onclick="modal('login-modal', true)">INICIAR SESIÓN</button>
+            <button class="btn-main btn-login" onclick="modal('login-modal', true)">
+                <span>INICIAR SESIÓN</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
         </div>
 
         <div class="action-row" id="filters-container" style="display:none;">
-            <button class="btn-main btn-filter active" onclick="filtrar('todos', this)">TODOS</button>
-            <button class="btn-main btn-filter" onclick="filtrar('hoy', this)">HOY</button>
-            <button class="btn-main btn-filter" onclick="filtrar('ayer', this)">AYER</button>
+            <div class="filter-group">
+                <button class="btn-filter active" onclick="filtrar('todos', this)">TODOS</button>
+                <button class="btn-filter" onclick="filtrar('hoy', this)">HOY</button>
+                <button class="btn-filter" onclick="filtrar('ayer', this)">AYER</button>
+            </div>
         </div>
 
         <div class="list-wrapper">
             <div id="tx-list">
-                <div style="text-align: center; padding: 60px 20px; color: var(--text-dim); font-size: 0.9rem;">
-                    <div style="background:#fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px auto;">
-                        <svg style="width: 32px; color:#818cf8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
+                    <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                        <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
-                    <p style="font-weight:700; color:var(--text-main);">Esperando autenticación...</p>
-                    <p style="font-size:0.8rem; margin-top:5px;">Inicia sesión para ver tus datos</p>
+                    <p style="font-weight:600; font-size: 0.9rem;">Esperando autenticación...</p>
                 </div>
             </div>
         </div>
@@ -371,11 +370,11 @@
     <div id="login-modal" class="modal-bg">
         <div class="modal-box">
             <div class="modal-header"><h3 class="modal-title">Acceso Seguro</h3><button class="btn-close" onclick="modal('login-modal', false)">×</button></div>
-            <div class="input-group"><input type="text" id="user" class="input-cyber" placeholder="Usuario / ID"></div>
+            <div class="input-group"><input type="text" id="user" class="input-clean" placeholder="ID de Usuario"></div>
             <div class="input-group">
-                <input type="password" id="pass" class="input-cyber" placeholder="Contraseña">
+                <input type="password" id="pass" class="input-clean" placeholder="Contraseña">
                 <button class="toggle-pwd" id="eye-btn" onclick="togglePass()">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 </button>
             </div>
             <button class="btn-main btn-login" onclick="doLogin()"><span id="btn-txt">INGRESAR</span><div class="spinner" id="login-spin"></div></button>
@@ -384,40 +383,41 @@
     </div>
 
     <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes Premium</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
-    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:10px;font-weight:600;">Toca para copiar</div><div id="bancos-list"></div></div></div>
+    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:15px;font-weight:600;text-align:center;">Toca un banco para copiar</div><div id="bancos-list"></div></div></div>
     
     <div id="modal-soporte" class="modal-bg">
         <div class="modal-box">
             <div class="modal-header"><h3 class="modal-title">Soporte Técnico</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div>
             <div class="support-box">
-                <div class="support-icon">🛠️</div>
-                <p class="support-text">¿Tu suscripción ha vencido o tienes problemas con la aplicación?</p>
+                <div class="support-icon-lg">🛠️</div>
+                <p style="color:var(--text-secondary);margin-bottom:20px;font-weight:500;">¿Necesitas ayuda con tu suscripción o el servicio?</p>
                 <button class="whatsapp-btn" onclick="contactar()">
-                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.658-.698c.968.585 1.996.893 3.03.893 5.402 0 7.752-3.796 5.538-7.852-1.138-2.086-3.18-3.994-5.766-3.994zm0 1.442c2.159 0 4.324 1.862 4.324 4.324 0 2.123-1.624 4.054-4.024 4.054-1.041 0-1.734-.377-2.361-.776l-.151-.097-1.176.309.314-1.147-.108-.167c-.492-.764-.76-1.427-.76-2.176 0-2.158 1.784-4.324 3.942-4.324zm-2.419 2.16c-.11-.243-.425-.257-.66-.014-.198.203-.763.732-.763 1.769 0 1.036.75 2.039.855 2.18.106.143 1.45 2.255 3.559 3.121 2.108.866 2.108.575 2.488.537.38-.038 1.226-.501 1.402-.985.175-.484.175-.9.132-.971-.044-.071-.162-.113-.34-.202-.178-.09-1.055-.52-1.218-.579-.163-.06-.282-.09-.4.088-.118.179-.455.579-.558.697-.103.119-.207.133-.385.044-.179-.088-.752-.278-1.434-.885-.531-.473-.89-1.059-1.008-1.237-.119-.178-.013-.274.076-.363.08-.08.179-.208.268-.313.089-.105.119-.178.179-.297.06-.118.03-.222-.015-.312-.045-.09-.4-1.001-.565-1.356z"/></svg>
-                    Chatear en WhatsApp
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.698c1.005.572 1.903.87 3.05.87 3.183 0 5.768-2.586 5.768-5.766.001-3.182-2.585-5.769-5.766-5.769-.001 0-.001 0 0 0zm0-2c4.28 0 7.769 3.489 7.769 7.769 0 4.28-3.489 7.769-7.769 7.769-1.262 0-2.497-.307-3.599-.894l-4.083 1.072 1.092-3.971c-.653-1.129-1.016-2.436-1.016-3.793 0-4.28 3.489-7.769 7.769-7.769zm.001 13.986c0 0 0 0 0 0 .162 0 .324-.006.484-.018l-.045.006c.108.005.216.012.325.012 3.433 0 6.216-2.784 6.216-6.216s-2.784-6.216-6.216-6.216-6.216 2.784-6.216 6.216c0 1.258.383 2.463 1.107 3.473l-.707 2.571 2.634-.693c.895.518 1.921.792 2.98.792.053 0 .105 0 .158-.002l.044-.002z"/></svg>
+                    <span>Contactar WhatsApp</span>
                 </button>
                 <div class="support-footer">
-                    Horario: 9am - 6pm<br>Número: 51960744787
+                    Horario: 9:00 AM - 6:00 PM<br>
+                    Número: 51960744787
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="toast">¡Copiado!</div>
+    <div id="toast">¡Copiado al portapapeles!</div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
         const CONTACTO = "51960744787";
         let state = { data: [], config: {}, authed: false, filter: 'todos' };
 
-        const SVG_EYE_OPEN = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
-        const SVG_EYE_SLASH = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
+        const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
+        const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
 
         window.onload = () => { renderStaticModals(); checkSession(); };
 
         function checkSession() {
-            const sess = localStorage.getItem('clean_session_v1');
-            if(sess) { const { exp } = JSON.parse(sess); if(Date.now() < exp) silentLogin(); else localStorage.removeItem('clean_session_v1'); }
+            const sess = localStorage.getItem('premium_session_v1');
+            if(sess) { const { exp } = JSON.parse(sess); if(Date.now() < exp) silentLogin(); else localStorage.removeItem('premium_session_v1'); }
         }
 
         function modal(id, show) {
@@ -446,7 +446,7 @@
                 let isValid = false;
                 if(json.config && json.config[u] && String(json.config[u]) === p) isValid = true;
                 if(isValid) { loginSuccess(json); modal('login-modal', false); } else { err.style.display = 'block'; }
-            } catch(e) { err.textContent = "Error conexión"; err.style.display = 'block'; }
+            } catch(e) { err.textContent = "Error de conexión"; err.style.display = 'block'; }
             finally { txt.style.display = 'block'; spin.style.display = 'none'; }
         }
 
@@ -454,8 +454,8 @@
 
         function loginSuccess(json) {
             state.authed = true; state.data = json.notificaciones || [];
-            localStorage.setItem('clean_session_v1', JSON.stringify({ exp: Date.now() + (8 * 3600 * 1000) }));
-            document.getElementById('status-indicator').textContent = "CONECTADO";
+            localStorage.setItem('premium_session_v1', JSON.stringify({ exp: Date.now() + (12 * 3600 * 1000) }));
+            document.getElementById('status-indicator').textContent = "EN LÍNEA";
             document.getElementById('status-indicator').classList.add('active');
             document.getElementById('login-container').style.display = 'none';
             document.getElementById('filters-container').style.display = 'flex';
@@ -500,8 +500,7 @@
 
                 const dObj = new Date(item.fecha);
                 const hora = dObj.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit' });
-                const fechaCorta = dObj.toLocaleDateString([], { day:'2-digit', month:'2-digit' });
-
+                
                 const div = document.createElement('div');
                 div.className = 'tx-card';
                 div.setAttribute('data-app', appClass);
@@ -511,11 +510,12 @@
                 div.innerHTML = `
                     <div class="tx-icon">${letra}</div>
                     <div class="tx-info">
-                        <div class="tx-meta-top">${item.aplicacion} • ${fechaCorta} ${hora}</div>
-                        <div class="tx-title">${limpiarTexto(item.titulo)}</div>
-                        <div class="tx-content-full">
-                           ${limpiarTexto(item.contenido)}
+                        <div class="tx-top-row">
+                            <span class="tx-app-name">${item.aplicacion}</span>
+                            <span class="tx-time">${hora}</span>
                         </div>
+                        <div class="tx-title">${limpiarTexto(item.titulo)}</div>
+                        <div class="tx-content">${limpiarTexto(item.contenido)}</div>
                     </div>
                     <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">
                         ${montoDisplay}
@@ -529,49 +529,48 @@
         }
 
         function renderStaticModals() {
-            // PLANES COMPACTOS
+            // PLANES
             const pList = document.getElementById('planes-list');
             pList.innerHTML = `
                 <div class="plan-card">
                     <div class="plan-info">
-                        <div class="plan-name">PLAN MENSUAL</div>
-                        <div class="plan-detail">Facturado cada mes</div>
+                        <div class="plan-name">Mensual Básico</div>
+                        <div class="plan-detail">Pago único por 30 días</div>
                     </div>
-                    <div class="plan-price-box">
+                    <div style="text-align:right;">
                         <span class="plan-price">S/ 6.00</span>
                         <button class="plan-btn-action" onclick="buy('Plan Mensual', 6)">CONTRATAR</button>
                     </div>
                 </div>
                 
                 <div class="plan-card featured">
-                    <div class="plan-tag">AHORRA 33%</div>
+                    <div class="plan-tag">POPULAR</div>
                     <div class="plan-info">
-                        <div class="plan-name">TRIMESTRAL</div>
-                        <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
+                        <div class="plan-name">Trimestral</div>
+                        <div class="plan-detail">Ahorras un 33%</div>
                     </div>
-                    <div class="plan-price-box">
+                    <div style="text-align:right;">
                         <span class="plan-price">S/ 12.00</span>
                         <button class="plan-btn-action" onclick="buy('Plan Trimestral', 12)">CONTRATAR</button>
                     </div>
                 </div>
 
                 <div class="plan-card featured">
-                    <div class="plan-tag">MEJOR PRECIO</div>
+                    <div class="plan-tag">MEJOR OPCIÓN</div>
                     <div class="plan-info">
-                        <div class="plan-name">SEMESTRAL</div>
-                        <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
+                        <div class="plan-name">Semestral</div>
+                        <div class="plan-detail">Ahorras un 50%</div>
                     </div>
-                    <div class="plan-price-box">
+                    <div style="text-align:right;">
                         <span class="plan-price">S/ 18.00</span>
                         <button class="plan-btn-action" onclick="buy('Plan Semestral', 18)">CONTRATAR</button>
                     </div>
                 </div>
             `;
 
-            // BANCOS CON ICONO COPY
+            // BANCOS
             const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
             const bList = document.getElementById('bancos-list');
-            const copyIcon = `<svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>`;
             
             bancos.forEach(bk => { 
                 bList.innerHTML += `
@@ -580,13 +579,13 @@
                         <div class="bank-name">${bk.b}</div>
                         <div class="bank-num">${bk.n}</div>
                     </div>
-                    ${copyIcon}
+                    <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                 </div>`; 
             });
         }
 
         function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
-        function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20suscribirme%20a%20este%20servicio`, '_blank'); }
+        function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); }
         function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
     </script>
 </body>
