@@ -542,7 +542,7 @@
     <div id="toast">¡Copiado al portapapeles!</div>
 
 <script>
-    // ====== CONFIGURACIÓN DE SESIÓN ======
+    // ====== CONFIGURACIÓN SIMPLE ======
     const SESSION_KEY = "interceptor_fex_session";
     const SESSION_DURATION_HOURS = 8; // Duración de la sesión en horas
     const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
@@ -553,84 +553,38 @@
     const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
     const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
 
-    // ====== SISTEMA DE SESIÓN ======
-    function guardarSesion(username) {
+    // ====== SISTEMA SIMPLE DE SESIÓN ======
+    function guardarSesion() {
         const expiracion = Date.now() + (SESSION_DURATION_HOURS * 60 * 60 * 1000);
         localStorage.setItem(SESSION_KEY, JSON.stringify({ 
-            expira: expiracion,
-            usuario: username,
-            timestamp: new Date().toISOString()
+            expira: expiracion
         }));
-        console.log("✅ Sesión guardada para:", username);
     }
 
     function verificarSesion() {
         try {
             const sesionData = localStorage.getItem(SESSION_KEY);
-            if (!sesionData) {
-                console.log("ℹ️ No hay sesión activa");
-                return false;
-            }
+            if (!sesionData) return false;
             
             const sesion = JSON.parse(sesionData);
-            const ahora = Date.now();
-            
-            if (ahora < sesion.expira) {
-                console.log("✅ Sesión válida para:", sesion.usuario);
-                return true;
-            } else {
-                console.log("❌ Sesión expirada, limpiando...");
-                localStorage.removeItem(SESSION_KEY);
-                return false;
-            }
+            return Date.now() < sesion.expira;
         } catch(e) {
-            console.error("Error verificando sesión:", e);
             localStorage.removeItem(SESSION_KEY);
             return false;
         }
     }
 
-    function cerrarSesion() {
-        localStorage.removeItem(SESSION_KEY);
-        state.authed = false;
-        
-        // Restaurar estado inicial
-        document.getElementById('status-indicator').textContent = "Sin Acceso";
-        document.getElementById('status-indicator').classList.remove('active');
-        document.getElementById('login-container').style.display = 'flex';
-        document.getElementById('filters-container').style.display = 'none';
-        document.getElementById('public-footer').style.display = 'grid';
-        
-        // Limpiar datos
-        state.data = [];
-        processData();
-        
-        console.log("🔒 Sesión cerrada");
-    }
-
     // ====== INICIALIZACIÓN ======
     window.onload = () => { 
         renderStaticModals(); 
-        checkSession(); 
         
-        // Verificar sesión periódicamente cada minuto
-        setInterval(checkSession, 60000);
-    };
-
-    function checkSession() {
+        // Solo verificar si hay sesión activa al cargar
         if (verificarSesion()) {
-            // Sesión válida - intentar silent login
-            silentLogin();
-        } else {
-            // No hay sesión o expiró
-            state.authed = false;
-            document.getElementById('status-indicator').textContent = "Sin Acceso";
-            document.getElementById('status-indicator').classList.remove('active');
-            document.getElementById('login-container').style.display = 'flex';
-            document.getElementById('filters-container').style.display = 'none';
-            document.getElementById('public-footer').style.display = 'grid';
+            state.authed = true;
+            cargarDatos();
+            actualizarInterfazAutenticada();
         }
-    }
+    };
 
     function modal(id, show) {
         const el = document.getElementById(id);
@@ -673,8 +627,11 @@
             
             if(isValid) { 
                 // ✅ LOGIN EXITOSO
-                loginSuccess(json, u); 
-                guardarSesion(u); // ← GUARDAR SESIÓN CON EXPIRACIÓN
+                guardarSesion(); // Solo guardar timestamp de expiración
+                state.authed = true;
+                state.data = json.notificaciones || [];
+                
+                actualizarInterfazAutenticada();
                 modal('login-modal', false); 
             } else { 
                 err.textContent = "Usuario o contraseña incorrectos";
@@ -690,54 +647,24 @@
         }
     }
 
-    async function silentLogin() { 
-        try { 
+    async function cargarDatos() {
+        try {
             const res = await fetch(API_URL); 
             const json = await res.json();
-            
-            // Verificar si el Sheet tiene credenciales configuradas
-            const hasCredentials = json.config && Object.keys(json.config).length > 0;
-            
-            if (hasCredentials) {
-                // Cargar datos y mantener sesión activa
-                state.data = json.notificaciones || [];
-                state.authed = true;
-                processData();
-                
-                // Actualizar interfaz para sesión activa
-                document.getElementById('status-indicator').textContent = "EN LÍNEA";
-                document.getElementById('status-indicator').classList.add('active');
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('filters-container').style.display = 'flex';
-                document.getElementById('public-footer').style.display = 'none';
-                
-                console.log("✅ Silent login exitoso");
-            } else {
-                // No hay credenciales en el Sheet, cerrar sesión
-                console.log("❌ No hay credenciales configuradas, cerrando sesión");
-                cerrarSesion();
-            }
+            state.data = json.notificaciones || [];
+            processData();
         } catch(e) {
-            console.error("Error en silentLogin:", e);
-            // En caso de error, mantener la sesión pero mostrar advertencia
-            document.getElementById('status-indicator').textContent = "ERROR CONEXIÓN";
-            document.getElementById('status-indicator').classList.remove('active');
-        } 
+            console.error("Error cargando datos:", e);
+        }
     }
 
-    function loginSuccess(json, username) {
-        state.authed = true; 
-        state.data = json.notificaciones || [];
-        
-        // Actualizar interfaz
+    function actualizarInterfazAutenticada() {
         document.getElementById('status-indicator').textContent = "EN LÍNEA";
         document.getElementById('status-indicator').classList.add('active');
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('filters-container').style.display = 'flex';
         document.getElementById('public-footer').style.display = 'none';
-        
         processData();
-        console.log("🎉 Login exitoso para:", username);
     }
 
     // ====== FUNCIONALIDAD EXISTENTE ======
@@ -902,12 +829,6 @@
             t.classList.add('visible'); 
             setTimeout(() => t.classList.remove('visible'), 2000); 
         }); 
-    }
-
-    // ====== BOTÓN DE CERRAR SESIÓN (OPCIONAL) ======
-    // Puedes agregar un botón en el footer cuando está autenticado
-    function agregarBotonCerrarSesion() {
-        // Esto es opcional - puedes implementarlo si quieres un botón explícito para cerrar sesión
     }
 </script>
     
