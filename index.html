@@ -303,30 +303,28 @@
         .input-clean:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
         .toggle-pwd { position: absolute; right: 14px; top: 12px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; }
         
-        /* NUEVO DISEÑO COMPACTO PARA PLANES (Copiado del ejemplo compacto) */
+        /* NUEVO DISEÑO COMPACTO PARA PLANES (MÁS COMPACTO) */
         .plan-card { 
             border: 2px solid #eee; 
-            border-radius: 12px; 
-            padding: 12px; 
-            margin-bottom: 10px; 
+            border-radius: 10px; 
+            padding: 10px;  /* Reducido de 12px */
+            margin-bottom: 8px; /* Reducido de 10px */
             position: relative; 
             background: #fff; 
-            /* QUITÉ LA ANIMACIÓN HOVER: transition: all 0.3s ease; */
         }
-        /* QUITÉ EL EFECTO HOVER: .plan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); } */
         .plan-card.featured { 
             border-color: var(--primary); 
             background: #fbf9ff; 
         }
         .plan-tag { 
             position: absolute; 
-            top: -10px; 
-            right: 10px; 
+            top: -8px; /* Reducido de -10px */
+            right: 8px; /* Reducido de 10px */
             background: var(--primary); 
             color: white; 
-            font-size: 10px; 
-            padding: 4px 8px; 
-            border-radius: 10px; 
+            font-size: 9px; /* Reducido de 10px */
+            padding: 3px 6px; /* Reducido de 4px 8px */
+            border-radius: 8px; /* Reducido de 10px */
             font-weight: bold; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -334,33 +332,33 @@
         .plan-name { 
             font-weight: 700; 
             color: #555; 
-            font-size: 14px; 
-            margin-bottom: 4px;
+            font-size: 13px; /* Reducido de 14px */
+            margin-bottom: 2px; /* Reducido de 4px */
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .plan-price { 
-            font-size: 22px; 
+            font-size: 20px; /* Reducido de 22px */
             font-weight: 800; 
             color: #222; 
-            margin: 4px 0; 
+            margin: 2px 0; /* Reducido de 4px 0 */
         }
         .plan-detail { 
-            font-size: 12px; 
+            font-size: 11px; /* Reducido de 12px */
             color: var(--text-secondary); 
-            margin-bottom: 10px; 
-            line-height: 1.4;
+            margin-bottom: 8px; /* Reducido de 10px */
+            line-height: 1.3; /* Reducido de 1.4 */
         }
         .plan-btn { 
             display: block; 
             width: 100%; 
-            padding: 10px; 
+            padding: 8px; /* Reducido de 10px */
             background: #222; 
             color: white; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 6px; /* Reducido de 8px */
             font-weight: 600; 
-            font-size: 14px; 
+            font-size: 13px; /* Reducido de 14px */
             cursor: pointer; 
             text-align: center; 
             text-decoration: none; 
@@ -666,7 +664,7 @@
         }
 
         function renderStaticModals() {
-            // NUEVO DISEÑO COMPACTO PARA PLANES (Copiado del ejemplo compacto)
+            // NUEVO DISEÑO COMPACTO PARA PLANES (MÁS COMPACTO)
             const pList = document.getElementById('planes-list');
             pList.innerHTML = `
                 <div class="plan-card">
