@@ -549,7 +549,6 @@
     const CONTACTO = "51960744787";
     
     let state = { data: [], config: {}, authed: false, filter: 'todos' };
-    let refreshInterval = null;
 
     const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
     const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
@@ -575,36 +574,6 @@
         }
     }
 
-    // ====== ACTUALIZACIÓN AUTOMÁTICA ======
-    function iniciarActualizacionAutomatica() {
-        // Detener intervalo anterior si existe
-        if (refreshInterval) {
-            clearInterval(refreshInterval);
-        }
-        
-        // Actualizar cada 10 segundos
-        refreshInterval = setInterval(() => {
-            if (state.authed && verificarSesion()) {
-                cargarDatos();
-            } else {
-                // Si la sesión expiró, detener actualizaciones
-                clearInterval(refreshInterval);
-                state.authed = false;
-                actualizarInterfazNoAutenticada();
-            }
-        }, 10000); // 10 segundos
-        
-        // También cargar datos inmediatamente
-        cargarDatos();
-    }
-
-    function detenerActualizacionAutomatica() {
-        if (refreshInterval) {
-            clearInterval(refreshInterval);
-            refreshInterval = null;
-        }
-    }
-
     // ====== INICIALIZACIÓN ======
     window.onload = () => { 
         renderStaticModals(); 
@@ -612,8 +581,8 @@
         // Solo verificar si hay sesión activa al cargar
         if (verificarSesion()) {
             state.authed = true;
+            cargarDatos();
             actualizarInterfazAutenticada();
-            iniciarActualizacionAutomatica();
         }
     };
 
@@ -663,7 +632,6 @@
                 state.data = json.notificaciones || [];
                 
                 actualizarInterfazAutenticada();
-                iniciarActualizacionAutomatica();
                 modal('login-modal', false); 
             } else { 
                 err.textContent = "Usuario o contraseña incorrectos";
@@ -680,10 +648,8 @@
     }
 
     async function cargarDatos() {
-        if (!state.authed) return;
-        
         try {
-            const res = await fetch(API_URL + '?t=' + Date.now()); // Cache busting
+            const res = await fetch(API_URL); 
             const json = await res.json();
             state.data = json.notificaciones || [];
             processData();
@@ -698,16 +664,6 @@
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('filters-container').style.display = 'flex';
         document.getElementById('public-footer').style.display = 'none';
-        processData();
-    }
-
-    function actualizarInterfazNoAutenticada() {
-        document.getElementById('status-indicator').textContent = "Sin Acceso";
-        document.getElementById('status-indicator').classList.remove('active');
-        document.getElementById('login-container').style.display = 'flex';
-        document.getElementById('filters-container').style.display = 'none';
-        document.getElementById('public-footer').style.display = 'grid';
-        state.data = [];
         processData();
     }
 
