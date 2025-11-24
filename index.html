@@ -166,9 +166,7 @@
             position: relative; 
             overflow: hidden; 
             box-shadow: var(--shadow-card); 
-            /* QUITADO: transition: transform 0.2s; */
         }
-        /* QUITADO: .stat-card:active { transform: scale(0.98); } */
         .stat-value { 
             font-size: 1.2rem; 
             font-weight: 800; 
@@ -194,7 +192,7 @@
             background: linear-gradient(to right, #0ea5e9, #10b981);
         }
 
-        /* CONTROLES - CON NUEVO ESTILO */
+        /* CONTROLES - SIN ANIMACIONES */
         .action-row { 
             padding: 0 16px; 
             display: flex; 
@@ -212,7 +210,6 @@
             font-weight: 700; 
             font-size: 0.85rem; 
             cursor: pointer; 
-            transition: all 0.2s; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -224,11 +221,6 @@
             color: #fff; 
             box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4); 
         }
-        .btn-login:hover { 
-            background: linear-gradient(to right, #0da271, #0c8fc7);
-            transform: translateY(-1px);
-        }
-        .btn-login:active { transform: scale(0.98); }
 
         /* FILTROS SEPARADOS (CHIPS) - CON NUEVO ESTILO */
         .filter-group { 
@@ -249,7 +241,6 @@
             font-weight: 700; 
             border-radius: 30px; 
             cursor: pointer; 
-            transition: 0.2s; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
@@ -258,7 +249,6 @@
             color: #ffffff; 
             border-color: transparent;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); 
-            transform: translateY(-1px);
         }
 
         /* LISTA - CON NUEVO ESTILO */
@@ -279,11 +269,9 @@
             padding: 10px 12px;
             border-radius: var(--radius-md); 
             border: 1px solid transparent; 
-            transition: 0.2s; 
             position: relative; 
             box-shadow: var(--shadow-card); 
         }
-        .tx-card:active { transform: scale(0.99); background: #f8fafc; }
         
         .tx-card[data-app="Yape"] .tx-icon { 
             background: linear-gradient(to bottom right, #e0f2fe, #bae6fd);
@@ -408,7 +396,6 @@
             flex-direction: column; 
             align-items: center; 
             gap: 4px; 
-            transition: 0.2s; 
             font-family: var(--font-main); 
         }
         .footer-btn svg { 
@@ -416,13 +403,6 @@
             height: 20px; 
             stroke: currentColor; 
             stroke-width: 2; 
-            transition: 0.2s; 
-        }
-        .footer-btn:hover { 
-            color: #10b981; 
-        }
-        .footer-btn:hover svg { 
-            transform: translateY(-2px); 
         }
 
         /* MODALES - CON NUEVO ESTILO */
@@ -494,11 +474,6 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            transition: 0.2s; 
-        }
-        .btn-close:hover { 
-            background: #e2e8f0; 
-            color: var(--text-primary); 
         }
         
         /* Inputs */
@@ -513,7 +488,6 @@
             font-family: var(--font-main); 
             font-size: 0.9rem; 
             font-weight: 500; 
-            transition: 0.3s; 
         }
         .input-clean:focus { 
             background: #fff; 
@@ -591,13 +565,8 @@
             text-align: center; 
             text-decoration: none; 
             box-sizing: border-box;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-        .plan-btn:hover { 
-            background: linear-gradient(to right, #0da271, #0c8fc7);
-            transform: translateY(-1px);
         }
 
         /* SOPORTE */
@@ -618,10 +587,7 @@
             cursor: pointer; 
             margin-bottom: 14px; 
             box-shadow: 0 8px 20px -6px rgba(37, 211, 102, 0.4);
-            transition: 0.2s;
         }
-        .whatsapp-btn:hover { background: #20bd5a; }
-        .whatsapp-btn:active { transform: scale(0.98); }
 
         /* BANCOS */
         .bank-row { 
@@ -631,14 +597,9 @@
             margin-bottom: 8px; 
             cursor: pointer; 
             border: 1px solid var(--border); 
-            transition: 0.2s; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-        }
-        .bank-row:hover { 
-            background: #f8fafc; 
-            border-color: #10b981; 
         }
         .bank-info { display: flex; flex-direction: column; gap: 4px; }
         .bank-name { color: var(--text-primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
@@ -648,9 +609,7 @@
             color: #10b981; 
             width: 20px; height: 20px; 
             opacity: 0.5; 
-            transition: 0.2s; 
         }
-        .bank-row:hover .copy-icon { opacity: 1; transform: scale(1.1); }
         
         /* Utils */
         .spinner { 
