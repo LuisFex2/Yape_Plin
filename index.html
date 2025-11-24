@@ -303,32 +303,85 @@
         .input-clean:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
         .toggle-pwd { position: absolute; right: 14px; top: 12px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; }
         
-        /* PLANES */
+        /* NUEVO DISEÑO COMPACTO PARA PLANES (Copiado del ejemplo compacto) */
         .plan-card { 
-            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px; 
-            position: relative; background: #ffffff; display: flex; justify-content: space-between; align-items: center; 
-            transition: 0.2s;
+            border: 2px solid #eee; 
+            border-radius: 12px; 
+            padding: 12px; 
+            margin-bottom: 10px; 
+            position: relative; 
+            background: #fff; 
+            transition: all 0.3s ease;
         }
-        .plan-card:hover { border-color: #cbd5e1; }
-        .plan-card.featured { border: 1px solid var(--primary-soft); background: #fcfcff; box-shadow: 0 4px 15px -3px rgba(79, 70, 229, 0.1); }
-        
+        .plan-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .plan-card.featured { 
+            border-color: var(--primary); 
+            background: #fbf9ff; 
+        }
         .plan-tag { 
-            position: absolute; top: -9px; left: 14px; background: var(--primary); color: white; 
-            font-size: 0.55rem; padding: 3px 8px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; 
-            box-shadow: 0 4px 10px -2px rgba(79, 70, 229, 0.3);
+            position: absolute; 
+            top: -10px; 
+            right: 10px; 
+            background: var(--primary); 
+            color: white; 
+            font-size: 10px; 
+            padding: 4px 8px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        .plan-name { font-weight: 800; color: var(--text-primary); font-size: 0.85rem; }
-        .plan-detail { font-size: 0.7rem; color: var(--text-secondary); font-weight: 500; margin-top: 2px; }
-        
-        .plan-price { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); display: block; text-align: right; }
-        .plan-btn-action { 
-            padding: 5px 12px; background: #f1f5f9; color: var(--text-primary); border: none; 
-            border-radius: 8px; font-weight: 700; font-size: 0.65rem; cursor: pointer; margin-top: 4px; 
-            transition: 0.2s; 
+        .plan-name { 
+            font-weight: 700; 
+            color: #555; 
+            font-size: 14px; 
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .plan-card.featured .plan-btn-action { background: var(--primary); color: white; }
-        .plan-card.featured .plan-btn-action:hover { background: #4338ca; }
+        .plan-price { 
+            font-size: 22px; 
+            font-weight: 800; 
+            color: #222; 
+            margin: 4px 0; 
+        }
+        .plan-detail { 
+            font-size: 12px; 
+            color: var(--text-secondary); 
+            margin-bottom: 10px; 
+            line-height: 1.4;
+        }
+        .plan-btn { 
+            display: block; 
+            width: 100%; 
+            padding: 10px; 
+            background: #222; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            cursor: pointer; 
+            text-align: center; 
+            text-decoration: none; 
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .plan-btn:hover { 
+            background: var(--primary); 
+            transform: translateY(-1px);
+        }
+        .plan-card.featured .plan-btn { 
+            background: var(--primary); 
+        }
+        .plan-card.featured .plan-btn:hover { 
+            background: #4338ca;
+        }
 
         /* SOPORTE */
         .support-box { text-align: center; }
@@ -461,7 +514,16 @@
         </div>
     </div>
 
-    <div id="modal-planes" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Planes Premium</h3><button class="btn-close" onclick="modal('modal-planes', false)">×</button></div><div id="planes-list"></div></div></div>
+    <div id="modal-planes" class="modal-bg">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title">Planes Premium</h3>
+                <button class="btn-close" onclick="modal('modal-planes', false)">×</button>
+            </div>
+            <div id="planes-list"></div>
+        </div>
+    </div>
+
     <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:15px;font-weight:600;text-align:center;">Toca un banco para copiar</div><div id="bancos-list"></div></div></div>
     
     <div id="modal-soporte" class="modal-bg">
@@ -607,42 +669,30 @@
         }
 
         function renderStaticModals() {
-            // PLANES
+            // NUEVO DISEÑO COMPACTO PARA PLANES (Copiado del ejemplo compacto)
             const pList = document.getElementById('planes-list');
             pList.innerHTML = `
                 <div class="plan-card">
-                    <div class="plan-info">
-                        <div class="plan-name">Mensual Básico</div>
-                        <div class="plan-detail">Pago único por 30 días</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <span class="plan-price">S/ 6.00</span>
-                        <button class="plan-btn-action" onclick="buy('Plan Mensual', 6)">CONTRATAR</button>
-                    </div>
+                    <div class="plan-name">PLAN MENSUAL</div>
+                    <div class="plan-price">S/ 6.00</div>
+                    <div class="plan-detail">Facturado cada mes</div>
+                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
                 </div>
                 
                 <div class="plan-card featured">
-                    <div class="plan-tag">POPULAR</div>
-                    <div class="plan-info">
-                        <div class="plan-name">Trimestral</div>
-                        <div class="plan-detail">Ahorras un 33%</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <span class="plan-price">S/ 12.00</span>
-                        <button class="plan-btn-action" onclick="buy('Plan Trimestral', 12)">CONTRATAR</button>
-                    </div>
+                    <div class="plan-tag">AHORRA 33%</div>
+                    <div class="plan-name">TRIMESTRAL</div>
+                    <div class="plan-price">S/ 12.00</div>
+                    <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
+                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
                 </div>
 
                 <div class="plan-card featured">
-                    <div class="plan-tag">MEJOR OPCIÓN</div>
-                    <div class="plan-info">
-                        <div class="plan-name">Semestral</div>
-                        <div class="plan-detail">Ahorras un 50%</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <span class="plan-price">S/ 18.00</span>
-                        <button class="plan-btn-action" onclick="buy('Plan Semestral', 18)">CONTRATAR</button>
-                    </div>
+                    <div class="plan-tag">MEJOR PRECIO</div>
+                    <div class="plan-name">SEMESTRAL</div>
+                    <div class="plan-price">S/ 18.00</div>
+                    <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
+                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
                 </div>
             `;
 
