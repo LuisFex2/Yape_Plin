@@ -12,36 +12,44 @@
 
     <style>
         /* ════════════════════════════════════════════════════════════════
-           🎨 NUEVO ESTILO CON GRADIENTES VERDE-AZUL
+           🎨 DISEÑO ENTERPRISE EMERALD/SKY (COMPACTO & ESTÁTICO)
         ════════════════════════════════════════════════════════════════ */
         :root {
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
+            --bg-body: #f8fafc;       /* Slate 50 */
+            --bg-card: #ffffff;       
             
-            --primary: #10b981;          /* Emerald 500 */
-            --primary-soft: #d1fae5;     /* Emerald 100 */
+            --text-primary: #0f172a;  /* Slate 900 */
+            --text-secondary: #64748b;/* Slate 500 */
             
-            --yape: #0ea5e9;             /* Sky 500 */
-            --yape-bg: #e0f2fe;          /* Sky 100 */
+            /* Colores Principales */
+            --emerald-600: #059669;
+            --sky-600: #0284c7;
+            --cyan-btn: #06b6d4;      /* Color exacto para botones de planes */
             
-            --plin: #8b5cf6;             /* Violet 500 */
-            --plin-bg: #ede9fe;          /* Violet 100 */
+            --grad-main: linear-gradient(135deg, var(--emerald-600) 0%, var(--sky-600) 100%);
             
-            --bank: #06b6d4;             /* Cyan 500 */
-            --bank-bg: #cffafe;          /* Cyan 100 */
+            --primary: #059669;       
+            --primary-soft: #ecfdf5;  
+            
+            --yape: #d946ef;          
+            --yape-bg: #fae8ff;       
+            
+            --plin: #0ea5e9;          
+            --plin-bg: #e0f2fe;       
+            
+            --bank: #10b981;          
+            --bank-bg: #ecfdf5;       
             
             --danger: #ef4444;
-            --border: #e2e8f0;
+            --border: #cbd5e1;
             
-            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
             
-            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
-            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -58,578 +66,304 @@
             overflow: hidden;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
         #app {
             width: 100%; max-width: 480px; height: 100%; position: relative;
-            background: var(--bg-card); display: flex; flex-direction: column; 
-            box-shadow: var(--shadow-soft);
+            background: #ffffff; display: flex; flex-direction: column; 
         }
 
         @media (min-width: 500px) {
-            #app { height: 92vh; margin-top: 4vh; border-radius: var(--radius-lg); border: 1px solid #fff; }
+            #app { height: 92vh; margin-top: 4vh; border-radius: var(--radius-lg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e2e8f0; }
         }
 
-        /* HEADER - CON NUEVO ESTILO DE GRADIENTE */
+        /* HEADER */
         header { 
-            padding: 12px 16px 8px;
+            padding: 16px 20px 10px;
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             flex-shrink: 0; 
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid #f1f5f9;
             z-index: 10;
-            position: relative;
         }
-        
-        /* Efecto de gradiente detrás del header */
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            opacity: 0.05;
-            z-index: -1;
-        }
-        
         .brand { display: flex; flex-direction: column; }
         .brand h1 { 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            letter-spacing: -0.5px; 
-            background: linear-gradient(to right, #10b981, #0ea5e9);
+            font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; 
+            background: var(--grad-main);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
+            -webkit-text-fill-color: transparent;
+            display: flex; align-items: center; gap: 8px; 
         }
-        .brand h1::before { 
-            content:''; 
-            display:block; 
-            width:8px; 
-            height:8px; 
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            border-radius:50%; 
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2); 
-        }
-        .brand span { font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; margin-left: 16px; margin-top: 0px; }
+        .brand h1::before { content:''; display:block; width:8px; height:8px; background: var(--emerald-600); border-radius:50%; -webkit-text-fill-color: initial; }
+        .brand span { font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-left: 16px; margin-top: 2px; }
 
         .status-badge {
-            padding: 4px 10px; border-radius: 20px; font-size: 0.55rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;
-            background: #f1f5f9; color: var(--text-secondary); transition: 0.3s;
+            padding: 5px 12px; border-radius: 30px; font-size: 0.6rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;
+            background: #f1f5f9; color: #94a3b8; transition: 0.1s;
         }
         .status-badge.active { 
-            background: rgba(16, 185, 129, 0.1); 
-            color: #10b981; 
+            background: var(--primary-soft); 
+            color: var(--emerald-600); 
+            border: 1px solid rgba(5, 150, 105, 0.2);
         }
 
-        /* ESTADÍSTICAS - CON NUEVO ESTILO Y SIN ANIMACIÓN */
-        .stats-row { 
-            display: flex; 
-            gap: 8px; 
-            padding: 0 16px 8px 16px; 
-            flex-shrink: 0; 
-            position: relative;
-        }
-        
-        /* Efecto de gradiente detrás de las estadísticas */
-        .stats-row::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            border-radius: 16px;
-            opacity: 0.05;
-            z-index: -1;
-        }
-        
+        /* ESTADÍSTICAS */
+        .stats-row { display: flex; gap: 12px; padding: 0 20px 10px 20px; flex-shrink: 0; }
         .stat-card {
-            flex: 1; 
-            background: #ffffff; 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius-md); 
-            padding: 10px 8px;
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center;
-            position: relative; 
-            overflow: hidden; 
-            box-shadow: var(--shadow-card); 
+            flex: 1; background: #ffffff; 
+            border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 14px 12px;
+            text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden; 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            cursor: default; user-select: none;
         }
-        .stat-value { 
-            font-size: 1.2rem; 
-            font-weight: 800; 
-            letter-spacing: -0.5px; 
-            margin-bottom: 2px; 
-        }
-        .stat-card:first-child .stat-value { color: #10b981; }
-        .stat-card:last-child .stat-value { color: #0ea5e9; }
-        .stat-label { font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         
-        .stat-card::after { 
-            content:''; 
-            position: absolute; 
-            top:0; 
-            left:0; 
-            width: 100%; 
-            height: 3px; 
-        }
-        .stat-card:first-child::after { 
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-        }
-        .stat-card:last-child::after { 
-            background: linear-gradient(to right, #0ea5e9, #10b981);
-        }
+        .stat-value { font-size: 1.35rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; margin-bottom: 4px; }
+        .stat-label { font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .stat-card::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--grad-main); opacity: 0.7; }
 
-        /* CONTROLES - SIN ANIMACIONES */
-        .action-row { 
-            padding: 0 16px; 
-            display: flex; 
-            gap: 8px; 
-            margin-bottom: 10px; 
-            flex-shrink: 0; 
-        }
+        /* CONTROLES */
+        .action-row { padding: 0 20px; display: flex; gap: 10px; margin-bottom: 12px; flex-shrink: 0; }
         
         .btn-main { 
-            flex: 1; 
-            padding: 10px; 
-            border: none; 
-            border-radius: var(--radius-sm); 
-            font-family: var(--font-main); 
-            font-weight: 700; 
-            font-size: 0.85rem; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 8px;
+            flex: 1; padding: 14px; border: none; border-radius: var(--radius-sm); 
+            font-family: var(--font-main); font-weight: 700; font-size: 0.9rem; cursor: pointer; 
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: transform 0.05s;
         }
-        
         .btn-login { 
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            color: #fff; 
-            box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4); 
+            background: var(--grad-main); color: #fff; 
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25);
         }
+        .btn-login:active { transform: scale(0.98); opacity: 0.95; }
 
-        /* FILTROS SEPARADOS (CHIPS) - CON NUEVO ESTILO */
+        /* FILTROS */
         .filter-group { 
-            display: flex; 
-            gap: 8px;
-            width: 100%; 
-            background: transparent; 
-            padding: 0;
+            display: flex; width: 100%; gap: 8px; 
+            background: transparent; padding: 0; border: none;
         }
-        
         .btn-filter { 
             flex: 1; 
             background: #ffffff; 
             color: var(--text-secondary); 
-            border: 1px solid var(--border); 
-            padding: 8px; 
-            font-size: 0.7rem; 
+            border: 1px solid #cbd5e1; 
+            padding: 10px; 
+            font-size: 0.75rem; 
             font-weight: 700; 
-            border-radius: 30px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: 0.1s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        
         .btn-filter.active { 
-            background: linear-gradient(to right, #10b981, #0ea5e9);
+            background: var(--grad-main); 
             color: #ffffff; 
             border-color: transparent;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); 
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
+            transform: translateY(-1px);
         }
 
-        /* LISTA - CON NUEVO ESTILO */
-        .list-wrapper { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 0 16px 16px 16px; 
-            min-height: 0; 
-            background: #fafafa; 
-            border-top: 1px solid var(--border); 
-        }
+        /* LISTA */
+        .list-wrapper { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; min-height: 0; background: #ffffff; }
         
         .tx-card { 
             display: flex; 
-            align-items: center;
+            align-items: center; 
             background: #ffffff; 
             margin-bottom: 8px; 
-            padding: 10px 12px;
-            border-radius: var(--radius-md); 
-            border: 1px solid transparent; 
-            position: relative; 
-            box-shadow: var(--shadow-card); 
+            padding: 10px 12px; 
+            border-radius: 12px; 
+            border: 1px solid #cbd5e1; 
+            box-shadow: var(--shadow-card);
+            position: relative;
         }
         
-        .tx-card[data-app="Yape"] .tx-icon { 
-            background: linear-gradient(to bottom right, #e0f2fe, #bae6fd);
-            color: #0ea5e9; 
-        }
-        .tx-card[data-app="Yape"] .tx-amount.positive { color: #0ea5e9; }
-        .tx-card[data-app="Yape"] { 
-            border-left: 3px solid #0ea5e9; 
-        }
+        .tx-card[data-app="Yape"] .tx-icon { background: var(--yape-bg); color: var(--yape); }
+        .tx-card[data-app="Yape"] .tx-amount.positive { color: var(--yape); }
 
-        .tx-card[data-app="Plin"] .tx-icon { 
-            background: linear-gradient(to bottom right, #ede9fe, #ddd6fe);
-            color: #8b5cf6; 
-        }
-        .tx-card[data-app="Plin"] .tx-amount.positive { color: #8b5cf6; }
-        .tx-card[data-app="Plin"] { border-left: 3px solid #8b5cf6; }
+        .tx-card[data-app="Plin"] .tx-icon { background: var(--plin-bg); color: var(--plin); }
+        .tx-card[data-app="Plin"] .tx-amount.positive { color: var(--plin); }
 
-        .tx-card[data-app="Interbank"] .tx-icon { 
-            background: linear-gradient(to bottom right, #cffafe, #a5f3fc);
-            color: #06b6d4; 
-        }
-        .tx-card[data-app="Interbank"] .tx-amount.positive { color: #06b6d4; }
-        .tx-card[data-app="Interbank"] { border-left: 3px solid #06b6d4; }
+        .tx-card[data-app="Interbank"] .tx-icon { background: var(--bank-bg); color: var(--bank); }
+        .tx-card[data-app="Interbank"] .tx-amount.positive { color: var(--bank); }
 
         .tx-icon { 
-            width: 36px; 
-            height: 36px; 
-            border-radius: 10px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-right: 10px; 
-            flex-shrink: 0; 
-            font-size: 0.9rem; 
-            font-weight: 800; 
-            margin-top: 0px;
+            width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            margin-right: 10px; flex-shrink: 0; font-size: 1.1rem; font-weight: 800; 
         }
+        .tx-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0; }
         
-        .tx-info { 
-            flex: 1; 
-            min-width: 0; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0px;
-        }
-
-        .tx-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 100%;
-            margin-bottom: 2px;
-        }
+        .tx-header { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-bottom: 2px; }
+        .tx-title { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; padding-right: 8px; }
         
-        .tx-title { 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            color: var(--text-primary); 
-            line-height: 1.2; 
-            padding-right: 8px;
-        }
+        .tx-amount { font-size: 1rem; font-weight: 800; white-space: nowrap; flex-shrink: 0; color: var(--text-primary); }
+        .tx-amount.promo { color: #94a3b8; text-decoration: line-through; font-size: 0.7rem; }
         
-        .tx-amount { 
-            font-size: 0.95rem; 
-            font-weight: 800; 
-            white-space: nowrap; 
-            flex-shrink: 0; 
-        }
-        .tx-amount.promo { color: #cbd5e1; text-decoration: line-through; font-size: 0.65rem; }
-
-        .tx-content { 
-            font-size: 0.75rem; 
-            color: var(--text-secondary); 
-            line-height: 1.3; 
-            font-weight: 500; 
-            white-space: normal; 
-            word-wrap: break-word;
-        }
-
-        .tx-footer {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 4px;
-        }
+        .tx-content { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.35; font-weight: 500; }
+        
+        .tx-footer { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
         
         .tx-app-pill {
-            font-size: 0.6rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            color: var(--text-primary); 
-            opacity: 0.6; 
-            letter-spacing: 0.5px;
+            font-size: 0.6rem; font-weight: 700; text-transform: uppercase; 
+            color: var(--text-secondary); letter-spacing: 0.5px;
+            background: #f1f5f9; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;
         }
-        
-        .tx-time { 
-            font-size: 0.6rem; 
-            color: #94a3b8; 
-            font-weight: 600; 
-        }
+        .tx-time { font-size: 0.65rem; color: #9ca3af; font-weight: 600; }
 
-        /* FOOTER - CON NUEVO ESTILO */
+        /* FOOTER */
         .footer-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; 
-            background: #ffffff; 
-            border-top: 1px solid var(--border); 
-            padding: 0 0 calc(8px + env(safe-area-inset-bottom)) 0;
-            z-index: 50; 
-            flex-shrink: 0; 
+            display: grid; grid-template-columns: 1fr 1fr 1fr; background: #ffffff; 
+            border-top: 1px solid #e2e8f0; 
+            padding: 8px 0 calc(12px + env(safe-area-inset-bottom)) 0;
+            z-index: 50; flex-shrink: 0; 
         }
         .footer-btn { 
-            background: transparent; 
-            border: none; 
-            color: #94a3b8; 
-            padding: 10px 0; 
-            font-size: 0.6rem; 
-            font-weight: 700; 
-            letter-spacing: 0.5px; 
-            cursor: pointer; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 4px; 
-            font-family: var(--font-main); 
+            background: transparent; border: none; color: #94a3b8; padding: 8px 0; 
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; 
+            display: flex; flex-direction: column; align-items: center; gap: 6px; 
+            font-family: var(--font-main); transition: 0s;
         }
-        .footer-btn svg { 
-            width: 20px; 
-            height: 20px; 
-            stroke: currentColor; 
-            stroke-width: 2; 
-        }
+        .footer-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; }
+        .footer-btn:active { color: var(--sky-600); }
 
-        /* MODALES - CON NUEVO ESTILO */
+        /* MODALES */
         .modal-bg { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(15, 23, 42, 0.2); 
-            backdrop-filter: blur(4px); 
-            z-index: 100; 
-            opacity: 0; 
-            pointer-events: none; 
-            transition: 0.3s; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); 
+            z-index: 100; opacity: 0; pointer-events: none; transition: 0.2s; 
+            display: flex; align-items: center; justify-content: center; 
         }
         .modal-bg.open { opacity: 1; pointer-events: all; }
         
         .modal-box { 
-            width: 90%; 
-            max-width: 360px; 
-            background: #ffffff; 
-            border-radius: 24px; 
-            padding: 24px; 
-            transform: translateY(30px); 
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-            box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.15); 
-            position: relative;
+            width: 88%; max-width: 340px; background: #ffffff; border-radius: 20px; padding: 20px; 
+            transform: translateY(20px) scale(0.95); transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
         }
+        .modal-bg.open .modal-box { transform: translateY(0) scale(1); }
         
-        /* Efecto de gradiente en los modales */
-        .modal-box::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            border-radius: 25px;
-            opacity: 0.1;
-            z-index: -1;
-        }
-        
-        .modal-bg.open .modal-box { transform: translateY(0); }
-        
-        .modal-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px; 
-        }
-        .modal-title { 
-            font-size: 1.2rem; 
-            font-weight: 800; 
-            color: var(--text-primary); 
-            letter-spacing: -0.5px; 
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
         
         .btn-close { 
-            background: #f1f5f9; 
-            border: none; 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 50%; 
-            color: var(--text-secondary); 
-            font-size: 1.1rem; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; 
+            color: var(--text-primary); font-size: 1.1rem; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; transition: 0s; 
         }
+        .btn-close:active { background: #e2e8f0; transform: scale(0.95); }
         
         /* Inputs */
-        .input-group { margin-bottom: 14px; position: relative; }
+        .input-group { margin-bottom: 16px; position: relative; }
         .input-clean { 
-            width: 100%; 
-            background: #f8fafc; 
-            border: 1px solid var(--border); 
-            padding: 12px 16px; 
-            border-radius: var(--radius-sm); 
-            color: var(--text-primary); 
-            font-family: var(--font-main); 
-            font-size: 0.9rem; 
-            font-weight: 500; 
+            width: 100%; background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px 14px; 
+            border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-main); 
+            font-size: 0.95rem; font-weight: 600; transition: 0.2s; 
         }
-        .input-clean:focus { 
-            background: #fff; 
-            border-color: #10b981; 
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); 
-        }
-        .toggle-pwd { 
-            position: absolute; 
-            right: 14px; 
-            top: 12px; 
-            background: none; 
-            border: none; 
-            color: var(--text-secondary); 
-            cursor: pointer; 
-            padding: 0; 
+        .input-clean:focus { background: #fff; border-color: var(--emerald-600); box-shadow: 0 0 0 3px var(--primary-soft); }
+        .toggle-pwd { position: absolute; right: 14px; top: 14px; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; }
+        
+        /* ════════════════════════════════════════
+           DISEÑO PLANES (COMPACTO)
+        ════════════════════════════════════════ */
+        .plan-card-ref {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px; /* Reducido drásticamente */
+            margin-bottom: 8px; /* Reducido drásticamente */
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex; flex-direction: column;
         }
         
-        /* PLANES - CON NUEVO ESTILO */
-        .plan-card { 
-            border: 2px solid #eee; 
-            border-radius: 10px; 
-            padding: 10px;
-            margin-bottom: 8px;
-            position: relative; 
-            background: #fff; 
+        .plan-card-ref.highlight {
+            border-color: var(--bank); 
         }
-        .plan-card.featured { 
-            border-color: #10b981; 
-            background: #f0fdf9; 
-        }
-        .plan-tag { 
-            position: absolute; 
-            top: -8px;
-            right: 8px;
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            color: white; 
-            font-size: 9px;
-            padding: 3px 6px;
-            border-radius: 8px;
-            font-weight: bold; 
+        
+        .plan-tag-ref {
+            position: absolute;
+            top: -9px;
+            right: 10px;
+            background: var(--cyan-btn);
+            color: white;
+            font-weight: 800;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .plan-name { 
-            font-weight: 700; 
-            color: #555; 
-            font-size: 13px;
+        
+        .plan-title-ref {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #4b5563; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .plan-price { 
-            font-size: 20px;
-            font-weight: 800; 
-            color: #222; 
-            margin: 2px 0;
+        
+        .plan-price-ref {
+            font-size: 1.5rem; /* Tamaño compacto pero visible */
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+            margin-bottom: 2px;
         }
-        .plan-detail { 
-            font-size: 11px;
-            color: var(--text-secondary); 
+        
+        .plan-sub-ref {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: 500;
             margin-bottom: 8px;
-            line-height: 1.3;
         }
-        .plan-btn { 
-            display: block; 
-            width: 100%; 
-            padding: 8px;
-            background: linear-gradient(to right, #10b981, #0ea5e9);
-            color: white; 
-            border: none; 
+        
+        .plan-btn-ref {
+            display: block;
+            width: 100%;
+            background: var(--cyan-btn);
+            color: white;
+            text-align: center;
+            padding: 8px; /* Botón más delgado */
             border-radius: 6px;
-            font-weight: 600; 
-            font-size: 13px;
-            cursor: pointer; 
-            text-align: center; 
-            text-decoration: none; 
-            box-sizing: border-box;
+            font-weight: 800;
             text-transform: uppercase;
+            text-decoration: none;
             letter-spacing: 0.5px;
+            font-size: 0.8rem;
+            border: none;
+            transition: 0.1s;
         }
-
-        /* SOPORTE */
-        .support-box { text-align: center; }
-        .whatsapp-btn { 
-            background: #25D366; 
-            color: white; 
-            width: 100%; 
-            padding: 14px; 
-            border-radius: var(--radius-sm); 
-            border: none; 
-            font-weight: 700; 
-            font-size: 0.95rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            cursor: pointer; 
-            margin-bottom: 14px; 
-            box-shadow: 0 8px 20px -6px rgba(37, 211, 102, 0.4);
-        }
+        .plan-btn-ref:active { transform: scale(0.98); opacity: 0.9; }
 
         /* BANCOS */
         .bank-row { 
-            padding: 12px 14px; 
-            background: #ffffff; 
-            border-radius: var(--radius-sm); 
-            margin-bottom: 8px; 
-            cursor: pointer; 
-            border: 1px solid var(--border); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
+            padding: 10px; background: #f8fafc; border-radius: 10px; margin-bottom: 6px; 
+            cursor: pointer; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; transition: 0.1s;
         }
-        .bank-info { display: flex; flex-direction: column; gap: 4px; }
-        .bank-name { color: var(--text-primary); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-        .bank-num { font-family: 'Plus Jakarta Sans', monospace; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.5px; }
+        .bank-row:active { background: var(--primary-soft); border-color: var(--emerald-600); }
+        .bank-name { color: var(--text-primary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .bank-num { font-family: monospace; font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; }
         
-        .copy-icon { 
-            color: #10b981; 
-            width: 20px; height: 20px; 
-            opacity: 0.5; 
+        /* SOPORTE */
+        .whatsapp-btn { 
+            background: #25D366; color: white; width: 100%; padding: 12px; border-radius: var(--radius-sm); 
+            border: none; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; 
+            gap: 8px; cursor: pointer; margin-bottom: 14px; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);
         }
-        
-        /* Utils */
-        .spinner { 
-            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; 
-            border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none; 
-        }
+        .whatsapp-btn:active { background: #20bd5a; transform: scale(0.98); }
+        .support-footer { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; font-weight: 500; }
+
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; display: none;}
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .msg-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600; background: #fef2f2; padding: 10px; border-radius: 10px; }
-        
-        #toast { 
-            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); 
-            background: var(--text-primary); color: #fff; padding: 10px 24px; border-radius: 30px; 
-            font-size: 0.85rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; 
-            z-index: 200; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-        }
+        .msg-error { color: var(--danger); font-size: 0.8rem; text-align: center; margin-top: 12px; display: none; font-weight: 600; background: #fef2f2; padding: 8px; border-radius: 8px; }
+        #toast { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: #fff; padding: 8px 20px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         #toast.visible { opacity: 1; bottom: 100px; }
-        
-        .support-footer { margin-top: 20px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; font-weight: 500; }
-        .support-icon-lg { font-size: 3rem; margin-bottom: 12px; display: block; filter: grayscale(100%); opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -672,10 +406,10 @@
         <div class="list-wrapper">
             <div id="tx-list">
                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
-                    <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
-                        <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <div style="background:#f1f5f9; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+                        <svg style="width: 24px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
-                    <p style="font-weight:600; font-size: 0.9rem;">Esperando autenticación...</p>
+                    <p style="font-weight:600; font-size: 0.8rem;">Esperando autenticación...</p>
                 </div>
             </div>
         </div>
@@ -707,7 +441,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 </button>
             </div>
-            <button class="btn-main btn-login" onclick="doLogin()"><span id="btn-txt">INGRESAR</span><div class="spinner" id="login-spin"></div></button>
+            <button class="btn-main btn-login" onclick="doLogin()">
+                <span id="btn-txt">INGRESAR</span>
+                <div class="spinner" id="login-spin" style="display: none;"></div>
+            </button>
             <p id="error-msg" class="msg-error">Credenciales incorrectas</p>
         </div>
     </div>
@@ -722,17 +459,16 @@
         </div>
     </div>
 
-    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:15px;font-weight:600;text-align:center;">Toca un banco para copiar</div><div id="bancos-list"></div></div></div>
+    <div id="modal-pagos" class="modal-bg"><div class="modal-box"><div class="modal-header"><h3 class="modal-title">Métodos de Pago</h3><button class="btn-close" onclick="modal('modal-pagos', false)">×</button></div><div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:12px;font-weight:600;text-align:center;">Toca un banco para copiar</div><div id="bancos-list"></div></div></div>
     
     <div id="modal-soporte" class="modal-bg">
         <div class="modal-box">
             <div class="modal-header"><h3 class="modal-title">Soporte Técnico</h3><button class="btn-close" onclick="modal('modal-soporte', false)">×</button></div>
-            <div class="support-box">
-                <div class="support-icon-lg">🛠️</div>
-                <p style="color:var(--text-secondary);margin-bottom:20px;font-weight:500;">¿Necesitas ayuda con tu suscripción o el servicio?</p>
+            <div style="text-align: center;">
+                <p style="color:var(--text-secondary);margin-bottom:16px;font-weight:500; font-size: 0.9rem;">¿Necesitas ayuda con el servicio?</p>
                 <button class="whatsapp-btn" onclick="contactar()">
                     <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.698c1.005.572 1.903.87 3.05.87 3.183 0 5.768-2.586 5.768-5.766.001-3.182-2.585-5.769-5.766-5.769-.001 0-.001 0 0 0zm0-2c4.28 0 7.769 3.489 7.769 7.769 0 4.28-3.489 7.769-7.769 7.769-1.262 0-2.497-.307-3.599-.894l-4.083 1.072 1.092-3.971c-.653-1.129-1.016-2.436-1.016-3.793 0-4.28 3.489-7.769 7.769-7.769zm.001 13.986c0 0 0 0 0 0 .162 0 .324-.006.484-.018l-.045.006c.108.005.216.012.325.012 3.433 0 6.216-2.784 6.216-6.216s-2.784-6.216-6.216-6.216-6.216 2.784-6.216 6.216c0 1.258.383 2.463 1.107 3.473l-.707 2.571 2.634-.693c.895.518 1.921.792 2.98.792.053 0 .105 0 .158-.002l.044-.002z"/></svg>
-                    <span>Contactar WhatsApp</span>
+                    <span>WhatsApp</span>
                 </button>
                 <div class="support-footer">
                     Horario: 9:00 AM - 6:00 PM<br>
@@ -742,12 +478,12 @@
         </div>
     </div>
 
-    <div id="toast">¡Copiado al portapapeles!</div>
+    <div id="toast">¡Copiado!</div>
 
 <script>
     // ====== CONFIGURACIÓN SIMPLE ======
     const SESSION_KEY = "interceptor_fex_session";
-    const SESSION_DURATION_HOURS = 8; // Duración de la sesión en horas
+    const SESSION_DURATION_HOURS = 8;
     const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
     const CONTACTO = "51960744787";
     
@@ -756,19 +492,15 @@
     const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
     const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
 
-    // ====== SISTEMA SIMPLE DE SESIÓN ======
     function guardarSesion() {
         const expiracion = Date.now() + (SESSION_DURATION_HOURS * 60 * 60 * 1000);
-        localStorage.setItem(SESSION_KEY, JSON.stringify({ 
-            expira: expiracion
-        }));
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ expira: expiracion }));
     }
 
     function verificarSesion() {
         try {
             const sesionData = localStorage.getItem(SESSION_KEY);
             if (!sesionData) return false;
-            
             const sesion = JSON.parse(sesionData);
             return Date.now() < sesion.expira;
         } catch(e) {
@@ -777,11 +509,8 @@
         }
     }
 
-    // ====== INICIALIZACIÓN ======
     window.onload = () => { 
         renderStaticModals(); 
-        
-        // Solo verificar si hay sesión activa al cargar
         if (verificarSesion()) {
             state.authed = true;
             cargarDatos();
@@ -829,11 +558,9 @@
             }
             
             if(isValid) { 
-                // ✅ LOGIN EXITOSO
-                guardarSesion(); // Solo guardar timestamp de expiración
+                guardarSesion();
                 state.authed = true;
                 state.data = json.notificaciones || [];
-                
                 actualizarInterfazAutenticada();
                 modal('login-modal', false); 
             } else { 
@@ -870,7 +597,6 @@
         processData();
     }
 
-    // ====== FUNCIONALIDAD EXISTENTE ======
     function filtrar(tipo, btn) {
         state.filter = tipo;
         document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
@@ -884,27 +610,15 @@
         const list = document.getElementById('tx-list'); 
         list.innerHTML = '';
         
-        if (!state.authed || state.data.length === 0) {
-            if (!state.authed) {
-                list.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
-                        <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
-                            <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        </div>
-                        <p style="font-weight:600; font-size: 0.9rem;">Esperando autenticación...</p>
+        if (!state.authed) {
+            list.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
+                    <div style="background:#f1f5f9; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+                        <svg style="width: 24px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
-                `;
-            } else {
-                list.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
-                        <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
-                            <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        </div>
-                        <p style="font-weight:600; font-size: 0.9rem;">No hay transacciones</p>
-                    </div>
-                `;
-            }
-            
+                    <p style="font-weight:600; font-size: 0.8rem;">Esperando autenticación...</p>
+                </div>
+            `;
             document.getElementById('total-display').textContent = 'S/ 0.00';
             document.getElementById('count-display').textContent = '0';
             return;
@@ -925,6 +639,17 @@
         });
         
         items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+        if (items.length === 0) {
+            list.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
+                    <div style="background:#f1f5f9; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+                        <svg style="width: 24px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <p style="font-weight:600; font-size: 0.8rem;">No hay transacciones</p>
+                </div>
+            `;
+        }
 
         let total = 0;
         let opsValidas = 0;
@@ -969,71 +694,49 @@
     }
 
     function renderStaticModals() {
-        // PLANES
         const pList = document.getElementById('planes-list');
         pList.innerHTML = `
-            <div class="plan-card">
-                <div class="plan-name">PLAN MENSUAL</div>
-                <div class="plan-price">S/ 6.00</div>
-                <div class="plan-detail">Facturado cada mes</div>
-                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
+            <div class="plan-card-ref">
+                <div class="plan-title-ref">PLAN MENSUAL</div>
+                <div class="plan-price-ref">S/ 6.00</div>
+                <div class="plan-sub-ref">Facturado cada mes</div>
+                <a class="plan-btn-ref" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual">CONTRATAR</a>
             </div>
             
-            <div class="plan-card featured">
-                <div class="plan-tag">AHORRA 33%</div>
-                <div class="plan-name">TRIMESTRAL</div>
-                <div class="plan-price">S/ 12.00</div>
-                <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
-                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
+            <div class="plan-card-ref highlight">
+                <div class="plan-tag-ref">AHORRA 33%</div>
+                <div class="plan-title-ref">TRIMESTRAL</div>
+                <div class="plan-price-ref">S/ 12.00</div>
+                <div class="plan-sub-ref">Sale a S/ 4.00 x mes</div>
+                <a class="plan-btn-ref" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral">CONTRATAR</a>
             </div>
 
-            <div class="plan-card featured">
-                <div class="plan-tag">MEJOR PRECIO</div>
-                <div class="plan-name">SEMESTRAL</div>
-                <div class="plan-price">S/ 18.00</div>
-                <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
-                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
+            <div class="plan-card-ref highlight">
+                <div class="plan-tag-ref">MEJOR PRECIO</div>
+                <div class="plan-title-ref">SEMESTRAL</div>
+                <div class="plan-price-ref">S/ 18.00</div>
+                <div class="plan-sub-ref">Sale a S/ 3.00 x mes</div>
+                <a class="plan-btn-ref" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral">CONTRATAR</a>
             </div>
         `;
 
-        // BANCOS
-        const bancos = [
-            {b:"Yape / Plin", n:CONTACTO}, 
-            {b:"BCP", n:"191-22334455-0-99"}, 
-            {b:"BBVA", n:"0011-0123-45678901"}, 
-            {b:"Interbank", n:"898-3001234567"}
-        ];
+        const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
         const bList = document.getElementById('bancos-list');
         bList.innerHTML = '';
-        
         bancos.forEach(bk => { 
             bList.innerHTML += `
             <div class="bank-row" onclick="copiar('${bk.n}')">
-                <div class="bank-info">
+                <div style="display:flex;flex-direction:column;gap:2px;">
                     <div class="bank-name">${bk.b}</div>
                     <div class="bank-num">${bk.n}</div>
                 </div>
-                <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                <svg style="width:18px;height:18px;opacity:0.5;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
             </div>`; 
         });
     }
 
-    function buy(plan, precio) { 
-        window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); 
-    }
-    
-    function contactar() { 
-        window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); 
-    }
-    
-    function copiar(texto) { 
-        navigator.clipboard.writeText(texto).then(() => { 
-            const t = document.getElementById('toast'); 
-            t.classList.add('visible'); 
-            setTimeout(() => t.classList.remove('visible'), 2000); 
-        }); 
-    }
+    function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); }
+    function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
 </script>
-    
 </body>
 </html>
