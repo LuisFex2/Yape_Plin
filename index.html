@@ -542,26 +542,93 @@
     <div id="toast">¡Copiado al portapapeles!</div>
 
 <script>
+    // ====== CONFIGURACIÓN DE SESIÓN ======
+    const SESSION_KEY = "interceptor_fex_session";
+    const SESSION_DURATION_HOURS = 8; // Duración de la sesión en horas
     const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
     const CONTACTO = "51960744787";
+    
     let state = { data: [], config: {}, authed: false, filter: 'todos' };
 
     const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
     const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
 
-    window.onload = () => { renderStaticModals(); checkSession(); };
+    // ====== SISTEMA DE SESIÓN ======
+    function guardarSesion(username) {
+        const expiracion = Date.now() + (SESSION_DURATION_HOURS * 60 * 60 * 1000);
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ 
+            expira: expiracion,
+            usuario: username,
+            timestamp: new Date().toISOString()
+        }));
+        console.log("✅ Sesión guardada para:", username);
+    }
+
+    function verificarSesion() {
+        try {
+            const sesionData = localStorage.getItem(SESSION_KEY);
+            if (!sesionData) {
+                console.log("ℹ️ No hay sesión activa");
+                return false;
+            }
+            
+            const sesion = JSON.parse(sesionData);
+            const ahora = Date.now();
+            
+            if (ahora < sesion.expira) {
+                console.log("✅ Sesión válida para:", sesion.usuario);
+                return true;
+            } else {
+                console.log("❌ Sesión expirada, limpiando...");
+                localStorage.removeItem(SESSION_KEY);
+                return false;
+            }
+        } catch(e) {
+            console.error("Error verificando sesión:", e);
+            localStorage.removeItem(SESSION_KEY);
+            return false;
+        }
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem(SESSION_KEY);
+        state.authed = false;
+        
+        // Restaurar estado inicial
+        document.getElementById('status-indicator').textContent = "Sin Acceso";
+        document.getElementById('status-indicator').classList.remove('active');
+        document.getElementById('login-container').style.display = 'flex';
+        document.getElementById('filters-container').style.display = 'none';
+        document.getElementById('public-footer').style.display = 'grid';
+        
+        // Limpiar datos
+        state.data = [];
+        processData();
+        
+        console.log("🔒 Sesión cerrada");
+    }
+
+    // ====== INICIALIZACIÓN ======
+    window.onload = () => { 
+        renderStaticModals(); 
+        checkSession(); 
+        
+        // Verificar sesión periódicamente cada minuto
+        setInterval(checkSession, 60000);
+    };
 
     function checkSession() {
-        const sess = localStorage.getItem('premium_session_v1');
-        if(sess) { 
-            const { exp } = JSON.parse(sess); 
-            if(Date.now() < exp) {
-                silentLogin(); 
-            } else {
-                localStorage.removeItem('premium_session_v1');
-                // Forzar recarga para limpiar estado
-                setTimeout(() => location.reload(), 100);
-            }
+        if (verificarSesion()) {
+            // Sesión válida - intentar silent login
+            silentLogin();
+        } else {
+            // No hay sesión o expiró
+            state.authed = false;
+            document.getElementById('status-indicator').textContent = "Sin Acceso";
+            document.getElementById('status-indicator').classList.remove('active');
+            document.getElementById('login-container').style.display = 'flex';
+            document.getElementById('filters-container').style.display = 'none';
+            document.getElementById('public-footer').style.display = 'grid';
         }
     }
 
@@ -584,21 +651,43 @@
         const spin = document.getElementById('login-spin');
         const txt = document.getElementById('btn-txt');
         const err = document.getElementById('error-msg');
-        if(!u || !p) return;
-        txt.style.display = 'none'; spin.style.display = 'block'; err.style.display = 'none';
+        
+        if(!u || !p) {
+            err.textContent = "Completa todos los campos";
+            err.style.display = 'block';
+            return;
+        }
+        
+        txt.style.display = 'none'; 
+        spin.style.display = 'block'; 
+        err.style.display = 'none';
+        
         try {
-            const res = await fetch(API_URL); const json = await res.json();
+            const res = await fetch(API_URL); 
+            const json = await res.json();
             let isValid = false;
-            if(json.config && json.config[u] && String(json.config[u]) === p) isValid = true;
+            
+            if(json.config && json.config[u] && String(json.config[u]) === p) {
+                isValid = true;
+            }
+            
             if(isValid) { 
-                // Guardar el usuario en la sesión para futuras validaciones
+                // ✅ LOGIN EXITOSO
                 loginSuccess(json, u); 
+                guardarSesion(u); // ← GUARDAR SESIÓN CON EXPIRACIÓN
                 modal('login-modal', false); 
             } else { 
+                err.textContent = "Usuario o contraseña incorrectos";
                 err.style.display = 'block'; 
             }
-        } catch(e) { err.textContent = "Error de conexión"; err.style.display = 'block'; }
-        finally { txt.style.display = 'block'; spin.style.display = 'none'; }
+        } catch(e) { 
+            err.textContent = "Error de conexión"; 
+            err.style.display = 'block'; 
+        }
+        finally { 
+            txt.style.display = 'block'; 
+            spin.style.display = 'none'; 
+        }
     }
 
     async function silentLogin() { 
@@ -610,43 +699,48 @@
             const hasCredentials = json.config && Object.keys(json.config).length > 0;
             
             if (hasCredentials) {
-                // Cargar datos pero NO cambiar a estado autenticado
+                // Cargar datos y mantener sesión activa
                 state.data = json.notificaciones || [];
+                state.authed = true;
                 processData();
                 
-                // Mostrar advertencia de que necesita reautenticarse
-                document.getElementById('status-indicator').textContent = "REAUTENTICAR";
-                document.getElementById('status-indicator').classList.remove('active');
-                document.getElementById('login-container').style.display = 'flex';
-                document.getElementById('filters-container').style.display = 'none';
+                // Actualizar interfaz para sesión activa
+                document.getElementById('status-indicator').textContent = "EN LÍNEA";
+                document.getElementById('status-indicator').classList.add('active');
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('filters-container').style.display = 'flex';
+                document.getElementById('public-footer').style.display = 'none';
                 
+                console.log("✅ Silent login exitoso");
             } else {
                 // No hay credenciales en el Sheet, cerrar sesión
-                localStorage.removeItem('premium_session_v1');
-                setTimeout(() => location.reload(), 100);
+                console.log("❌ No hay credenciales configuradas, cerrando sesión");
+                cerrarSesion();
             }
         } catch(e) {
             console.error("Error en silentLogin:", e);
+            // En caso de error, mantener la sesión pero mostrar advertencia
+            document.getElementById('status-indicator').textContent = "ERROR CONEXIÓN";
+            document.getElementById('status-indicator').classList.remove('active');
         } 
     }
 
     function loginSuccess(json, username) {
         state.authed = true; 
         state.data = json.notificaciones || [];
-        // Guardar sesión con timestamp y usuario
-        localStorage.setItem('premium_session_v1', JSON.stringify({ 
-            exp: Date.now() + (12 * 3600 * 1000),
-            user: username // Guardar el usuario para referencia
-        }));
+        
+        // Actualizar interfaz
         document.getElementById('status-indicator').textContent = "EN LÍNEA";
         document.getElementById('status-indicator').classList.add('active');
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('filters-container').style.display = 'flex';
         document.getElementById('public-footer').style.display = 'none';
+        
         processData();
+        console.log("🎉 Login exitoso para:", username);
     }
 
-    // El resto del código se mantiene igual...
+    // ====== FUNCIONALIDAD EXISTENTE ======
     function filtrar(tipo, btn) {
         state.filter = tipo;
         document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
@@ -657,16 +751,49 @@
     function limpiarTexto(texto) { if(!texto) return ""; return texto.replace(/\\"/g, '"'); }
 
     function processData() {
-        const list = document.getElementById('tx-list'); list.innerHTML = '';
-        const hoy = new Date(); const ayer = new Date(hoy); ayer.setDate(ayer.getDate() - 1);
-        const strHoy = hoy.toLocaleDateString('es-PE'); const strAyer = ayer.toLocaleDateString('es-PE');
+        const list = document.getElementById('tx-list'); 
+        list.innerHTML = '';
+        
+        if (!state.authed || state.data.length === 0) {
+            if (!state.authed) {
+                list.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
+                        <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                            <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <p style="font-weight:600; font-size: 0.9rem;">Esperando autenticación...</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color: var(--text-secondary); padding-top: 40px;">
+                        <div style="background:var(--bg-body); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                            <svg style="width: 28px; opacity:0.4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <p style="font-weight:600; font-size: 0.9rem;">No hay transacciones</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('total-display').textContent = 'S/ 0.00';
+            document.getElementById('count-display').textContent = '0';
+            return;
+        }
+
+        const hoy = new Date(); 
+        const ayer = new Date(hoy); 
+        ayer.setDate(ayer.getDate() - 1);
+        const strHoy = hoy.toLocaleDateString('es-PE'); 
+        const strAyer = ayer.toLocaleDateString('es-PE');
 
         let items = state.data.filter(item => {
-            const d = new Date(item.fecha); const dStr = d.toLocaleDateString('es-PE');
+            const d = new Date(item.fecha); 
+            const dStr = d.toLocaleDateString('es-PE');
             if(state.filter === 'hoy') return dStr === strHoy;
             if(state.filter === 'ayer') return dStr === strAyer;
             return true;
         });
+        
         items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
 
         let total = 0;
@@ -712,7 +839,7 @@
     }
 
     function renderStaticModals() {
-        // NUEVO DISEÑO COMPACTO PARA PLANES (MÁS COMPACTO)
+        // PLANES
         const pList = document.getElementById('planes-list');
         pList.innerHTML = `
             <div class="plan-card">
@@ -740,8 +867,14 @@
         `;
 
         // BANCOS
-        const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
+        const bancos = [
+            {b:"Yape / Plin", n:CONTACTO}, 
+            {b:"BCP", n:"191-22334455-0-99"}, 
+            {b:"BBVA", n:"0011-0123-45678901"}, 
+            {b:"Interbank", n:"898-3001234567"}
+        ];
         const bList = document.getElementById('bancos-list');
+        bList.innerHTML = '';
         
         bancos.forEach(bk => { 
             bList.innerHTML += `
@@ -755,9 +888,27 @@
         });
     }
 
-    function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
-    function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); }
-    function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
+    function buy(plan, precio) { 
+        window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); 
+    }
+    
+    function contactar() { 
+        window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); 
+    }
+    
+    function copiar(texto) { 
+        navigator.clipboard.writeText(texto).then(() => { 
+            const t = document.getElementById('toast'); 
+            t.classList.add('visible'); 
+            setTimeout(() => t.classList.remove('visible'), 2000); 
+        }); 
+    }
+
+    // ====== BOTÓN DE CERRAR SESIÓN (OPCIONAL) ======
+    // Puedes agregar un botón en el footer cuando está autenticado
+    function agregarBotonCerrarSesion() {
+        // Esto es opcional - puedes implementarlo si quieres un botón explícito para cerrar sesión
+    }
 </script>
     
 </body>
