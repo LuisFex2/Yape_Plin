@@ -541,175 +541,225 @@
 
     <div id="toast">¡Copiado al portapapeles!</div>
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
-        const CONTACTO = "51960744787";
-        let state = { data: [], config: {}, authed: false, filter: 'todos' };
+// VERSIÓN MEJORADA - REEMPLAZA EL CÓDIGO COMPLETO DEL SCRIPT
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbx8g4auSn0-pSfpM60GKGrn8uHezR74QFG5pOnhtZmiLOpocm9ISf4a5G77FwVOrlZKUQ/exec";
+    const CONTACTO = "51960744787";
+    let state = { data: [], config: {}, authed: false, filter: 'todos' };
 
-        const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
-        const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
+    const SVG_EYE_OPEN = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
+    const SVG_EYE_SLASH = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></svg>`;
 
-        window.onload = () => { renderStaticModals(); checkSession(); };
+    window.onload = () => { renderStaticModals(); checkSession(); };
 
-        function checkSession() {
-            const sess = localStorage.getItem('premium_session_v1');
-            if(sess) { const { exp } = JSON.parse(sess); if(Date.now() < exp) silentLogin(); else localStorage.removeItem('premium_session_v1'); }
+    function checkSession() {
+        const sess = localStorage.getItem('premium_session_v1');
+        if(sess) { 
+            const { exp } = JSON.parse(sess); 
+            if(Date.now() < exp) {
+                silentLogin(); 
+            } else {
+                localStorage.removeItem('premium_session_v1');
+                // Forzar recarga para limpiar estado
+                setTimeout(() => location.reload(), 100);
+            }
         }
+    }
 
-        function modal(id, show) {
-            const el = document.getElementById(id);
-            if(show) el.classList.add('open'); else el.classList.remove('open');
-            document.getElementById('error-msg').style.display = 'none';
-        }
+    function modal(id, show) {
+        const el = document.getElementById(id);
+        if(show) el.classList.add('open'); else el.classList.remove('open');
+        document.getElementById('error-msg').style.display = 'none';
+    }
 
-        function togglePass() { 
-            const i = document.getElementById('pass'); 
-            const btn = document.getElementById('eye-btn');
-            if(i.type === 'password') { i.type = 'text'; btn.innerHTML = SVG_EYE_SLASH; } 
-            else { i.type = 'password'; btn.innerHTML = SVG_EYE_OPEN; }
-        }
+    function togglePass() { 
+        const i = document.getElementById('pass'); 
+        const btn = document.getElementById('eye-btn');
+        if(i.type === 'password') { i.type = 'text'; btn.innerHTML = SVG_EYE_SLASH; } 
+        else { i.type = 'password'; btn.innerHTML = SVG_EYE_OPEN; }
+    }
 
-        async function doLogin() {
-            const u = document.getElementById('user').value.trim();
-            const p = document.getElementById('pass').value.trim();
-            const spin = document.getElementById('login-spin');
-            const txt = document.getElementById('btn-txt');
-            const err = document.getElementById('error-msg');
-            if(!u || !p) return;
-            txt.style.display = 'none'; spin.style.display = 'block'; err.style.display = 'none';
-            try {
-                const res = await fetch(API_URL); const json = await res.json();
-                let isValid = false;
-                if(json.config && json.config[u] && String(json.config[u]) === p) isValid = true;
-                if(isValid) { loginSuccess(json); modal('login-modal', false); } else { err.style.display = 'block'; }
-            } catch(e) { err.textContent = "Error de conexión"; err.style.display = 'block'; }
-            finally { txt.style.display = 'block'; spin.style.display = 'none'; }
-        }
+    async function doLogin() {
+        const u = document.getElementById('user').value.trim();
+        const p = document.getElementById('pass').value.trim();
+        const spin = document.getElementById('login-spin');
+        const txt = document.getElementById('btn-txt');
+        const err = document.getElementById('error-msg');
+        if(!u || !p) return;
+        txt.style.display = 'none'; spin.style.display = 'block'; err.style.display = 'none';
+        try {
+            const res = await fetch(API_URL); const json = await res.json();
+            let isValid = false;
+            if(json.config && json.config[u] && String(json.config[u]) === p) isValid = true;
+            if(isValid) { 
+                // Guardar el usuario en la sesión para futuras validaciones
+                loginSuccess(json, u); 
+                modal('login-modal', false); 
+            } else { 
+                err.style.display = 'block'; 
+            }
+        } catch(e) { err.textContent = "Error de conexión"; err.style.display = 'block'; }
+        finally { txt.style.display = 'block'; spin.style.display = 'none'; }
+    }
 
-        async function silentLogin() { try { const res = await fetch(API_URL); const json = await res.json(); loginSuccess(json); } catch(e) {} }
-
-        function loginSuccess(json) {
-            state.authed = true; state.data = json.notificaciones || [];
-            localStorage.setItem('premium_session_v1', JSON.stringify({ exp: Date.now() + (12 * 3600 * 1000) }));
-            document.getElementById('status-indicator').textContent = "EN LÍNEA";
-            document.getElementById('status-indicator').classList.add('active');
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('filters-container').style.display = 'flex';
-            document.getElementById('public-footer').style.display = 'none';
-            processData();
-        }
-
-        function filtrar(tipo, btn) {
-            state.filter = tipo;
-            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            processData();
-        }
-
-        function limpiarTexto(texto) { if(!texto) return ""; return texto.replace(/\\"/g, '"'); }
-
-        function processData() {
-            const list = document.getElementById('tx-list'); list.innerHTML = '';
-            const hoy = new Date(); const ayer = new Date(hoy); ayer.setDate(ayer.getDate() - 1);
-            const strHoy = hoy.toLocaleDateString('es-PE'); const strAyer = ayer.toLocaleDateString('es-PE');
-
-            let items = state.data.filter(item => {
-                const d = new Date(item.fecha); const dStr = d.toLocaleDateString('es-PE');
-                if(state.filter === 'hoy') return dStr === strHoy;
-                if(state.filter === 'ayer') return dStr === strAyer;
-                return true;
-            });
-            items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
-
-            let total = 0;
-            let opsValidas = 0;
-
-            items.forEach(item => {
-                const importe = parseFloat(item.importe);
-                total += importe;
-                if(importe > 0) opsValidas++;
-
-                const isYape = item.aplicacion.toLowerCase().includes('yape');
-                const isInter = item.aplicacion.toLowerCase().includes('interbank');
-                let appClass = isYape ? 'Yape' : (isInter ? 'Interbank' : 'Plin');
-                const letra = item.aplicacion ? item.aplicacion.charAt(0).toUpperCase() : '?';
-                const fechaDisplay = item.fecha; 
+    async function silentLogin() { 
+        try { 
+            const res = await fetch(API_URL); 
+            const json = await res.json();
+            
+            // Verificar si el Sheet tiene credenciales configuradas
+            const hasCredentials = json.config && Object.keys(json.config).length > 0;
+            
+            if (hasCredentials) {
+                // Cargar datos pero NO cambiar a estado autenticado
+                state.data = json.notificaciones || [];
+                processData();
                 
-                const div = document.createElement('div');
-                div.className = 'tx-card';
-                div.setAttribute('data-app', appClass);
+                // Mostrar advertencia de que necesita reautenticarse
+                document.getElementById('status-indicator').textContent = "REAUTENTICAR";
+                document.getElementById('status-indicator').classList.remove('active');
+                document.getElementById('login-container').style.display = 'flex';
+                document.getElementById('filters-container').style.display = 'none';
                 
-                let montoDisplay = importe > 0 ? 'S/ ' + importe.toFixed(2) : 'PROMO';
+            } else {
+                // No hay credenciales en el Sheet, cerrar sesión
+                localStorage.removeItem('premium_session_v1');
+                setTimeout(() => location.reload(), 100);
+            }
+        } catch(e) {
+            console.error("Error en silentLogin:", e);
+        } 
+    }
 
-                div.innerHTML = `
-                    <div class="tx-icon">${letra}</div>
-                    <div class="tx-info">
-                        <div class="tx-header">
-                            <div class="tx-title">${limpiarTexto(item.titulo)}</div>
-                            <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">${montoDisplay}</div>
-                        </div>
-                        <div class="tx-content">${limpiarTexto(item.contenido)}</div>
-                        <div class="tx-footer">
-                            <span class="tx-app-pill">${item.aplicacion}</span>
-                            <span>•</span>
-                            <span class="tx-time">${fechaDisplay}</span>
-                        </div>
+    function loginSuccess(json, username) {
+        state.authed = true; 
+        state.data = json.notificaciones || [];
+        // Guardar sesión con timestamp y usuario
+        localStorage.setItem('premium_session_v1', JSON.stringify({ 
+            exp: Date.now() + (12 * 3600 * 1000),
+            user: username // Guardar el usuario para referencia
+        }));
+        document.getElementById('status-indicator').textContent = "EN LÍNEA";
+        document.getElementById('status-indicator').classList.add('active');
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('filters-container').style.display = 'flex';
+        document.getElementById('public-footer').style.display = 'none';
+        processData();
+    }
+
+    // El resto del código se mantiene igual...
+    function filtrar(tipo, btn) {
+        state.filter = tipo;
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        processData();
+    }
+
+    function limpiarTexto(texto) { if(!texto) return ""; return texto.replace(/\\"/g, '"'); }
+
+    function processData() {
+        const list = document.getElementById('tx-list'); list.innerHTML = '';
+        const hoy = new Date(); const ayer = new Date(hoy); ayer.setDate(ayer.getDate() - 1);
+        const strHoy = hoy.toLocaleDateString('es-PE'); const strAyer = ayer.toLocaleDateString('es-PE');
+
+        let items = state.data.filter(item => {
+            const d = new Date(item.fecha); const dStr = d.toLocaleDateString('es-PE');
+            if(state.filter === 'hoy') return dStr === strHoy;
+            if(state.filter === 'ayer') return dStr === strAyer;
+            return true;
+        });
+        items.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+        let total = 0;
+        let opsValidas = 0;
+
+        items.forEach(item => {
+            const importe = parseFloat(item.importe);
+            total += importe;
+            if(importe > 0) opsValidas++;
+
+            const isYape = item.aplicacion.toLowerCase().includes('yape');
+            const isInter = item.aplicacion.toLowerCase().includes('interbank');
+            let appClass = isYape ? 'Yape' : (isInter ? 'Interbank' : 'Plin');
+            const letra = item.aplicacion ? item.aplicacion.charAt(0).toUpperCase() : '?';
+            const fechaDisplay = item.fecha; 
+            
+            const div = document.createElement('div');
+            div.className = 'tx-card';
+            div.setAttribute('data-app', appClass);
+            
+            let montoDisplay = importe > 0 ? 'S/ ' + importe.toFixed(2) : 'PROMO';
+
+            div.innerHTML = `
+                <div class="tx-icon">${letra}</div>
+                <div class="tx-info">
+                    <div class="tx-header">
+                        <div class="tx-title">${limpiarTexto(item.titulo)}</div>
+                        <div class="tx-amount ${importe > 0 ? 'positive' : 'promo'}">${montoDisplay}</div>
                     </div>
-                `;
-                list.appendChild(div);
-            });
-
-            document.getElementById('total-display').textContent = 'S/ ' + total.toFixed(2);
-            document.getElementById('count-display').textContent = opsValidas;
-        }
-
-        function renderStaticModals() {
-            // NUEVO DISEÑO COMPACTO PARA PLANES (MÁS COMPACTO)
-            const pList = document.getElementById('planes-list');
-            pList.innerHTML = `
-                <div class="plan-card">
-                    <div class="plan-name">PLAN MENSUAL</div>
-                    <div class="plan-price">S/ 6.00</div>
-                    <div class="plan-detail">Facturado cada mes</div>
-                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
-                </div>
-                
-                <div class="plan-card featured">
-                    <div class="plan-tag">AHORRA 33%</div>
-                    <div class="plan-name">TRIMESTRAL</div>
-                    <div class="plan-price">S/ 12.00</div>
-                    <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
-                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
-                </div>
-
-                <div class="plan-card featured">
-                    <div class="plan-tag">MEJOR PRECIO</div>
-                    <div class="plan-name">SEMESTRAL</div>
-                    <div class="plan-price">S/ 18.00</div>
-                    <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
-                    <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
+                    <div class="tx-content">${limpiarTexto(item.contenido)}</div>
+                    <div class="tx-footer">
+                        <span class="tx-app-pill">${item.aplicacion}</span>
+                        <span>•</span>
+                        <span class="tx-time">${fechaDisplay}</span>
+                    </div>
                 </div>
             `;
+            list.appendChild(div);
+        });
 
-            // BANCOS
-            const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
-            const bList = document.getElementById('bancos-list');
+        document.getElementById('total-display').textContent = 'S/ ' + total.toFixed(2);
+        document.getElementById('count-display').textContent = opsValidas;
+    }
+
+    function renderStaticModals() {
+        // NUEVO DISEÑO COMPACTO PARA PLANES (MÁS COMPACTO)
+        const pList = document.getElementById('planes-list');
+        pList.innerHTML = `
+            <div class="plan-card">
+                <div class="plan-name">PLAN MENSUAL</div>
+                <div class="plan-price">S/ 6.00</div>
+                <div class="plan-detail">Facturado cada mes</div>
+                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Mensual%20de%20S%2F%206.00">Contratar</a>
+            </div>
             
-            bancos.forEach(bk => { 
-                bList.innerHTML += `
-                <div class="bank-row" onclick="copiar('${bk.n}')">
-                    <div class="bank-info">
-                        <div class="bank-name">${bk.b}</div>
-                        <div class="bank-num">${bk.n}</div>
-                    </div>
-                    <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                </div>`; 
-            });
-        }
+            <div class="plan-card featured">
+                <div class="plan-tag">AHORRA 33%</div>
+                <div class="plan-name">TRIMESTRAL</div>
+                <div class="plan-price">S/ 12.00</div>
+                <div class="plan-detail">Sale a <strong>S/ 4.00</strong> / mes</div>
+                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Trimestral%20de%20S%2F%2012.00">Contratar</a>
+            </div>
 
-        function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
-        function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); }
-        function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
-    </script>
+            <div class="plan-card featured">
+                <div class="plan-tag">MEJOR PRECIO</div>
+                <div class="plan-name">SEMESTRAL</div>
+                <div class="plan-price">S/ 18.00</div>
+                <div class="plan-detail">Sale a <strong>S/ 3.00</strong> / mes</div>
+                <a class="plan-btn" target="_blank" href="https://wa.me/51960744787?text=Hola%2C%20deseo%20contratar%20el%20Plan%20Semestral%20de%20S%2F%2018.00">Contratar</a>
+            </div>
+        `;
+
+        // BANCOS
+        const bancos = [{b:"Yape / Plin", n:CONTACTO}, {b:"BCP", n:"191-22334455-0-99"}, {b:"BBVA", n:"0011-0123-45678901"}, {b:"Interbank", n:"898-3001234567"}];
+        const bList = document.getElementById('bancos-list');
+        
+        bancos.forEach(bk => { 
+            bList.innerHTML += `
+            <div class="bank-row" onclick="copiar('${bk.n}')">
+                <div class="bank-info">
+                    <div class="bank-name">${bk.b}</div>
+                    <div class="bank-num">${bk.n}</div>
+                </div>
+                <svg class="copy-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            </div>`; 
+        });
+    }
+
+    function buy(plan, precio) { window.open(`https://wa.me/${CONTACTO}?text=${encodeURIComponent(`Hola, deseo el plan ${plan} de S/${precio}`)}`, '_blank'); }
+    function contactar() { window.open(`https://wa.me/${CONTACTO}?text=Hola%20deseo%20soporte`, '_blank'); }
+    function copiar(texto) { navigator.clipboard.writeText(texto).then(() => { const t = document.getElementById('toast'); t.classList.add('visible'); setTimeout(() => t.classList.remove('visible'), 2000); }); }
+</script>
+    
 </body>
 </html>
