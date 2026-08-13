@@ -250,11 +250,11 @@
         .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
         
         .btn-close { 
-            background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; 
-            color: var(--text-primary); font-size: 1.1rem; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; transition: 0s; 
+            background: var(--danger); border: none; width: 30px; height: 30px; border-radius: 50%; 
+            color: #ffffff; font-size: 1.2rem; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; transition: 0.1s; 
         }
-        .btn-close:active { background: #e2e8f0; transform: scale(0.95); }
+        .btn-close:active { background: #dc2626; transform: scale(0.95); }
         
         /* Inputs */
         .input-group { margin-bottom: 16px; position: relative; }
@@ -374,7 +374,12 @@
                 <h1>INTERCEPTOR FEX</h1>
                 <span>Monitoreo Tiempo Real</span>
             </div>
-            <div id="status-indicator" class="status-badge">Sin Acceso</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div id="status-indicator" class="status-badge">Sin Acceso</div>
+                <button id="btn-logout" style="display: none; background: #fff0f0; color: var(--danger); border: 1px solid #fca5a5; padding: 4px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center;" onclick="cerrarSesion()" title="Cerrar Sesión">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                </button>
+            </div>
         </header>
 
         <div class="stats-row">
@@ -497,6 +502,11 @@
         localStorage.setItem(SESSION_KEY, JSON.stringify({ expira: expiracion }));
     }
 
+    function cerrarSesion() {
+        localStorage.removeItem(SESSION_KEY);
+        window.location.reload();
+    }
+
     function verificarSesion() {
         try {
             const sesionData = localStorage.getItem(SESSION_KEY);
@@ -591,6 +601,7 @@
     function actualizarInterfazAutenticada() {
         document.getElementById('status-indicator').textContent = "EN LÍNEA";
         document.getElementById('status-indicator').classList.add('active');
+        document.getElementById('btn-logout').style.display = 'flex';
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('filters-container').style.display = 'flex';
         document.getElementById('public-footer').style.display = 'none';
